@@ -64,3 +64,17 @@
 ;procedures are effectives, and this is the root of the paradigm shift
 ;in thinking that computer programming engenders, ie it is about
 ;"how-to" knowledge, not what is.
+
+(define sicp-sqrt-iter
+  (lambda (guess x)
+    (define improve-guess
+      (lambda (guess x)
+        (define average
+          (lambda (x y)
+            (/ (+ x y) 2)))
+        (average guess (/ x guess))))
+    (define good-enough?
+      (lambda (guess x)
+        (< (abs (- (square guess) x)) 0.0001)))
+    (cond ((good-enough? guess x) guess)
+          (else (sqrt-iter (improve-guess guess x) x)))))
