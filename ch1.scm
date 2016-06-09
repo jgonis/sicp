@@ -66,7 +66,15 @@
 ;"how-to" knowledge, not what is.
 
 (define sicp-sqrt-iter
-  (lambda (guess x)
+  (lambda (guess x test-func improve-func)
+    (cond ((test-func guess x) guess)
+          (else (sicp-sqrt-iter (improve-func guess x)
+                                x
+                                test-func
+                                improve-func)))))
+
+(define sicp-sqrt
+  (lambda (x)
     (define improve-guess
       (lambda (guess x)
         (define average
@@ -76,12 +84,7 @@
     (define good-enough?
       (lambda (guess x)
         (< (abs (- (square guess) x)) 0.000000000000001)))
-    (cond ((good-enough? guess x) guess)
-          (else (sicp-sqrt-iter (improve-guess guess x) x)))))
-
-(define sicp-sqrt
-  (lambda (x)
-    (sicp-sqrt-iter 1.0 x)))
+    (sicp-sqrt-iter 1.0 x good-enough? improve-guess)))
 
 ;Exercise 1.6
 ;The new-if program enters into an infinite recursion because it
@@ -90,5 +93,24 @@
 ;test the guess for being "good-enough".
 
 ;Exercise 1.7
-;Some examples of numbers that our sqrt procedure doesn't work that
-;well on:
+(define alt-sicp-sqrt
+  (lambda (x)
+    (define alt-good-enough?
+      (lambda guess x)
+      #t)
+    sicp-sqrt-iter 1.0 x alt-good-enough?))
+
+
+;Exercise 1.8
+(define sicp-cube-root
+  (lambda (x)
+    (define improve-guess
+      (lambda (guess x)
+        (define average
+          (lambda (x y)
+            (/ (+ x y) 3)))
+        (average (* 2 guess) (/ x (* guess guess)))))
+    (define good-enough?
+      (lambda (guess x)
+        (< (abs (- (* guess guess guess) x)) 0.000000000000001)))
+    (sicp-sqrt-iter 1.0 x good-enough? improve-guess)))
