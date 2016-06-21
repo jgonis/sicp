@@ -165,3 +165,16 @@
               ((= kinds-of-coins 4) 25)
               ((= kinds-of-coins 5) 50))))
     (cc amount 5)))
+
+;exercise 1.12
+(define pascals-triangle
+  (lambda (row column)
+    (define pascal-helper
+      (lambda (row column)
+        (cond ((or (= column 1) (= column row)) 1)
+              (else (+ (pascal-helper (- row 1) (- column 1))
+                       (pascal-helper (- row 1) column))))))
+    (cond ((< column 1) (error "column value cannot be less than 1" column))
+          ((< row 1) (error "row value cannot be less than 1" row))
+          ((> column row) (error "column value cannot exceed row value" column row))
+          (else (pascal-helper row column)))))
