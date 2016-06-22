@@ -114,3 +114,92 @@
       (lambda (guess x)
         (< (abs (- (* guess guess guess) x)) 0.000000000000001)))
     (sicp-sqrt-iter 1.0 x good-enough? improve-guess)))
+
+;Some examples of numbers that our sqrt procedure doesn't work that
+;well on:
+
+(define recursive-factorial
+  (lambda (n)
+    (cond ((= n 1) 1)
+          (else (* n (recursive-factorial (- n 1)))))))
+
+(define iter-factorial
+  (lambda (n)
+    (define factorial-helper
+      (lambda (product counter max-count)
+        (cond ((> counter max-count) product)
+              (else (factorial-helper (* counter product)
+                                      (+ counter 1)
+                                      max-count)))))
+    (factorial-helper 1 1 n)))
+
+
+;Exercise 1.9
+;The first procedure defines a recursive process because the inc procedure
+;will need to wait on the result of calling the '+' procedure before it
+;can carry out its operations, and so on, for each value of a.
+;
+;The second procedure defines an iterative process because the '+'
+;procedure call just pass in the new argument values for a and b and
+;does not need to wait on any other evaluations of itself.
+;
+;The first method will generate this process
+;(+ 4 5)
+;(inc (+ 3 5))
+;(inc (inc (+ 2 5)))
+;(inc (inc (inc (+ 1 5))))
+;(inc (inc (inc (inc (+ 0 5)))))
+;(inc (inc (inc (inc 5))))
+;(inc (inc (inc 6)))
+;(inc (inc 7))
+;(inc 8)
+;9
+;
+;The second process will generate the following process
+;(+ 4 5)
+;(+ 3 6)
+;(+ 2 7)
+;(+ 1 8)
+;(0 9)
+;9
+
+;Exercise 1.10
+;(A 1 10) -> 1024
+;(A 2 4) -> 65536
+;(define (f n) (A 0 n) -> this defines 2 * n
+;(define (g n) (A 1 n) -> this defines the function 2^n
+;(define (h n) (A 2 n) -> this defines the function
+
+(define count-change
+  (lambda (amount)
+    (define cc
+      (lambda (amount kinds-of-coins)
+        (cond ((= amount 0) 1)
+              ((or (< amount 0)
+                   (= kinds-of-coins 0))
+               0)
+              (else (+ (cc amount (- kinds-of-coins 1))
+                       (cc (- amount (first-denomination
+                                      kinds-of-coins))
+                           kinds-of-coins))))))
+    (define first-denomination
+      (lambda (kinds-of-coins)
+        (cond ((= kinds-of-coins 1) 1)
+              ((= kinds-of-coins 2) 5)
+              ((= kinds-of-coins 3) 10)
+              ((= kinds-of-coins 4) 25)
+              ((= kinds-of-coins 5) 50))))
+    (cc amount 5)))
+
+;exercise 1.12
+(define pascals-triangle
+  (lambda (row column)
+    (define pascal-helper
+      (lambda (row column)
+        (cond ((or (= column 1) (= column row)) 1)
+              (else (+ (pascal-helper (- row 1) (- column 1))
+                       (pascal-helper (- row 1) column))))))
+    (cond ((< column 1) (error "column value cannot be less than 1" column))
+          ((< row 1) (error "row value cannot be less than 1" row))
+          ((> column row) (error "column value cannot exceed row value" column row))
+          (else (pascal-helper row column)))))
