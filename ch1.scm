@@ -216,3 +216,18 @@
         (cond ((= count 1) total)
               (else (helper (* count total) (- count 1))))))
     (helper 1 n)))
+
+(define fib
+  (lambda (n)
+    (cond ((= n 0) 1)
+          ((= n 1) 1)
+          (else (+ (fib (- n 1))
+                   (fib (- n 2)))))))
+
+(define iter-fib
+  (lambda (n)
+    (define helper
+      (lambda (a b count)
+        (cond ((= count 0) b)
+              (else (helper (+ a b) a  (- count 1))))))
+    (helper 1 0 n)))
