@@ -203,3 +203,16 @@
           ((< row 1) (error "row value cannot be less than 1" row))
           ((> column row) (error "column value cannot exceed row value" column row))
           (else (pascal-helper row column)))))
+
+(define recursive-factorial
+  (lambda (n)
+    (cond ((= n 1) 1)
+          (else (* n (recursive-factorial (- n 1)))))))
+
+(define iter-factorial
+  (lambda (n)
+    (define helper
+      (lambda (total count)
+        (cond ((= count 1) total)
+              (else (helper (* count total) (- count 1))))))
+    (helper 1 n)))
