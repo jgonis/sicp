@@ -260,3 +260,32 @@
   (lambda (a n)
     (cond ((= n 0) 1)
           (else (* a (jeff-expt a (- n 1)))))))
+
+(define jeff-linear-expt
+  (lambda (a n)
+    (define helper
+      (lambda (a n product)
+        (cond ((= n 0) product)
+              (else (helper a (- n 1) (* a product))))))
+    (helper a n 1)))
+
+(define jeff-fast-expt
+  (lambda (a n)
+    (cond ((= n 0) 1)
+          ((even? n) (square (jeff-fast-expt a (/ n 2))))
+          (else (* a (jeff-fast-expt a (- n 1)))))))
+
+;Exercise 1.16
+
+;Ex 1.17
+(define jeff-fast-*
+  (lambda (a b)
+    (define double
+      (lambda (a)
+        (* a 2)))
+    (define halve
+      (lambda (a)
+        (/ a 2)))
+    (cond ((= b 0) 0)
+          ((even? b) (double (jeff-fast-* a (halve b))))
+          (else (+ a (jeff-fast-* a (- b 1)))))))
