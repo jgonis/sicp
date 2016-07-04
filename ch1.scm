@@ -247,3 +247,16 @@
       (lambda (angle)
         (cond ((not (> (abs angle) 0.1)) angle)
               (else (p (sine (/ angle 3.0)))))))))
+;How many times is the procedure p applied when sine 12.15 is evaluated?
+; :> sine -> p (/ 12.15 3) -> sine -> p (/ 4.05 3) -> sine -> p (/ 1.34999 3)
+; -> sine -> p (/ .449999 3) -> sine -> p (/ .15 3) -> sine
+; So P is executed 5 times.
+
+; The growth in both space and time is linear as angle increases as it
+; decreases by a constant amount (divide by 3) with each step, and it is
+; recursive, so the space grows for each step as well.
+
+(define jeff-expt
+  (lambda (a n)
+    (cond ((= n 0) 1)
+          (else (* a (jeff-expt a (- n 1)))))))
