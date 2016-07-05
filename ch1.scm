@@ -276,6 +276,19 @@
           (else (* a (jeff-fast-expt a (- n 1)))))))
 
 ;Exercise 1.16
+(define jeff-really-fast-expt
+  (lambda (a n)
+    (cond ((= n 0) 1)
+          ((even? n) (jeff-really-fast-expt (square a) (/ n 2)))
+          (else (* a (jeff-really-fast-expt a (- n 1)))))))
+(define jeff-fast-iter-expt
+  (lambda (a n)
+    (define iter-helper
+      (lambda (a b n)
+        (cond ((= n 0) a)
+              ((even? n) (iter-helper a (square b) (/ n 2)))
+              (else (iter-helper (* a b) b (- n 1))))))
+    (iter-helper 1 a n)))
 
 ;Ex 1.17
 (define jeff-fast-*
@@ -289,3 +302,9 @@
     (cond ((= b 0) 0)
           ((even? b) (double (jeff-fast-* a (halve b))))
           (else (+ a (jeff-fast-* a (- b 1)))))))
+
+;Section 1.2.5
+(define jeff-gcd
+  (lambda (a b)
+    (cond ((= b 0) a)
+          (else (jeff-gcd b (remainder a b))))))
