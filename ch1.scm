@@ -24,22 +24,22 @@
                (cond ((> x y) (sum-of-squares z x))
                      (else (sum-of-squares z y)))))))))
 
-(import (srfi :78))
-(import (rename (prefix (sicp ch1) sicp-)))
-(check-set-mode! 'summary)
-(check (sicp-square 5) => 25)
-(check (sicp-sum-of-squares 3 4) => 25)
-(check (sicp-abs -1) => 1)
-(check (sicp-abs 1) => 1)
-(check (sicp-ex1.3 1 2 3) => 13)
-(check (sicp-ex1.3 3 2 1) => 13)
-(check (sicp-ex1.3 3 1 2) => 13)
-(check (sicp-ex1.3 3 3 2) => 18)
-(check (sicp-ex1.3 3 2 3) => 18)
-(check (sicp-ex1.3 2 3 3) => 18)
-(check (sicp-ex1.3 3 3 3) => 18)
-(check-report)
-(check-reset!)
+;(import (srfi :78))
+;(import (rename (prefix (sicp ch1) sicp-)))
+;(check-set-mode! 'summary)
+;(check (sicp-square 5) => 25)
+;(check (sicp-sum-of-squares 3 4) => 25)
+;(check (sicp-abs -1) => 1)
+;(check (sicp-abs 1) => 1)
+;(check (sicp-ex1.3 1 2 3) => 13)
+;(check (sicp-ex1.3 3 2 1) => 13)
+;(check (sicp-ex1.3 3 1 2) => 13)
+;(check (sicp-ex1.3 3 3 2) => 18)
+;(check (sicp-ex1.3 3 2 3) => 18)
+;(check (sicp-ex1.3 2 3 3) => 18)
+;(check (sicp-ex1.3 3 3 3) => 18)
+;(check-report)
+;(check-reset!)
 
 ;exercise 1.2
 (/ (+ 5 4 (- 2 (- 3 (+ 6 (/ 4 5)))))
@@ -293,6 +293,7 @@
 ;Ex 1.17
 (define jeff-fast-*
   (lambda (a b)
+    name: 'jeff-fast-*
     (define double
       (lambda (a)
         (* a 2)))
@@ -302,6 +303,23 @@
     (cond ((= b 0) 0)
           ((even? b) (double (jeff-fast-* a (halve b))))
           (else (+ a (jeff-fast-* a (- b 1)))))))
+
+;Exercise 1.18
+(define jeff-fast-iter-*
+  (lambda (a b)
+    name: 'jeff-fast-iter-*
+    (define double
+      (lambda (a)
+        (* a 2)))
+    (define halve
+      (lambda (a)
+        (/ a 2)))
+    (define helper
+      (lambda (state a b)
+        (cond ((= b 0) state)
+              ((even? b) (helper state (double a) (halve b)))
+              (else (helper (+ a state) a (- b 1))))))
+    (helper 0 a b)))
 
 ;Section 1.2.5
 (define jeff-gcd
