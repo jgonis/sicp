@@ -204,6 +204,30 @@
           ((> column row) (error "column value cannot exceed row value" column row))
           (else (pascal-helper row column)))))
 
+(define pascal-printer
+  (lambda (number-of-rows)
+    (define helper
+      (lambda (number-of-rows current-row)
+        (cond ((= current-row number-of-rows)
+               (cons (generate-row-string current-row) '()))
+              (else '()))))
+    (define print-strings
+      (lambda (list-of-strings)
+        (cond ((not (null? list-of-string))
+               (display (car list-of-strings))
+               (newline)
+               (print-string (cdr list-of-strings))))))
+    (define generate-row-string
+      (lambda (current-row)))
+    (print-strings (helper number-of-rows 1))))
+
+(define pad-string
+  (lambda (current-string child-string)
+    (let* ((child-length (string-length child-string))
+           (current-length (string-length current-string))
+           (left-pad (ceiling (/ (- child-length current-length) 2)))
+           (right-pad (floor (/ (- child-length current-length) 2)))))))
+
 (define recursive-factorial
   (lambda (n)
     (cond ((= n 1) 1)
