@@ -219,7 +219,7 @@
 
 (define fib
   (lambda (n)
-    (cond ((= n 0) 1)
+    (cond ((= n 0) 0)
           ((= n 1) 1)
           (else (+ (fib (- n 1))
                    (fib (- n 2)))))))
@@ -229,8 +229,8 @@
     (define helper
       (lambda (a b count)
         (cond ((= count 0) b)
-              (else (helper (+ a b) a  (- count 1))))))
-    (helper 1 0 n)))
+              (else (helper b (+ a b) (- count 1))))))
+    (helper 0 1 n)))
 
 (define-library (sicp ex115)
   (export sine)
