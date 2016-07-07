@@ -218,7 +218,16 @@
                (newline)
                (print-string (cdr list-of-strings))))))
     (define generate-row-string
-      (lambda (current-row)))
+      (lambda (current-row)
+        (define helper
+          (lambda (current-row current-column)
+            (cond ((= current-column current-row)
+                   (number->string (pascals-triangle current-row current-column)))
+                  (else (string-append
+                         (number->string (pascals-triangle current-row current-column))
+                         " "
+                         (helper current-row (+ current-column 1)))))))
+        (helper current-row 1)))
     (print-strings (helper number-of-rows 1))))
 
 (define pad-string
