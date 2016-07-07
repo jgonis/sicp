@@ -317,7 +317,6 @@
 ;Ex 1.17
 (define jeff-fast-*
   (lambda (a b)
-    name: 'jeff-fast-*
     (define double
       (lambda (a)
         (* a 2)))
@@ -331,7 +330,6 @@
 ;Exercise 1.18
 (define jeff-fast-iter-*
   (lambda (a b)
-    name: 'jeff-fast-iter-*
     (define double
       (lambda (a)
         (* a 2)))
@@ -345,8 +343,26 @@
               (else (helper (+ a state) a (- b 1))))))
     (helper 0 a b)))
 
-;Section 1.2.5
+                                        ;Section 1.2.5
 (define jeff-gcd
   (lambda (a b)
     (cond ((= b 0) a)
           (else (jeff-gcd b (remainder a b))))))
+
+(define smallest-divisor
+  (lambda (n)
+    (find-divisor n 2)))
+
+(define find-divisor
+  (lambda (n test-divisor)
+    (cond ((> (square test-divisor) n) n)
+          ((divides? test-divisor n) test-divisor)
+          (else (find-divisor n (+ test-divisor 1))))))
+
+(define divides?
+  (lambda (a b)
+    (= (remainder a b) 0)))
+
+(define prime?
+  (lambda (n)
+    (= (smallest-divisor n) n)))
