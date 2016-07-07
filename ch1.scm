@@ -205,30 +205,31 @@
           (else (pascal-helper row column)))))
 
 (define pascal-printer
-  (lambda (number-of-rows)
+  (lambda (rows-to-print)
     (define helper
       (lambda (number-of-rows current-row)
         (cond ((= current-row number-of-rows)
                (cons (generate-row-string current-row) '()))
-              (else '()))))
+              (else (cons (generate-row-string current-row)
+                          (helper number-of-rows (+ current-row 1)))))))
     (define print-strings
       (lambda (list-of-strings)
-        (cond ((not (null? list-of-string))
+        (cond ((not (null? list-of-strings))
                (display (car list-of-strings))
                (newline)
-               (print-string (cdr list-of-strings))))))
+               (print-strings (cdr list-of-strings))))))
     (define generate-row-string
       (lambda (current-row)
-        (define helper
+        (define generate-helper
           (lambda (current-row current-column)
             (cond ((= current-column current-row)
                    (number->string (pascals-triangle current-row current-column)))
                   (else (string-append
                          (number->string (pascals-triangle current-row current-column))
                          " "
-                         (helper current-row (+ current-column 1)))))))
-        (helper current-row 1)))
-    (print-strings (helper number-of-rows 1))))
+                         (generate-helper current-row (+ current-column 1)))))))
+        (generate-helper current-row 1)))
+    (print-strings (helper rows-to-print 1))))
 
 (define pad-string
   (lambda (current-string child-string)
