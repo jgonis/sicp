@@ -24,22 +24,27 @@
                (cond ((> x y) (sum-of-squares z x))
                      (else (sum-of-squares z y)))))))))
 
-;(import (srfi :78))
-;(import (rename (prefix (sicp ch1) sicp-)))
-;(check-set-mode! 'summary)
-;(check (sicp-square 5) => 25)
-;(check (sicp-sum-of-squares 3 4) => 25)
-;(check (sicp-abs -1) => 1)
-;(check (sicp-abs 1) => 1)
-;(check (sicp-ex1.3 1 2 3) => 13)
-;(check (sicp-ex1.3 3 2 1) => 13)
-;(check (sicp-ex1.3 3 1 2) => 13)
-;(check (sicp-ex1.3 3 3 2) => 18)
-;(check (sicp-ex1.3 3 2 3) => 18)
-;(check (sicp-ex1.3 2 3 3) => 18)
-;(check (sicp-ex1.3 3 3 3) => 18)
-;(check-report)
-;(check-reset!)
+(define-library (sicp testex13)
+  (export test-ex13)
+  (import (scheme base)
+          (srfi 78)
+          (rename (prefix (sicp ch1) sicp-)))
+  (begin
+    (define (test-ex13)
+      (check-set-mode! 'summary)
+      (check (sicp-square 5) => 25)
+      (check (sicp-sum-of-squares 3 4) => 25)
+      (check (sicp-abs -1) => 1)
+      (check (sicp-abs 1) => 1)
+      (check (sicp-ex1.3 1 2 3) => 13)
+      (check (sicp-ex1.3 3 2 1) => 13)
+      (check (sicp-ex1.3 3 1 2) => 13)
+      (check (sicp-ex1.3 3 3 2) => 18)
+      (check (sicp-ex1.3 3 2 3) => 18)
+      (check (sicp-ex1.3 2 3 3) => 18)
+      (check (sicp-ex1.3 3 3 3) => 18)
+      (check-report)
+      (check-reset!))))
 
 ;exercise 1.2
 (/ (+ 5 4 (- 2 (- 3 (+ 6 (/ 4 5)))))
@@ -96,8 +101,7 @@
 (define alt-sicp-sqrt
   (lambda (x)
     (define alt-good-enough?
-      (lambda guess x)
-      #t)
+      (lambda (guess x) #t))
     sicp-sqrt-iter 1.0 x alt-good-enough?))
 
 
@@ -201,7 +205,8 @@
                        (pascal-helper (- row 1) column))))))
     (cond ((< column 1) (error "column value cannot be less than 1" column))
           ((< row 1) (error "row value cannot be less than 1" row))
-          ((> column row) (error "column value cannot exceed row value" column row))
+          ((> column row) (error "column value cannot exceed row value" column
+                                 row))
           (else (pascal-helper row column)))))
 
 (define pascal-printer
@@ -223,20 +228,25 @@
         (define generate-helper
           (lambda (current-row current-column)
             (cond ((= current-column current-row)
-                   (number->string (pascals-triangle current-row current-column)))
+                   (number->string (pascals-triangle
+                                    current-row
+                                    current-column)))
                   (else (string-append
-                         (number->string (pascals-triangle current-row current-column))
+                         (number->string (pascals-triangle
+                                          current-row
+                                          current-column))
                          " "
                          (generate-helper current-row (+ current-column 1)))))))
         (generate-helper current-row 1)))
     (print-strings (helper rows-to-print 1))))
 
-(define pad-string
+#|(define pad-string
   (lambda (current-string child-string)
     (let* ((child-length (string-length child-string))
            (current-length (string-length current-string))
            (left-pad (ceiling (/ (- child-length current-length) 2)))
            (right-pad (floor (/ (- child-length current-length) 2)))))))
+|#
 
 (define recursive-factorial
   (lambda (n)
@@ -359,20 +369,56 @@
     (cond ((= b 0) a)
           (else (jeff-gcd b (remainder a b))))))
 
-(define smallest-divisor
-  (lambda (n)
-    (find-divisor n 2)))
+(define-library (sicp naive-prime)
+  (export prime?)
+  (import (scheme base))
+  (begin
+    (define smallest-divisor
+      (lambda (n)
+        (find-divisor n 2)))
+    (define (find-divisor n test-divisor)
+      (cond ((> (square test-divisor) n) n)
+            ((divides? n test-divisor) test-divisor)
+            (else (find-divisor n (+ test-divisor 1)))))
+    (define divides?
+      (lambda (a b)
+        (= (remainder a b) 0)))
+    (define prime?
+      (lambda (n)
+        (= (smallest-divisor n) n)))))
 
-(define find-divisor
-  (lambda (n test-divisor)
-    (cond ((> (square test-divisor) n) n)
-          ((divides? test-divisor n) test-divisor)
-          (else (find-divisor n (+ test-divisor 1))))))
+(define-library (sicp fast-prime)
+  (export prime?)
+  (import (scheme base)
+          (srfi 27))
+  (begin
+    (define (expmod base exp m)
+      (cond ((= exp 0) 1)
+            ((even? exp)
+             (remainder (square (expmod base (/ exp 2) m))
+                        m))
+            (else (remainder (* base (expmod base (- exp 1) m))
+                             m))))
+    (define (fermat-test n)
+      (define (try-it a)
+        (= (expmod a n n) a))
+      (try-it (+ 1 (random-integer (- n 1)))))
+    (define (prime? n times)
+      (cond ((= times 0) #t)
+            ((fermat-test n)
+             (prime? n (- times 1)))
+            (else #f)))))
 
-(define divides?
-  (lambda (a b)
-    (= (remainder a b) 0)))
-
-(define prime?
-  (lambda (n)
-    (= (smallest-divisor n) n)))
+(define-library (sicp test-primes)
+  (export test-primes)
+  (import (scheme base)
+          (srfi 78)
+          (rename (prefix (sicp naive-prime) slow-))
+          (rename (prefix (sicp fast-prime) fast-)))
+  (begin
+    (define (test-primes)
+      (check-set-mode! 'summary)
+      (check (slow-prime? 5) => #t)
+      (check (fast-prime? 5 3) => #t)
+      (check-report)
+      (check-reset!))))
