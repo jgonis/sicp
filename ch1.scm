@@ -23,6 +23,16 @@
               ((and (>= z x) (>= z y))
                (cond ((> x y) (sum-of-squares z x))
                      (else (sum-of-squares z y)))))))))
+(define-library (sicp math-funcs)
+  (export PI
+          cube)
+  (import (scheme base))
+  (begin
+    (define PI (3.141592653589793238462643383279))
+    (define (cube x)
+      (* x x x))))
+
+(import (sicp math-funcs))
 
 (define-library (sicp testex13)
   (export test-ex13)
@@ -422,3 +432,42 @@
       (check (fast-prime? 5 3) => #t)
       (check-report)
       (check-reset!))))
+
+(define-library (sicp ch13)
+  (export sum-integers
+          sum-cubes
+          pi-sum
+          iterative-pi-sum
+          sum
+          integral)
+  (import (scheme base))
+  (begin
+    (define (integral f a b dx)
+      (define (add-dx x) (+ x dx))
+      (* (sum f (+ a (/ dx 2.0)) add-dx b)
+         dx))
+    (define (sum term a next b)
+      (cond ((> a b) 0)
+            (else (+ (term a)
+                     (sum term (next a) next b)))))
+    (define (cube a)
+      (* a a a))
+    (define (sum-integers a b)
+      (cond ((> a b) 0)
+            (else (+ a (sum-integers (+ a 1) b)))))
+    (define (sum-cubes a b)
+      (cond ((> a b) 0)
+            (else (+ (cube a)
+                     (sum-cubes (+ a 1) b)))))
+    (define (pi-sum a b)
+      (cond ((> a b) 0)
+            (else (+ (/ 1.0 (* a (+ a 2)))
+                     (pi-sum (+ a 4) b)))))
+    (define (iterative-pi-sum a b)
+      (define (helper a b total)
+        (cond ((> a b) total)
+              (else (helper (+ a 4)
+                            b
+                            (+ total
+                               (/ 1.0 (* a (+ a 2))))))))
+      (helper a b 0))))
