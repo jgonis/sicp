@@ -28,7 +28,7 @@
           cube)
   (import (scheme base))
   (begin
-    (define PI (3.141592653589793238462643383279))
+    (define PI 3.141592653589793238462643383279)
     (define (cube x)
       (* x x x))))
 
@@ -439,13 +439,26 @@
           pi-sum
           iterative-pi-sum
           sum
-          integral)
+          integral
+          iterative-integral
+          iterative-sum
+          simpsons-rule)
   (import (scheme base))
   (begin
     (define (integral f a b dx)
       (define (add-dx x) (+ x dx))
       (* (sum f (+ a (/ dx 2.0)) add-dx b)
          dx))
+    (define (iterative-integral f a b dx)
+      (define (add-dx x) (+ x dx))
+      (* (iterative-sum f (+ a (/ dx 2.0)) add-dx b)
+         dx))
+    (define (iterative-sum term a next b)
+      (define (helper term a next b total)
+        (cond ((> a b) total)
+              (else (helper term (next a) next b (+ total
+                                                    (term a))))))
+      (helper term a next b 0))
     (define (sum term a next b)
       (cond ((> a b) 0)
             (else (+ (term a)
@@ -470,4 +483,27 @@
                             b
                             (+ total
                                (/ 1.0 (* a (+ a 2))))))))
-      (helper a b 0))))
+      (helper a b 0))
+    (define (simpsons-rule f a b n)
+      ;increment n by 2, avoid duplicating lambdas.
+      (define (inc-by-two x)
+        (+ x 2))
+      ;function value at f(a + kh)
+      (define (helper k h)
+        (f (+ a (* k h))))
+      (let ((h (/ (- b a) n)))
+        (* (/ h 3)
+           (+ (f a) ;function value at n = 0
+              (f b) ;function value at n
+              ;function values starting at n = 1, times 4, and continuing
+              ;every 2, aka 1, 3, 5, etc
+              (iterative-sum (lambda (x) (* 4 (helper x h)))
+                             1
+                             inc-by-two
+                             (- n 1))
+              ;function values starting at n = 2, times 2 and continuing
+              ;every 2, aka 2, 4, 6, etc
+              (iterative-sum (lambda (x) (* 2 (helper x h)))
+                             2
+                             inc-by-two
+                             (- n 2))))))))
