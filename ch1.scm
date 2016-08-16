@@ -1,3 +1,4 @@
+(import (scheme process-context))
 (define-library (sicp ch1)
   (export square sum-of-squares abs ex1.3)
   (import (except (scheme base) square abs))
@@ -547,11 +548,21 @@
   (export accumulate)
   (import (scheme base))
   (begin
-    (define (accumulate))))
+    (define (accumulate combiner null-value term a next b)
+      (cond ((> a b) null-value)
+            (else (combiner (term a)
+                            (accumulate combiner
+                                        null-value
+                                        term
+                                        (next a)
+                                        next
+                                        b)))))
+    (define (accumulate-sum term a next b) 1)
+    (define (accumulate-product term a next b) 1)))
 
 (define-library (sicp ex132)
   (export ex132)
   (import (scheme base)
           (sicp accumulator))
   (begin
-    (define (ex132))))
+    (define (ex132) 1)))
