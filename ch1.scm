@@ -440,8 +440,6 @@
           iterative-pi-sum
           sum
           iterative-sum
-          product
-          iterative-product
           integral
           iterative-integral
           simpsons-rule)
@@ -548,10 +546,12 @@
 (define-library (sicp accumulator)
   (export accumulate)
   (import (scheme base))
-  (begin))
+  (begin
+    (define (accumulate))))
 
 (define-library (sicp ex132)
   (export ex132)
   (import (scheme base)
           (sicp accumulator))
-  (begin))
+  (begin
+    (define (ex132))))
