@@ -469,23 +469,6 @@
       (cond ((> a b) 0)
             (else (+ (term a)
                      (sum term (next a) next b)))))
-    (define (product term a next b)
-      (cond ((> a b) 1)
-            (else (* (term a)
-                     (product term (next a) next b)))))
-    (define (iterative-product term a next b)
-      (define (helper term a next b total)
-        (cond ((> a b) total)
-              (else (helper term
-                            (next a)
-                            next
-                            b
-                            (* total (term a))))))
-      (helper term a next b 1))
-    (define (ex131 iterations)
-      (* (/ 2 3)
-         (iterative-product )
-         (iterative-product )))
     (define (cube a)
       (* a a a))
     (define (sum-integers a b)
@@ -522,3 +505,53 @@
              (lambda (x) (+ x 2))
              (- n 2)))))))
 
+(define-library (sicp product-sum)
+  (export product-sum
+          iterative-product-sum)
+  (import (scheme base))
+  (begin
+    (define (product-sum term a next b)
+      (cond ((> a b) 1)
+            (else (* (term a)
+                     (product-sum term (next a) next b)))))
+    (define (iterative-product-sum term a next b)
+      (define (helper term a next b total)
+        (cond ((> a b) total)
+              (else (helper term
+                            (next a)
+                            next
+                            b
+                            (* total (term a))))))
+      (helper term a next b 1))))
+
+(define-library (sicp ex131)
+  (export ex131
+          iterative-ex131)
+  (import (scheme base)
+          (sicp product-sum))
+  (begin
+    (define (ex131 iterations)
+      (* (/ 2 3)
+         (product-sum (lambda (x) (* (/ x (- x 1))
+                                     (/ x (+ x 1))))
+                      4
+                      (lambda (x) (+ x 2))
+                      iterations)))
+    (define (iterative-ex131 iterations)
+      (* (/ 2 3)
+         (iterative-product-sum (lambda (x) (* (/ x (- x 1))
+                                               (/ x (+ x 1))))
+                                4
+                                (lambda (x) (+ x 2))
+                                iterations)))))
+
+(define-library (sicp accumulator)
+  (export accumulate)
+  (import (scheme base))
+  (begin))
+
+(define-library (sicp ex132)
+  (export ex132)
+  (import (scheme base)
+          (sicp accumulator))
+  (begin))
