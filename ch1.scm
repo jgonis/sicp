@@ -545,7 +545,8 @@
                                 iterations)))))
 
 (define-library (sicp accumulator)
-  (export accumulate)
+  (export accumulate
+          iterative-accumulate)
   (import (scheme base))
   (begin
     (define (accumulate combiner null-value term a next b)
@@ -557,12 +558,77 @@
                                         (next a)
                                         next
                                         b)))))
-    (define (accumulate-sum term a next b) 1)
-    (define (accumulate-product term a next b) 1)))
+    (define (iterative-accumulate combiner null-value term a next b)
+      (define (helper combiner null-value term a next b total)
+        (cond ((> a b) total)
+              (else (helper combiner
+                            null-value
+                            term
+                            (next a)
+                            next
+                            b
+                            (combiner total (term a))))))
+      (helper combiner null-value term a next b null-value))))
 
 (define-library (sicp ex132)
   (export ex132)
   (import (scheme base)
-          (sicp accumulator))
+          (sicp accumulator)
+          (srfi 78))
   (begin
-    (define (ex132) 1)))
+    (define (accumulate-product term a next b)
+      (accumulate (lambda (x y) (* x y))
+                  1
+                  term
+                  a
+                  next
+                  b))
+    (define (accumulate-sum term a next b)
+      (accumulate (lambda (x y) (+ x y))
+                  0
+                  term
+                  a
+                  next
+                  b))
+    (define (iterative-accumulate-sum term a next b)
+      (iterative-accumulate (lambda (x y) (+ x y))
+                            0
+                            term
+                            a
+                            next
+                            b))
+    (define (iterative-accumulate-product term a next b)
+      (iterative-accumulate (lambda (x y) (* x y))
+                            1
+                            term
+                            a
+                            next
+                            b))
+    (define (ex132)
+      (check-set-mode! 'summary)
+      (check (accumulate-sum (lambda (x) x)
+                             1
+                             (lambda (x) (+ x 1))
+                             5) => 15)
+      (check (accumulate-product (lambda (x) x)
+                                 1
+                                 (lambda (x) (+ x 1))
+                                 5) => 120)
+      (check (accumulate-sum (lambda (x) x)
+                             1
+                             (lambda (x) (+ x 1))
+                             100) => (iterative-accumulate-sum
+                                      (lambda (x) x)
+                                      1
+                                      (lambda (x) (+ x 1))
+                                      100))
+      (check (accumulate-product (lambda (x) x)
+                                 1
+                                 (lambda (x) (+ x 1))
+                                 20) => (iterative-accumulate-product
+                                         (lambda (x) x)
+                                         1
+                                         (lambda (x) (+ x 1))
+                                         20))
+      (check-report)
+      (check-reset!))))
