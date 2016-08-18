@@ -632,3 +632,15 @@
                                          20))
       (check-report)
       (check-reset!))))
+
+(define-library (sicp ex133)
+  (export ex133)
+  (begin
+    (define (ex133) 1)))
+
+(define-library (sicp ch134)
+  (export search)
+  (begin
+    (define (search f neg-point pos-point)
+      (let ((midpoint (average neg-point pos-point)))
+        1))))
