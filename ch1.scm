@@ -1,4 +1,6 @@
-(import (scheme process-context))
+(import (scheme process-context)
+        (scheme inexact))
+
 (define-library (sicp ch1)
   (export square sum-of-squares abs ex1.3)
   (import (except (scheme base) square abs))
@@ -26,12 +28,15 @@
                      (else (sum-of-squares z y)))))))))
 (define-library (sicp math-funcs)
   (export PI
-          cube)
+          cube
+          average)
   (import (scheme base))
   (begin
     (define PI 3.141592653589793238462643383279)
     (define (cube x)
-      (* x x x))))
+      (* x x x))
+     (define (average x y)
+      (/ (+ x y) 2))))
 
 (import (sicp math-funcs))
 
@@ -635,12 +640,75 @@
 
 (define-library (sicp ex133)
   (export ex133)
+  (import (scheme base))
   (begin
     (define (ex133) 1)))
 
 (define-library (sicp ch134)
-  (export search)
+  (export search
+          half-interval-method
+          fixed-point
+          close-enough?)
+  (import (scheme base)
+          (scheme inexact)
+          (sicp math-funcs))
   (begin
     (define (search f neg-point pos-point)
       (let ((midpoint (average neg-point pos-point)))
-        1))))
+        (if (close-enough? neg-point pos-point)
+            midpoint
+            (let ((test-value (f midpoint)))
+              (cond ((positive? test-value)
+                     (search f neg-point midpoint))
+                    ((negative? test-value)
+                     (search f midpoint pos-point))
+                    (else midpoint))))))
+    (define (close-enough? point1 point2)
+      (< (abs (- point1 point2)) 0.000001))
+    (define (half-interval-method f a b)
+      (let ((a-value (f a))
+            (b-value (f b)))
+        (cond ((and (negative? a-value)
+                    (positive? b-value))
+               (search f a b))
+              ((and (negative? b-value)
+                    (positive? a-value))
+               (search f b a))
+              (else (error "Values are not of the opposite sign" a b)))))
+    (define (fixed-point f first-guess)
+      (define (try guess)
+        (let ((next (f guess)))
+          (if (close-enough? guess next)
+              next
+              (try next))))
+      (try first-guess))
+    )
+  )
+
+(define-library (sicp ex135)
+  (export golden-ratio-fixed-point
+          fixed-point-sqrt)
+  (import (scheme base)
+          (sicp ch134)
+          (sicp math-funcs))
+  (begin
+     (define (fixed-point-sqrt x)
+      (fixed-point (lambda (y) (average y (/ x y))) 1.0))
+     (define (golden-ratio-fixed-point)
+       (fixed-point (lambda (x) (+ 1 (/ 1 x))) 1.0))))
+
+(define-library (sicp ex136)
+  (export ex136)
+  (import (scheme base)
+          (scheme write)
+          (sicp ch134))
+  (begin
+    (define (ex136 f first-guess)
+      (define (try guess)
+        (let ((next (f guess)))
+          (display next)
+          (newline)
+          (if (close-enough? guess next)
+              next
+              (try next))))
+      (try first-guess))))
