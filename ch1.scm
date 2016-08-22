@@ -644,7 +644,7 @@
   (begin
     (define (ex133) 1)))
 
-(define-library (sicp ch134)
+(define-library (sicp ch133)
   (export search
           half-interval-method
           fixed-point
@@ -689,7 +689,7 @@
   (export golden-ratio-fixed-point
           fixed-point-sqrt)
   (import (scheme base)
-          (sicp ch134)
+          (sicp ch133)
           (sicp math-funcs))
   (begin
      (define (fixed-point-sqrt x)
@@ -701,8 +701,9 @@
   (export ex136)
   (import (scheme base)
           (scheme write)
-          (sicp ch134))
+          (sicp ch133))
   (begin
+    ;the fixed point of x^x = 1000 is 4.555536005198178
     (define (ex136 f first-guess)
       (define (try guess)
         (let ((next (f guess)))
@@ -712,3 +713,4 @@
               next
               (try next))))
       (try first-guess))))
+
