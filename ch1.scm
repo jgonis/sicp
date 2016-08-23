@@ -664,7 +664,7 @@
                      (search f midpoint pos-point))
                     (else midpoint))))))
     (define (close-enough? point1 point2)
-      (< (abs (- point1 point2)) 0.000001))
+      (< (abs (- point1 point2)) 0.000000001))
     (define (half-interval-method f a b)
       (let ((a-value (f a))
             (b-value (f b)))
@@ -714,3 +714,41 @@
               (try next))))
       (try first-guess))))
 
+(define-library (sicp ch134)
+  (export average-damp
+          deriv
+          newtons-method)
+  (import (scheme base)
+          (sicp math-funcs)
+          (sicp ch133))
+  (begin
+    (define (average-damp f)
+      (lambda (x)
+        (average x (f x))))
+    (define (deriv g)
+      (let ((dx 0.00000000001))
+        (lambda (x)
+          (/ (- (g (+ x dx)) (g x))
+             dx))))
+    (define (newton-transform g)
+      (lambda (x)
+        (- x (/ (g x)
+                ((deriv g) x)))))
+    (define (newtons-method g guess)
+      (fixed-point (newton-transform g) guess))))
+
+(define-library (sicp ex145)
+  (export nth-root)
+  (import (scheme base))
+  (begin
+    (define (nth-root a n) 1)))
+
+(define-library (sicp ex146)
+  (export iterative-improve
+          ii-fixed-point
+          ii-sqrt)
+  (import (scheme base))
+  (begin
+    (define (iterative-improve good-enough? improve-guess) 1)
+    (define (ii-fixed-point) 1)
+    (define (ii-sqrt x) 1)))
