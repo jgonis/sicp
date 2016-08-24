@@ -747,8 +747,17 @@
   (export iterative-improve
           ii-fixed-point
           ii-sqrt)
-  (import (scheme base))
+  (import (scheme base)
+          (sicp math-funcs))
   (begin
-    (define (iterative-improve good-enough? improve-guess) 1)
-    (define (ii-fixed-point) 1)
-    (define (ii-sqrt x) 1)))
+    (define (iterative-improve good-enough? improve-guess)
+      (lambda (initial-guess)
+        (cond ((good-enough? initial-guess) initial-guess)
+              (else ((iterative-improve good-enough? improve-guess)
+                     (improve-guess initial-guess))))))
+    (define (ii-fixed-point f first-guess) 1)
+    (define (ii-sqrt x)
+      ((iterative-improve
+        (lambda (guess) (< (abs (- (* guess guess) x)) 0.000001))
+        (lambda (guess) (average guess (/ x guess))))
+       1.0))))
