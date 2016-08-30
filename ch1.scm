@@ -737,6 +737,13 @@
     (define (newtons-method g guess)
       (fixed-point (newton-transform g) guess))))
 
+(define-library (sicp ex140)
+  (export cubic)
+  (import (scheme base)
+          (sicp ch134))
+  (begin
+    (define (cubic a b c) 1)))
+
 (define-library (sicp ex145)
   (export nth-root)
   (import (scheme base))
