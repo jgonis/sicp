@@ -742,7 +742,17 @@
   (import (scheme base)
           (sicp ch134))
   (begin
-    (define (cubic a b c) 1)))
+    (define (cubic a b c)
+      (lambda (x)
+        (+ (* x x x) (* a (* x x)) (* b x) c)))))
+
+(define-library (sicp ex141)
+  (export double)
+  (import (scheme base))
+  (begin
+    (define (double func)
+      (lambda (x)
+        (func (func x))))))
 
 (define-library (sicp ex145)
   (export nth-root)
