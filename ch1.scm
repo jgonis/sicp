@@ -757,7 +757,7 @@
                      (improve-guess initial-guess))))))
     (define (ii-fixed-point f first-guess)
       ((iterative-improve
-        (lambda (guess) (< (abs (- first-guess guess)) 0.000001))
+        (lambda (guess) (< (abs (- (f guess) guess)) 0.000001))
         (lambda (guess) (f guess))) first-guess))
     (define (ii-sqrt x)
       ((iterative-improve
