@@ -755,7 +755,10 @@
         (cond ((good-enough? initial-guess) initial-guess)
               (else ((iterative-improve good-enough? improve-guess)
                      (improve-guess initial-guess))))))
-    (define (ii-fixed-point f first-guess) 1)
+    (define (ii-fixed-point f first-guess)
+      ((iterative-improve
+        (lambda (guess) (< (abs (- first-guess guess)) 0.000001))
+        (lambda (guess) (f guess))) first-guess))
     (define (ii-sqrt x)
       ((iterative-improve
         (lambda (guess) (< (abs (- (* guess guess) x)) 0.000001))
