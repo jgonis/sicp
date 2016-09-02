@@ -50,7 +50,8 @@
   (export make-segment
           make-point
           midpoint-segment
-          print-point)
+          print-point
+          print-segment)
   (import (scheme base)
           (scheme write)
           (sicp math-funcs))
@@ -62,9 +63,9 @@
     (define (end-segment line-segment)
       (cdr line-segment))
     (define (print-segment line-segment)
-      (display (start-segment line-segment))
+      (print-point (start-segment line-segment))
       (display " --> ")
-      (display (end-segment line-segment)))
+      (print-point (end-segment line-segment)))
     (define (midpoint-segment line-segment)
       (make-point (average (x-point (start-segment line-segment))
                            (x-point (end-segment line-segment)))
