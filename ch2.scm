@@ -83,3 +83,17 @@
       (display ", ")
       (display (y-point point))
       (display ")"))))
+
+(define-library (sicp ex23)
+  (export make-rectangle
+          print-rectangle
+          perimeter-of-rectangle
+          area-of-rectangle)
+  (import (scheme base)
+          (scheme write)
+          (sicp ex22))
+  (begin
+    (define (make-rectangle) 1)
+    (define (print-rectangle) 1)
+    (define (perimeter-of-rectangle) 1)
+    (define (area-of-rectangle) 1)))
