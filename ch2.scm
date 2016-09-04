@@ -49,6 +49,8 @@
 (define-library (sicp ex22)
   (export make-segment
           make-point
+          x-point
+          y-point
           midpoint-segment
           print-point
           print-segment)
@@ -84,13 +86,11 @@
       (display (y-point point))
       (display ")"))))
 
-(define-library (sicp ex23)
+(define-library (sicp ex23-constructors)
   (export make-rectangle
-          print-rectangle
-          perimeter-of-rectangle
-          area-of-rectangle)
+          top-left-point
+          bottom-right-point)
   (import (scheme base)
-          (scheme write)
           (sicp ex22))
   (begin
     (define (make-rectangle top-left-point bottom-right-point)
@@ -98,13 +98,49 @@
     (define (top-left-point rectangle)
       (car rectangle))
     (define (bottom-right-point rectangle)
-      (cdr rectangle))
+      (cdr rectangle))))
+
+(define-library (sicp ex23-alt-constructors)
+  (export make-rectangle
+          top-left-point
+          bottom-right-point)
+  (import (scheme base)
+          (sicp ex22))
+  (begin
+    (define (make-rectangle center-point width height)
+      (cons center-point (cons width height)))
+    (define (top-left-point rectangle)
+      (let ((center-point (car rectangle))
+            (width (car (cdr rectangle)))
+            (height (cdr (cdr rectangle))))
+        (make-point (- (x-point center-point) (/ width 2))
+                    (- (y-point center-point) (/ height 2)))))
+    (define (bottom-right-point rectangle)
+      (let ((center-point (car rectangle))
+            (width (car (cdr rectangle)))
+            (height (cdr (cdr rectangle))))
+        (make-point (+ (x-point center-point) (/ width 2))
+                    (+ (y-point center-point) (/ height 2)))))))
+
+(define-library (sicp ex23-functions)
+  (export perimeter-of-rectangle
+          area-of-rectangle
+          print-rectangle)
+  (import (scheme base)
+          (scheme write)
+          (sicp ex22)
+          (sicp ex23-alt-constructors))
+  (begin
     (define (print-rectangle rectangle)
       (display "Top Left: ")
       (print-point (top-left-point rectangle))
       (display " Bottom Right: ")
       (print-point (bottom-right-point rectangle)))
-    (define (perimeter-of-rectangle rectangle) 1)
+    (define (perimeter-of-rectangle rectangle)
+      (+ (* 2 (abs (- (x-point (top-left-point rectangle))
+                      (x-point (bottom-right-point rectangle)))))
+         (* 2 (abs (- (y-point (top-left-point rectangle))
+                      (y-point (bottom-right-point rectangle)))))))
     (define (area-of-rectangle rectangle)
       (* (abs (- (x-point (top-left-point rectangle))
                  (x-point (bottom-right-point rectangle))))
