@@ -146,3 +146,25 @@
                  (x-point (bottom-right-point rectangle))))
          (abs (- (y-point (top-left-point rectangle))
                  (y-point (bottom-right-point rectangle))))))))
+(define-library (sicp ex24)
+  (export ex24-cons
+          ex24-car
+          ex24-cdr)
+  (import (scheme base))
+  (begin
+    (define (ex24-cons x y)
+      (lambda (m) (m x y)))
+    (define (ex24-car z)
+      (z (lambda (p q) p)))
+    (define (ex24-cdr z)
+      (z (lambda (p q) q)))))
+
+(define-library (sicp ex25)
+  (export ex25-cons
+          ex25-car
+          ex25-cdr)
+  (import (scheme base))
+  (begin
+    (define (ex25-cons x y) 1)
+    (define (ex25-car z) 1)
+    (define (ex25-cdr z) 1)))
