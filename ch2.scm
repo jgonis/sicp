@@ -178,3 +178,44 @@
               (else (helper (/ z 3) (+ count 1)))))
       (let ((car (expt 2 (ex25-car z))))
         (helper (/ z car) 0)))))
+
+(define-library (sicp ch214)
+  (export make-interval
+          print-interval
+          +-interval
+          *-interval
+          /-interval
+          subtract-interval
+          )
+  (import (scheme base)
+          (scheme write))
+  (begin
+    (define (make-interval lower-bound upper-bound)
+      (cons lower-bound upper-bound))
+    (define (lower-bound interval)
+      (car interval))
+    (define (upper-bound interval)
+      (cdr interval))
+    (define (print-interval interval)
+      (display "Lower bound: ")
+      (display (lower-bound interval))
+      (display " Upper bound: ")
+      (display (upper-bound interval)))
+    (define (+-interval i1 i2)
+      (make-interval (+ (lower-bound i1)
+                        (lower-bound i2))
+                     (+ (upper-bound i1)
+                        (upper-bound i2))))
+    (define (*-interval i1 i2)
+      (let ((p1 (* (lower-bound i1)
+                   (lower-bound i2)))
+            (p2 (* (lower-bound i1)
+                   (upper-bound i2)))
+            (p3 (* (upper-bound i1)
+                   (lower-bound i2)))
+            (p4 (* (upper-bound i1)
+                   (upper-bound i2))))
+        (make-interval (min p1 p2 p3 p4)
+                       (max p1 p2 p3 p4))))
+    (define (/-interval i1 i2) 1)
+    (define (subtract-interval i1 i2) 1)))
