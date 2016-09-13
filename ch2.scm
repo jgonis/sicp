@@ -181,6 +181,12 @@
 
 (define-library (sicp ch214)
   (export make-interval
+          make-interval-from-center
+          make-interval-from-percent
+          lower-bound
+          upper-bound
+          interval-center
+          interval-percent-tolerance
           print-interval
           +-interval
           *-interval
@@ -192,6 +198,21 @@
   (begin
     (define (make-interval lower-bound upper-bound)
       (cons lower-bound upper-bound))
+    (define (make-interval-from-center center width)
+      (make-interval (- center width) (+ center width)))
+    (define (make-interval-from-percent center percent-tolerance)
+      (make-interval (- center (* center percent-tolerance))
+                     (+ center (* center percent-tolerance))))
+    (define (interval-percent-tolerance interval)
+      1)
+    (define (interval-center interval)
+      (/ (+ (lower-bound interval)
+            (upper-bound interval))
+         2))
+    (define (interval-width interval)
+      (/ (- (upper-bound interval)
+            (lower-bound interval))
+         2))
     (define (lower-bound interval)
       (car interval))
     (define (upper-bound interval)
@@ -218,9 +239,15 @@
         (make-interval (min p1 p2 p3 p4)
                        (max p1 p2 p3 p4))))
     (define (/-interval i1 i2)
-      (*-interval i1
-                  (make-interval (/ 1 (upper-bound i2))
-                                 (/ 1 (lower-bound i2)))))
+      (cond ((= 0 (upper-bound i2))
+             (error "interval contains 0 and cannot be divided"
+                    (upper-bound i2)))
+            ((= 0 (lower-bound i2))
+             (error "interval contains 0 and cannot be divided"
+                    (lower-bound i2)))
+            (else (*-interval i1
+                              (make-interval (/ 1 (upper-bound i2))
+                                             (/ 1 (lower-bound i2)))))))
     (define (subtract-interval i1 i2)
       (let ((p1 (- (lower-bound i1)
                    (lower-bound i2)))
@@ -231,6 +258,4 @@
             (p4 (- (upper-bound i1)
                    (upper-bound i2))))
         (make-interval (min p1 p2 p3 p4)
-                       (max p1 p2 p3 p4))))
-    (define (interval-width interval)
-      (/ (abs (- (upper-bound interval) (lower-bound interval))) 2))))
+                       (max p1 p2 p3 p4))))))
