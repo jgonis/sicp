@@ -259,3 +259,57 @@
                    (upper-bound i2))))
         (make-interval (min p1 p2 p3 p4)
                        (max p1 p2 p3 p4))))))
+
+(define-library (sicp ex214)
+  (export par1
+          par2)
+  (import (scheme base)
+          (sicp ch214))
+  (begin
+    (define (par1 r1 r2)
+      (/-interval
+       (*-interval r1 r2)
+       (+-interval r1 r2)))
+    (define (par2 r1 r2)
+      (let ((one (make-interval 1 1)))
+        (/-interval one
+                    (+-interval
+                     (/-interval one r1)
+                     (/-interval one r2)))))))
+
+(define-library (sicp ch221)
+  (export sicp-list-ref
+          sicp-length
+          sicp-append)
+  (import (scheme base))
+  (begin
+    (define (sicp-list-ref items n)
+      (cond ((= n 0) (car items))
+            (else (sicp-list-ref (cdr items) (- n 1)))))
+    (define (sicp-length items)
+      (cond ((null? items) 0)
+            (else (+ 1 (sicp-length (cdr items))))))
+    (define (sicp-append list1 list2)
+      (cond ((null? list1) list2)
+            (else (cons (car list1)
+                        (sicp-append (cdr list1) list2)))))))
+
+(define-library (sicp ex217)
+  (export ex217)
+  (import (scheme base))
+  (begin
+    (define (ex217 items)
+      (cond ((null? (cdr items)) items)
+            (else (ex217 (cdr items)))))))
+
+(define-library (sicp ex218)
+  (export ex218)
+  (import (scheme base)
+          (sicp ch221))
+  (begin
+    (define (ex218 items)
+      (define (helper items index)
+        (cond ((< index 0) '())
+              (else (cons (sicp-list-ref items index)
+                          (helper items (- index 1))))))
+      (helper items (- (sicp-length items) 1)))))
