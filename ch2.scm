@@ -328,3 +328,14 @@
       (cond ((odd? first) (find-same-parity (cons first rest) odd?))
             (else (find-same-parity (cons first rest) even?))))))
 
+(define-library (sicp ex221)
+  (export ex221-no-map
+          ex221-map)
+  (import (scheme base))
+  (begin
+    (define (ex221-no-map items)
+      (cond ((null? items) nil)
+            (else (cons (square (car items))
+                        (ex221-no-map (cdr items))))))
+    (define (ex221-map items)
+      (map (lambda (x) (* x x)) items))))
