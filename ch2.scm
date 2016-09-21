@@ -313,3 +313,18 @@
               (else (cons (sicp-list-ref items index)
                           (helper items (- index 1))))))
       (helper items (- (sicp-length items) 1)))))
+
+(define-library (sicp ex220)
+  (export same-parity)
+  (import (scheme base))
+  (begin
+    (define (same-parity first . rest)
+      (define (find-same-parity items test)
+        (cond ((null? items) '())
+              ((test (car items)) (cons (car items)
+                                        (find-same-parity (cdr items)
+                                                          test)))
+              (else (find-same-parity (cdr items) test))))
+      (cond ((odd? first) (find-same-parity (cons first rest) odd?))
+            (else (find-same-parity (cons first rest) even?))))))
+
