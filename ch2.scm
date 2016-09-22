@@ -339,3 +339,37 @@
                         (ex221-no-map (cdr items))))))
     (define (ex221-map items)
       (map (lambda (x) (* x x)) items))))
+
+(define-library (sicp ex222)
+  (export ex222
+          ex222-alt)
+  (import (scheme base))
+  (begin
+    (define (ex222 items)
+      (define (iter things answer)
+        (cond ((null? things) answer)
+              (else (iter (cdr things)
+                          (cons (square (car things))
+                                answer)))))
+      (iter items '()))
+    (define (ex222-alt items)
+      (define (iter things answer)
+        (cond ((null? things) answer)
+              (else (iter (cdr things)
+                          (cons answer
+                                (square (car things)))))))
+      (iter items '()))))
+;;Exercise 2.22
+;;In the first case, the list is reversed because cons always adds the
+;;element to the front of the list, even though we are iterating through
+;;the list from beginning to end.  Thus, the last item in the original
+;;list will be added to the front of the answer list.
+;;In the second case, we will get a dotted pair list because the last item
+;;will not be the empty list, but instead will be the square of the last
+;;item on the list.
+
+(define-library (sicp ex223)
+  (export ex223-for-each)
+  (import (scheme base))
+  (begin
+    (define (ex223-for-each func items) 1)))
