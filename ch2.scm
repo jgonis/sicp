@@ -334,7 +334,7 @@
   (import (scheme base))
   (begin
     (define (ex221-no-map items)
-      (cond ((null? items) nil)
+      (cond ((null? items) '())
             (else (cons (square (car items))
                         (ex221-no-map (cdr items))))))
     (define (ex221-map items)
