@@ -372,4 +372,7 @@
   (export ex223-for-each)
   (import (scheme base))
   (begin
-    (define (ex223-for-each func items) 1)))
+    (define (ex223-for-each func items)
+      (cond ((null? items) #t)
+            (else (func (car items))
+                  (ex223-for-each func (cdr items)))))))
