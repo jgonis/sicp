@@ -473,4 +473,34 @@
                                      (mobile-left-branch mobile)))
                      (mobile-weight (branch-structure
                                      (mobile-right-branch mobile)))))))
-    (define (mobile-balanced? mobile) #f)))
+    (define (mobile-balanced? mobile)
+      (cond ((not (mobile? mobile)) #t)
+            (else (and (mobile-balanced
+                        (branch-structure (mobile-left-branch mobile)))
+                       (mobile-balanced
+                        (branch-structure (mobile-right-branch mobile)))
+                       (= (* (branch-length (mobile-left-branch mobile))
+                             (mobile-weight
+                              (branch-strucutre (mobile-left-branch mobile))))
+                          (* (branch-length (mobile-right-branch mobile))
+                             (mobile-weight
+                              (branch-structure (mobile-right-branch mobile)))))))))))
+
+;;test data
+;;        3      2
+;;     ------[]------
+;;     |            |
+;;     4            5
+;;(make-mobile (make-branch 3 4) (make-branch 2 5))
+;;
+;;            4        3
+;;         -------[]-------
+;;       4 | 3          1 |  5
+;;    ---------        ------------
+;;    |       |        |          |          
+;;    2       3        5          1
+;;(make-mobile (make-branch 4 (make-mobile (make-branch 4 2)
+;;                                         (make-branch 3 3)))
+;;             (make-branch 3 (make-mobile (make-branch 1 5)
+;;                                         (make-branch 5 1))))
+
