@@ -435,3 +435,42 @@
         (cond ((null? items) reversed)
               (else (helper (cdr items) (cons (car items) reversed)))))
       (helper items '()))))
+
+(define-library (sicp ex228)
+  (export fringe)
+  (import (scheme base))
+  (begin
+    (define (fringe tree)
+      (cond ((null? tree) '())
+            ((not (pair? tree)) (cons tree '()))
+            (else (append (fringe (car tree))
+                          (fringe (cdr tree))))))))
+
+(define-library (sicp ex229)
+  (export make-mobile
+          make-branch
+          mobile-weight
+          mobile-balanced?)
+  (import (scheme base))
+  (begin
+    (define (make-mobile left right)
+      (list left right))
+    (define (mobile? mobile)
+      (list? mobile))
+    (define (mobile-left-branch mobile)
+      (car mobile))
+    (define (mobile-right-branch mobile)
+      (car (cdr mobile)))
+    (define (make-branch length structure)
+      (list length structure))
+    (define (branch-length branch)
+      (car branch))
+    (define (branch-structure branch)
+      (car (cdr branch)))
+    (define (mobile-weight mobile)
+      (cond ((not (mobile? mobile)) mobile)
+            (else (+ (mobile-weight (branch-structure
+                                     (mobile-left-branch mobile)))
+                     (mobile-weight (branch-structure
+                                     (mobile-right-branch mobile)))))))
+    (define (mobile-balanced? mobile) #f)))
