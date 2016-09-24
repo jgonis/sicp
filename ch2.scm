@@ -376,3 +376,34 @@
       (cond ((null? items) #t)
             (else (func (car items))
                   (ex223-for-each func (cdr items)))))))
+
+(define-library (sicp ch222)
+  (export count-leaves)
+  (import (scheme base))
+  (begin
+    (define (count-leaves tree)
+      (cond ((null? tree) 0)
+            ((not (pair? tree)) 1)
+            (else (+ (count-leaves (car tree))
+                     (count-leaves (cdr tree))))))))
+
+;;Exercise 2.24
+;;(list 1 (list 2 (list 3 4))) will print (1  (2  (3  4)))
+;;dotted pair notation:
+;; [ ][]->[ ][/]
+;;  |      |        
+;;  1     [ ][]->[ ][/]  
+;;         |      | 
+;;         2     [ ][]->[ ][/]
+;;                |      |
+;;                3      4
+;;Finally, in tree format:
+;;             []
+;;            /  \
+;;           1   [] (2 (3 4))  
+;;              /  \
+;;             2   [] (3 4)
+;;                /  \
+;;               3   4
+
+;;Exercise 2.25
