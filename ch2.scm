@@ -411,3 +411,27 @@
 ;;(car (car ((7))))
 ;;(car (cdr (car (cdr (car (cdr (car (cdr (car (cdr (car (cdr
 ;;    '(1 (2 (3 (4 (5 (6 7)))))))))))))))))
+
+;;Exercise 2.26
+; (append x y) -> (1 2 3 4 5 6)
+; (cons x y) -> ((1 2 3) 4 5 6)
+; (list x y) -> ((1 2 3) (4 5 6))
+
+(define-library (sicp ex227)
+  (export deep-reverse
+          alt-reverse)
+  (import (scheme base))
+  (begin
+    (define (deep-reverse items)
+      (define (helper items reversed)
+        (cond ((null? items) reversed)
+              ((not (pair? items)) items)
+              (else (helper (cdr items)
+                            (cons (deep-reverse (car items))
+                                  reversed)))))
+      (helper items '()))
+    (define (alt-reverse items)
+      (define (helper items reversed)
+        (cond ((null? items) reversed)
+              (else (helper (cdr items) (cons (car items) reversed)))))
+      (helper items '()))))
