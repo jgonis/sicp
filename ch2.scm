@@ -475,13 +475,13 @@
                                      (mobile-right-branch mobile)))))))
     (define (mobile-balanced? mobile)
       (cond ((not (mobile? mobile)) #t)
-            (else (and (mobile-balanced
+            (else (and (mobile-balanced?
                         (branch-structure (mobile-left-branch mobile)))
-                       (mobile-balanced
+                       (mobile-balanced?
                         (branch-structure (mobile-right-branch mobile)))
                        (= (* (branch-length (mobile-left-branch mobile))
                              (mobile-weight
-                              (branch-strucutre (mobile-left-branch mobile))))
+                              (branch-structure (mobile-left-branch mobile))))
                           (* (branch-length (mobile-right-branch mobile))
                              (mobile-weight
                               (branch-structure (mobile-right-branch mobile)))))))))))
