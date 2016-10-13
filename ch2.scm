@@ -448,6 +448,7 @@
 
 (define-library (sicp ex229)
   (export make-mobile
+          mobile?
           make-branch
           mobile-weight
           mobile-balanced?)
@@ -490,17 +491,17 @@
 ;;        3      2
 ;;     ------[]------
 ;;     |            |
-;;     4            5
+;;     4            6
 ;;(make-mobile (make-branch 3 4) (make-branch 2 5))
 ;;
-;;            4        3
+;;            1        2
 ;;         -------[]-------
-;;       4 | 3          1 |  5
+;;       3 | 4          5 |  6
 ;;    ---------        ------------
 ;;    |       |        |          |          
-;;    2       3        5          1
-;;(make-mobile (make-branch 4 (make-mobile (make-branch 4 2)
-;;                                         (make-branch 3 3)))
-;;             (make-branch 3 (make-mobile (make-branch 1 5)
-;;                                         (make-branch 5 1))))
+;;    7       8        9          10
+;;(make-mobile (make-branch 1 (make-mobile (make-branch 3 7)
+;;                                         (make-branch 4 8)))
+;;             (make-branch 2 (make-mobile (make-branch 5 9)
+;;                                         (make-branch 6 10))))
 
