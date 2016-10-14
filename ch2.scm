@@ -546,3 +546,12 @@
            tree))
     (define (tree-map-square-tree tree)
       (tree-map square tree))))
+
+(define-library (sicp ex232)
+  (export subsets)
+  (import (scheme-base))
+  (begin
+    (define (subsets s)
+      (cond ((null? s) (list '()))
+            (else (let ((rest (subsets (cdr s))))
+                    (append rest (map (lambda () '()) rest))))))))
