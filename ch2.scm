@@ -534,4 +534,15 @@
                    (else (* sub-tree sub-tree))))
            tree))))
 
-
+(define-library (sicp ex231)
+  (export tree-map
+          tree-map-square-tree)
+  (import (scheme base))
+  (begin
+    (define (tree-map func tree)
+      (map (lambda (sub-tree)
+             (cond ((pair? sub-tree) (tree-map func sub-tree))
+                   (else (func sub-tree))))
+           tree))
+    (define (tree-map-square-tree tree)
+      (tree-map square tree))))
