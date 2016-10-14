@@ -378,14 +378,26 @@
                   (ex223-for-each func (cdr items)))))))
 
 (define-library (sicp ch222)
-  (export count-leaves)
+  (export count-leaves
+          scale-tree
+          scale-tree-map)
   (import (scheme base))
   (begin
     (define (count-leaves tree)
       (cond ((null? tree) 0)
             ((not (pair? tree)) 1)
             (else (+ (count-leaves (car tree))
-                     (count-leaves (cdr tree))))))))
+                     (count-leaves (cdr tree))))))
+    (define (scale-tree tree factor)
+      (cond ((null? tree) '())
+            ((not (pair? tree)) (* tree factor))
+            (else (cons (scale-tree (car tree) factor)
+                        (scale-tree (cdr tree) factor)))))
+    (define (scale-tree-map tree factor)
+      (map (lambda (sub-tree)
+             (cond ((pair? sub-tree) (scale-tree-map sub-tree factor))
+                   (else (* sub-tree factor))))
+           tree))))
 
 ;;Exercise 2.24
 ;;(list 1 (list 2 (list 3 4))) will print (1  (2  (3  4)))
@@ -505,3 +517,13 @@
 ;;             (make-branch 2 (make-mobile (make-branch 5 9)
 ;;                                         (make-branch 6 10))))
 
+
+(define-library (sicp e230)
+  (export square-tree
+          square-tree-map)
+  (import (scheme base))
+  (begin
+    (define (square-tree tree)
+      tree)
+    (define (square-tree-map tree)
+      tree)))
