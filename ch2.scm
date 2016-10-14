@@ -556,3 +556,21 @@
             (else (let ((rest (subsets (cdr s))))
                     (append rest (map (lambda (element) (cons (car s) element))
                                       rest))))))))
+(define-library (sicp sequence-ops)
+  (export accumulate
+          filter
+          enumerate-interval)
+  (import (scheme base))
+  (begin
+    (define (accumulate op initial-value sequence)
+      (cond ((null? sequence) initial-value)
+            (else (op (car sequence)
+                      (accumulate op initial-value (cdr sequence))))))
+    (define (filter predicate sequence)
+      (cond ((null? sequence) '())
+            ((predicate (car sequence))
+             (cons (car sequence) (filter predicate (cdr sequence))))
+            (else (filter predicate (cdr sequence)))))
+    (define (enumerate-interval low high step)
+      (cond ((> low high) '())
+            (else (cons low (enumerate-interval (step low) high step)))))))
