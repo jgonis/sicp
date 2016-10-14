@@ -518,12 +518,20 @@
 ;;                                         (make-branch 6 10))))
 
 
-(define-library (sicp e230)
+(define-library (sicp ex230)
   (export square-tree
           square-tree-map)
   (import (scheme base))
   (begin
     (define (square-tree tree)
-      tree)
+      (cond ((null? tree) '())
+            ((not (pair? tree)) (* tree tree))
+            (else (cons (square-tree (car tree))
+                        (square-tree (cdr tree))))))
     (define (square-tree-map tree)
-      tree)))
+      (map (lambda (sub-tree)
+             (cond ((pair? sub-tree) (square-tree-map sub-tree))
+                   (else (* sub-tree sub-tree))))
+           tree))))
+
+
