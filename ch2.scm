@@ -549,9 +549,10 @@
 
 (define-library (sicp ex232)
   (export subsets)
-  (import (scheme-base))
+  (import (scheme base))
   (begin
     (define (subsets s)
       (cond ((null? s) (list '()))
             (else (let ((rest (subsets (cdr s))))
-                    (append rest (map (lambda () '()) rest))))))))
+                    (append rest (map (lambda (element) (cons (car s) element))
+                                      rest))))))))
