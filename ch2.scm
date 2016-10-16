@@ -574,3 +574,17 @@
     (define (enumerate-interval low high step)
       (cond ((> low high) '())
             (else (cons low (enumerate-interval (step low) high step)))))))
+
+(define-library (sicp ex233)
+  (export accum-map
+          accum-append
+          accum-length)
+  (import (scheme base)
+          (sicp sequence-ops))
+  (begin
+    (define (accum-map op sequence)
+      (accumulate (lambda (x y) (cons (op x) y)) '() sequence))
+    (define (accum-append seq1 seq2)
+      (accumulate cons seq2 seq1))
+    (define (accum-length sequence)
+      (accumulate (lambda (x y) (+ 1 y)) 0 sequence))))
