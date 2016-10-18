@@ -599,3 +599,22 @@
                     (+ this-coeff (* x higher-terms)))
                   0
                   coefficient-sequence))))
+
+(define-library (sicp ex235)
+  (export count-leaves-accum)
+  (import (scheme base)
+          (sicp sequence-ops))
+  (begin
+    (define (count-leaves-accum t)
+      (accumulate (lambda (first previous-accums) 0) 0
+                  (map (lambda (elem) elem) t)))))
+
+(define-library (sicp ex236)
+  (export accumulate-n)
+  (import (scheme base)
+          (sicp sequence-ops))
+  (begin
+    (define (accumulate-n op init seqs)
+      (cond ((null? (car seqs)) '())
+            (else (cons (accumulate op init (map car seqs))
+                        (accumulate-n op init (map cdr seqs))))))))
