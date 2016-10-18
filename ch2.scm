@@ -588,3 +588,14 @@
       (accumulate cons seq2 seq1))
     (define (accum-length sequence)
       (accumulate (lambda (x y) (+ 1 y)) 0 sequence))))
+
+(define-library (sicp ex234)
+  (export horner-eval)
+  (import (scheme base)
+          (sicp sequence-ops))
+  (begin
+    (define (horner-eval x coefficient-sequence)
+      (accumulate (lambda (this-coeff higher-terms)
+                    (+ this-coeff (* x higher-terms)))
+                  0
+                  coefficient-sequence))))
