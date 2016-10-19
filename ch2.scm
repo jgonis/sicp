@@ -618,3 +618,15 @@
       (cond ((null? (car seqs)) '())
             (else (cons (accumulate op init (map car seqs))
                         (accumulate-n op init (map cdr seqs))))))))
+(define-library (sicp ex237)
+  (export dot-product
+          matrix-*-matrix
+          matrix-*-vector
+          transpose)
+  (import (scheme base)
+          (sicp sequence-ops))
+  (begin
+    (define (dot-product v w) 0)
+    (define (matrix-*-matrix m n) '())
+    (define (matrix-*-vector m v) '())
+    (define (transpose mat) '())))
