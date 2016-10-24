@@ -630,9 +630,32 @@
   (begin
     (define (dot-product v w)
       (accumulate + 0 (map * v w)))
-    (define (matrix-*-matrix m n) '())
+    (define (matrix-*-matrix m n)
+      (let ((cols (transpose n)))
+        (map (lambda (elem) elem) m)))
     (define (matrix-*-vector m v)
-      (map (lambda (row) (map * row v)) m))
+      (map (lambda (row) (accumulate + 0 (map * row v))) m))
     (define (transpose mat)
       (accumulate-n cons '() mat))))
 
+(define-library (sicp ex238)
+  (export fold-left)
+  (import (scheme base))
+  (begin
+    (define (fold-left op initial sequence)
+      (define (iter result rest)
+        (cond ((null? rest) result)
+              (else (iter (op result (car rest))
+                          (cdr rest)))))
+      (iter initial sequence))))
+
+(define-library (sicp ex239)
+  (export fold-right-reverse
+          fold-left-reverse)
+  (import (scheme base)
+          (sicp ex238))
+  (begin
+    (define (fold-right-reverse sequence)
+      (accumulate (lambda (x y) (cons y x)) '() sequence))
+    (define (fold-left-reverse sequence)
+      (fold-left (lambda (x y) (cons y x)) '() sequence))))
