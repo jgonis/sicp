@@ -648,6 +648,10 @@
               (else (iter (op result (car rest))
                           (cdr rest)))))
       (iter initial sequence))))
+;;value of (fold-right / 1 (list 1 2 3)) => 3/2
+;;value of (fold-left / 1 (list 1 2 3)) => 1/6
+;;value of (fold-right list nil (list 1 2 3)) => (1 (2 (3 ())))
+;;value of (fold-left list nil (list 1 2 3)) => (((() 1) 2) 3)
 
 (define-library (sicp ex239)
   (export fold-right-reverse
