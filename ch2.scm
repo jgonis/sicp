@@ -559,7 +559,8 @@
 (define-library (sicp sequence-ops)
   (export accumulate
           filter
-          enumerate-interval)
+          enumerate-interval
+          flatmap)
   (import (scheme base))
   (begin
     (define (accumulate op initial-value sequence)
@@ -573,7 +574,9 @@
             (else (filter predicate (cdr sequence)))))
     (define (enumerate-interval low high step)
       (cond ((> low high) '())
-            (else (cons low (enumerate-interval (step low) high step)))))))
+            (else (cons low (enumerate-interval (step low) high step)))))
+    (define (flatmap func sequence)
+      (accumulate append '() (map func sequence)))))
 
 (define-library (sicp ex233)
   (export accum-map
@@ -663,3 +666,32 @@
       (accumulate (lambda (x y) (cons y x)) '() sequence))
     (define (fold-left-reverse sequence)
       (fold-left (lambda (x y) (cons y x)) '() sequence))))
+
+(cdr (car (accumulate append '() (map (lambda (n)
+                              (map (lambda (i) (cons i n))
+                                   (enumerate-interval 1 n (lambda (x) (+ x 1)))))
+                            (enumerate-interval 1 6 (lambda (x) (+ x 1)))))))
+
+(define-library (sicp nested-mappings)
+  (export blah)
+  (import (scheme base)
+          (sicp fast-prime)
+          (sicp sequence-ops))
+  (begin
+    (define (prime-sum? pair)
+      (prime? (+ (car pair) (cdr pair))))
+    (define (make-pair-sum pair))))
+
+(define-library (sicp permutations)
+  (export permutations)
+  (import (scheme base)
+          (sicp sequence-ops))
+  (begin
+    (define (permutations s)
+      (cond ((null? s) (list '()))
+            (flatmap (lambda (x) (map (lambda (p) (cons x p))
+                                      (permutations
+                                       (filter
+                                        (lambda (item)
+                                          (not (= item x))) s))))
+                     s)))))
