@@ -572,9 +572,13 @@
             ((predicate (car sequence))
              (cons (car sequence) (filter predicate (cdr sequence))))
             (else (filter predicate (cdr sequence)))))
-    (define (enumerate-interval low high step)
-      (cond ((> low high) '())
-            (else (cons low (enumerate-interval (step low) high step)))))
+    (define (enumerate-interval low high . step)
+      (let ((stepFunc (cond ((null? step) (lambda (x) (+ x 1)))
+                            (else (car step)))))
+        (cond ((> low high) '())
+              (else (cons low (enumerate-interval (stepFunc low)
+                                                  high
+                                                  stepFunc))))))
     (define (flatmap func sequence)
       (accumulate append '() (map func sequence)))))
 
@@ -660,17 +664,13 @@
   (export fold-right-reverse
           fold-left-reverse)
   (import (scheme base)
-          (sicp ex238))
+          (sicp ex238)
+          (sicp sequence-ops))
   (begin
     (define (fold-right-reverse sequence)
       (accumulate (lambda (x y) (cons y x)) '() sequence))
     (define (fold-left-reverse sequence)
       (fold-left (lambda (x y) (cons y x)) '() sequence))))
-
-(cdr (car (accumulate append '() (map (lambda (n)
-                              (map (lambda (i) (cons i n))
-                                   (enumerate-interval 1 n (lambda (x) (+ x 1)))))
-                            (enumerate-interval 1 6 (lambda (x) (+ x 1)))))))
 
 (define-library (sicp nested-mappings)
   (export blah)
@@ -678,9 +678,10 @@
           (sicp fast-prime)
           (sicp sequence-ops))
   (begin
+    (define (blah) 1)
     (define (prime-sum? pair)
       (prime? (+ (car pair) (cdr pair))))
-    (define (make-pair-sum pair))))
+    (define (make-pair-sum pair) pair)))
 
 (define-library (sicp permutations)
   (export permutations)
