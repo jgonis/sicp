@@ -554,8 +554,26 @@
     (define (subsets s)
       (cond ((null? s) (list '()))
             (else (let ((rest (subsets (cdr s))))
-                    (append rest (map (lambda (element) (cons (car s) element))
+                    (append rest (map (lambda (element)
+                                        (cons (car s) element))
                                       rest))))))))
+;The following is the for the example argument of (1 2 3):
+;The subsets function works by iterating to the end of the list
+;and then return a list with an empty list inside of it. From there
+;the recursion continues back through the list, starting with (3),
+;proceeding to (2 3) and ending back at the original (1 2 3). At
+;each step the first element of this list is inserted into each element
+;of a copy of the current result list which is then appended to back
+;of the current result list, creating a new result list that we
+;continue to recurse with.
+;Example we get all the way to the end of the list and return (()).
+;We now recur back to the time when our argument list is (3). We insert
+;3 into a copy of the result list giving us ((3)) and append that to
+;the result list giving (() (3)). We recur again, with our argument
+;list now being (2 3). We insert 2 into a copy of the result list
+;giving ((2) (2 3)) and append this to the result list giving
+;(() (3) (2) (2 3)). We recur once again and repeat this procedure.
+
 (define-library (sicp sequence-ops)
   (export accumulate
           filter
@@ -702,3 +720,5 @@
                                   (permutations
                                    (remove x s))))
                            s))))))
+
+;
