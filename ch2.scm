@@ -721,4 +721,13 @@
                                    (remove x s))))
                            s))))))
 
-;
+(define-library (sicp ex240)
+  (export ex240
+          gen-pairs)
+  (import (scheme base)
+          (sicp sequence-ops))
+  (begin
+    (define (gen-pairs start finish)
+      (enumerate-interval start finish))
+    (define (ex240) 1)))
+
