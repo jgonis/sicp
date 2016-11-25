@@ -694,15 +694,24 @@
       (fold-left (lambda (x y) (cons y x)) '() sequence))))
 
 (define-library (sicp nested-mappings)
-  (export blah)
+  (export prime-sum-pairs)
   (import (scheme base)
           (sicp fast-prime)
           (sicp sequence-ops))
   (begin
-    (define (blah) 1)
+    (define (make-pairs n)
+      (accumulate append '()
+                  (map (lambda (right)
+                         (map (lambda (left) (cons left right))
+                              (enumerate-interval 1 right)))
+                       (enumerate-interval 1 n))))
     (define (prime-sum? pair)
       (prime? (+ (car pair) (cdr pair))))
-    (define (make-pair-sum pair) pair)))
+    (define (prime-sum-pairs n)
+      (map (lambda (prime-pair) (cons (+ (car prime-pair)
+                                         (cdr prime-pair))
+                                      prime-pair))
+           (filter prime-sum? (make-pairs n))))))
 
 (define-library (sicp permutations)
   (export permutations)
@@ -721,13 +730,9 @@
                                    (remove x s))))
                            s))))))
 
-(define-library (sicp ex240)
-  (export ex240
-          gen-pairs)
+(define-library (sicp ex241)
+  (export ex241)
   (import (scheme base)
           (sicp sequence-ops))
   (begin
-    (define (gen-pairs start finish)
-      (enumerate-interval start finish))
-    (define (ex240) 1)))
-
+    (define (ex241 n s) 1)))
