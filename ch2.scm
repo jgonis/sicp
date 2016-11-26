@@ -731,8 +731,48 @@
                            s))))))
 
 (define-library (sicp ex241)
-  (export ex241)
+  (export ex241
+          generate-triplets
+          filter-triplets
+          unique-triplet?)
   (import (scheme base)
           (sicp sequence-ops))
   (begin
-    (define (ex241 n s) 1)))
+    (define (generate-triplets n)
+      (accumulate append
+                  '()
+                  (accumulate append
+                              '()
+                              (map (lambda (left)
+                                     (map (lambda (middle)
+                                            (map (lambda (right)
+                                                   (list left middle right))
+                                                 (enumerate-interval 1
+                                                                     middle)))
+                                          (enumerate-interval 1
+                                                              left)))
+                                   (enumerate-interval 1
+                                                       n)))))
+    (define (filter-triplets pred? triplets)
+      (cond ((null? triplets) '())
+            ((pred? (car triplets))
+             (cons (car triplets)
+                   (filter-triplets pred? (cdr triplets))))
+            (else (filter-triplets pred? (cdr triplets)))))
+    (define (unique-triplet? triplet)
+      (let ((a (car triplet))
+            (b (car (cdr triplet)))
+            (c (car (cdr (cdr triplet)))))
+        (and (not (= a b))
+             (not (= a c))
+             (not (= b c)))))
+    (define (triplet-sum triplet)
+      (let ((a (car triplet))
+            (b (car (cdr triplet)))
+            (c (car (cdr (cdr triplet)))))
+        (+ a b c)))
+    (define (ex241 n s)
+      (let ((triplets (filter-triplets unique-triplet?
+                                       (generate-triplets n))))
+        (filter-triplets (lambda (triplet) (= (triplet-sum triplet) s))
+                         triplets)))))
