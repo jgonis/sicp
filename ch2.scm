@@ -731,10 +731,7 @@
                            s))))))
 
 (define-library (sicp ex241)
-  (export ex241
-          generate-triplets
-          filter-triplets
-          unique-triplet?)
+  (export ex241)
   (import (scheme base)
           (sicp sequence-ops))
   (begin
@@ -776,3 +773,10 @@
                                        (generate-triplets n))))
         (filter-triplets (lambda (triplet) (= (triplet-sum triplet) s))
                          triplets)))))
+
+(define-library (sicp ex242)
+  (export ex242)
+  (import (scheme base)
+          (sicp sequence-ops))
+  (begin
+    (define (ex242) 1)))
