@@ -771,7 +771,8 @@
     (define (ex241 n s)
       (let ((triplets (filter-triplets unique-triplet?
                                        (generate-triplets n))))
-        (filter-triplets (lambda (triplet) (= (triplet-sum triplet) s))
+        (filter-triplets (lambda (triplet)
+                           (= (triplet-sum triplet) s))
                          triplets)))))
 
 (define-library (sicp ex242)
@@ -782,8 +783,10 @@
     (define (board-valid board)
       (define (helper position rest-of-board)
         (cond ((null? rest-of-board) #t)
-              (else (and (not (= (car (car rest-of-board)) position))
-                         (helper position (cdr rest-of-board))))))
+              (else (and (not (= (car (car rest-of-board))
+                                 position))
+                         (helper position
+                                 (cdr rest-of-board))))))
       (cond ((null? board) #t)
             (else (and (helper (car (car board)) (cdr board))
                        (board-valid (cdr board))))))
@@ -792,17 +795,44 @@
         (cond ((= current-column 1)
                (filter (lambda (board) (board-valid board))
                        (map (lambda (current-position)
-                              (cons (cons current-position current-column)
+                              (cons (cons current-position
+                                          current-column)
                                     current-board))
                             (enumerate-interval 1 board-size))))
               (else (filter (lambda (board) (not (null? board)))
-                            (flatmap (lambda (current-position)
-                                       (helper (- current-column 1)
-                                               (cons (cons current-position
-                                                           current-column)
-                                                     current-board)
-                                               board-size))
-                                     (enumerate-interval 1 board-size))))))
+                            (flatmap
+                             (lambda (current-position)
+                               (helper (- current-column 1)
+                                       (cons
+                                        (cons current-position
+                                              current-column)
+                                        current-board)
+                                       board-size))
+                             (enumerate-interval 1
+                                                 board-size))))))
       (helper board-size '() board-size))))
+
+(define-library (sicp ex242-alt)
+  (export ex242-alt)
+  (import (scheme base)
+          (sicp sequence-ops))
+  (begin
+    (define (ex242-alt board-size)
+      (define (queen-cols k)
+        (cond ((= k 0) (list empty-board))
+              (else (filter
+                     (lambda (positions)
+                       (safe? k position))
+                     (flatmap
+                      (lambda (rest-of-queens)
+                        (map (lambda (new-row)
+                               (adjoin-position new-row
+                                                k
+                                                rest-of-queens))
+                             (enumerate-interval 1 board-size)))
+                      (queen-cols (- k 1)))))))
+      (queen-cols board-size))
+    (define (safe? current-column positions) #t)
+    (define (adjoin-position new-row k rest-of-queens) 1)))
 
 
