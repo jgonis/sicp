@@ -819,10 +819,10 @@
   (begin
     (define (ex242-alt board-size)
       (define (queen-cols k)
-        (cond ((= k 0) (list empty-board))
+        (cond ((= k 0) (list '()))
               (else (filter
                      (lambda (positions)
-                       (safe? k position))
+                       (safe? k positions))
                      (flatmap
                       (lambda (rest-of-queens)
                         (map (lambda (new-row)
