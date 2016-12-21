@@ -246,8 +246,9 @@
              (error "interval contains 0 and cannot be divided"
                     (lower-bound i2)))
             (else (*-interval i1
-                              (make-interval (/ 1 (upper-bound i2))
-                                             (/ 1 (lower-bound i2)))))))
+                              (make-interval
+                               (/ 1 (upper-bound i2))
+                               (/ 1 (lower-bound i2)))))))
     (define (subtract-interval i1 i2)
       (let ((p1 (- (lower-bound i1)
                    (lower-bound i2)))
@@ -361,12 +362,13 @@
       (iter items '()))))
 ;;Exercise 2.22
 ;;In the first case, the list is reversed because cons always adds the
-;;element to the front of the list, even though we are iterating through
+;;element to the front of the list, even though we are iterating
+;through
 ;;the list from beginning to end.  Thus, the last item in the original
 ;;list will be added to the front of the answer list.
-;;In the second case, we will get a dotted pair list because the last item
-;;will not be the empty list, but instead will be the square of the last
-;;item on the list.
+;;In the second case, we will get a dotted pair list because the last
+;;item will not be the empty list, but instead will be the square of
+;;the last item on the list.
 
 (define-library (sicp ex223)
   (export ex223-for-each)
@@ -445,7 +447,8 @@
     (define (alt-reverse items)
       (define (helper items reversed)
         (cond ((null? items) reversed)
-              (else (helper (cdr items) (cons (car items) reversed)))))
+              (else (helper (cdr items)
+                            (cons (car items) reversed)))))
       (helper items '()))))
 
 (define-library (sicp ex228)
@@ -482,22 +485,30 @@
       (car (cdr branch)))
     (define (mobile-weight mobile)
       (cond ((not (mobile? mobile)) mobile)
-            (else (+ (mobile-weight (branch-structure
-                                     (mobile-left-branch mobile)))
-                     (mobile-weight (branch-structure
-                                     (mobile-right-branch mobile)))))))
+            (else (+ (mobile-weight
+                      (branch-structure
+                       (mobile-left-branch mobile)))
+                     (mobile-weight
+                      (branch-structure
+                       (mobile-right-branch mobile)))))))
     (define (mobile-balanced? mobile)
       (cond ((not (mobile? mobile)) #t)
             (else (and (mobile-balanced?
-                        (branch-structure (mobile-left-branch mobile)))
+                        (branch-structure
+                         (mobile-left-branch mobile)))
                        (mobile-balanced?
-                        (branch-structure (mobile-right-branch mobile)))
-                       (= (* (branch-length (mobile-left-branch mobile))
+                        (branch-structure
+                         (mobile-right-branch mobile)))
+                       (= (* (branch-length
+                              (mobile-left-branch mobile))
                              (mobile-weight
-                              (branch-structure (mobile-left-branch mobile))))
-                          (* (branch-length (mobile-right-branch mobile))
+                              (branch-structure
+                               (mobile-left-branch mobile))))
+                          (* (branch-length
+                              (mobile-right-branch mobile))
                              (mobile-weight
-                              (branch-structure (mobile-right-branch mobile)))))))))))
+                              (branch-structure
+                               (mobile-right-branch mobile)))))))))))
 
 ;;test data
 ;;        3      2
@@ -562,12 +573,14 @@
 ;and then return a list with an empty list inside of it. From there
 ;the recursion continues back through the list, starting with (3),
 ;proceeding to (2 3) and ending back at the original (1 2 3). At
-;each step the first element of this list is inserted into each element
+;each step the first element of this list is inserted into each
+;element
 ;of a copy of the current result list which is then appended to back
 ;of the current result list, creating a new result list that we
 ;continue to recurse with.
 ;Example we get all the way to the end of the list and return (()).
-;We now recur back to the time when our argument list is (3). We insert
+;We now recur back to the time when our argument list is (3). We
+;insert
 ;3 into a copy of the result list giving us ((3)) and append that to
 ;the result list giving (() (3)). We recur again, with our argument
 ;list now being (2 3). We insert 2 into a copy of the result list
@@ -738,18 +751,19 @@
     (define (generate-triplets n)
       (accumulate append
                   '()
-                  (accumulate append
-                              '()
-                              (map (lambda (left)
-                                     (map (lambda (middle)
-                                            (map (lambda (right)
-                                                   (list left middle right))
-                                                 (enumerate-interval 1
-                                                                     middle)))
-                                          (enumerate-interval 1
-                                                              left)))
-                                   (enumerate-interval 1
-                                                       n)))))
+                  (accumulate
+                   append
+                   '()
+                   (map (lambda (left)
+                          (map (lambda (middle)
+                                 (map (lambda (right)
+                                        (list left middle right))
+                                      (enumerate-interval 1
+                                                          middle)))
+                               (enumerate-interval 1
+                                                   left)))
+                        (enumerate-interval 1
+                                            n)))))
     (define (filter-triplets pred? triplets)
       (cond ((null? triplets) '())
             ((pred? (car triplets))
@@ -926,6 +940,16 @@
     (define (adjoin-set x set)
       (cond ((element-of-set? x set) set)
             (else (cons x set))))))
+;;Exercise 2.60
+;Allowing duplicates doesn't change the worst case run-time for
+;element-of-set?, but it could change the constant factors
+;involved as you may have to pass over multiple duplicates
+;Adjoin-set becomes much quicker as you don't need to check for
+;duplicates and can just append the item instantly for constant
+;run-time. Union-set also becomes much quicker as you also do not
+;need to search for duplicates and can instead just append the sets
+;together. Intersection-set remains n^2, but the constant factors
+;will grow as you may be iterating over a large number of duplicates
 
 (define-library (sicp ordered-list-sets)
   (export union-set
@@ -936,5 +960,9 @@
   (begin
     (define (union-set set1 set2) 1)
     (define (intersection-set set1 set2) 1)
-    (define (element-of-set? x set) 1)
+    (define (element-of-set? x set)
+      (cond ((null? set) #f)
+            ((= x (car set)) #t)
+            ((< x (car set)) #f)
+            (else (element-of-set? x (cdr set)))))
     (define (adjoin-set x set) 1)))
