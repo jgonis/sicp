@@ -902,7 +902,7 @@
                             (multiplicand exp))))
             (else (error "unknown expression type!"))))))
 
-(define-library (sicp ch233)
+(define-library (sicp unordered-list-sets)
   (export union-set
           intersection-set
           element-of-set?
@@ -926,3 +926,15 @@
     (define (adjoin-set x set)
       (cond ((element-of-set? x set) set)
             (else (cons x set))))))
+
+(define-library (sicp ordered-list-sets)
+  (export union-set
+          intersection-set
+          element-of-set?
+          adjoin-set)
+  (import (scheme base))
+  (begin
+    (define (union-set set1 set2) 1)
+    (define (intersection-set set1 set2) 1)
+    (define (element-of-set? x set) 1)
+    (define (adjoin-set x set) 1)))
