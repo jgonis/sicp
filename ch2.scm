@@ -958,11 +958,47 @@
           adjoin-set)
   (import (scheme base))
   (begin
-    (define (union-set set1 set2) 1)
-    (define (intersection-set set1 set2) 1)
+    (define (union-set set1 set2)
+      (cond ((null? set1) set2)
+            ((null? set2) set1)
+            (else (let ((x1 (car set1)))
+                    (cond ((< x1 (car set2))
+                           (union-set (cdr set1)
+                                      (adjoin-set x1 set2)))
+                          ((element-of-set? x1 set2)
+                           (union-set (cdr set1) set2))
+                          (else (union-set (cdr set1)
+                                           (adjoin-set x1 set2))))))))
+    (define (intersection-set set1 set2)
+      (cond ((or (null? set1) (null? set2)) '())
+            (else
+             (let ((x1 (car set1))
+                   (x2 (car set2)))
+               (cond ((= x1 x2) (cons x1 (intersection-set
+                                          (cdr set1)
+                                          (cdr set2))))
+                     ((< x1 x2) (intersection-set (cdr set1)
+                                                  set2))
+                     ((> x1 x2) (intersection-set set1
+                                                  (cdr set2))))))))
     (define (element-of-set? x set)
       (cond ((null? set) #f)
             ((= x (car set)) #t)
             ((< x (car set)) #f)
             (else (element-of-set? x (cdr set)))))
+    (define (adjoin-set x set)
+      (cond ((null? set) (cons x '()))
+            ((< x (car set)) (cons x set))
+            (else (cons (car set) (adjoin-set x (cdr set))))))))
+
+(define-library (sicp binary-tree-sets)
+  (export union-set
+          intersection-set
+          element-of-set?
+          adjoin-set)
+  (import (scheme base))
+  (begin
+    (define (union-set set1 set2) 1)
+    (define (intersection-set set1 set2) 1)
+    (define (element-of-set? x set) #f)
     (define (adjoin-set x set) 1)))
