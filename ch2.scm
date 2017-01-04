@@ -999,7 +999,8 @@
           element-of-set?
           adjoin-set
           tree->list-1
-          tree->list-2)
+          tree->list-2
+          list->tree)
   (import (scheme base)
           (sicp tree-lib))
   (begin
@@ -1008,9 +1009,9 @@
     (define (element-of-set? x set)
       (cond ((null? set) #f)
             ((= x (node set)) #t)
-            ((< x (node set)) (element-of-set x
+            ((< x (node set)) (element-of-set? x
                                               (left-branch set)))
-            ((> x (node set)) (element-of-set x
+            ((> x (node set)) (element-of-set? x
                                               (right-branch set)))))
     (define (adjoin-set x set)
       (cond ((null? set) (make-tree x '() '()))
@@ -1028,5 +1029,42 @@
     (define (tree->list-1 tree)
       (cond ((null? tree) '())
             (else (append (tree->list-1 (left-branch tree))
-                          (cons (node tree))))))
-    (define (tree->list-2 tree) '())))
+                          (cons (node tree)
+                                (tree->list-1 (right-branch tree)))))))
+    (define (tree->list-2 tree)
+      (define (copy-to-list tree result-list)
+        (cond ((null? tree)
+               result-list)
+              (else
+               (copy-to-list (left-branch tree)
+                             (cons (node tree)
+                                   (copy-to-list (right-branch tree)
+                                                 result-list))))))
+      (copy-to-list tree '()))
+    (define (list->tree lyst)
+      (car (partial-tree lyst
+                         (length lyst))))
+    (define (partial-tree elements n)
+      (cond ((= n 0) (cons '() elements))
+            (else (letrec ((left-size (quotient (- n 1) 2))
+                           (left-result (partial-tree elements
+                                                      left-size))
+                           (left-tree (car left-result))
+                           (non-left-elements (cdr left-result))
+                           (right-size (- n (+ left-size 1)))
+                           (this-entry (car non-left-elements))
+                           (right-result (partial-tree
+                                          (cdr non-left-elements)
+                                          right-size))
+                           (right-tree (car right-result))
+                           (remaining-elements (cdr right-result)))
+                    (cons (make-tree this-entry
+                                     left-tree
+                                     right-tree)
+                          remaining-elements)))))))
+
+;;Exercise 2.63 - Both methods of converting a tree to a list
+;;convert to the exact same list. The second method will run faster
+;;because it is using cons instead of append.  Append runs in
+;;linear time while cons runs in constant time.
+
