@@ -998,7 +998,8 @@
           intersection-set
           element-of-set?
           adjoin-set)
-  (import (scheme base))
+  (import (scheme base)
+          (sicp tree-lib))
   (begin
     (define (union-set set1 set2) 1)
     (define (intersection-set set1 set2) 1)
