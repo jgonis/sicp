@@ -1,4 +1,5 @@
 (include "ch1.scm")
+(include "utils.scm")
 
 (define-library (sicp ch211)
   (export make-rational-number
