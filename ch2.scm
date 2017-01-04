@@ -997,11 +997,36 @@
   (export union-set
           intersection-set
           element-of-set?
-          adjoin-set)
+          adjoin-set
+          tree->list-1
+          tree->list-2)
   (import (scheme base)
           (sicp tree-lib))
   (begin
     (define (union-set set1 set2) 1)
     (define (intersection-set set1 set2) 1)
-    (define (element-of-set? x set) #f)
-    (define (adjoin-set x set) 1)))
+    (define (element-of-set? x set)
+      (cond ((null? set) #f)
+            ((= x (node set)) #t)
+            ((< x (node set)) (element-of-set x
+                                              (left-branch set)))
+            ((> x (node set)) (element-of-set x
+                                              (right-branch set)))))
+    (define (adjoin-set x set)
+      (cond ((null? set) (make-tree x '() '()))
+            ((= x (node set)) set)
+            ((< x (node set))
+             (make-tree (node set)
+                        (adjoin-set x
+                                    (left-branch set))
+                        (right-branch set)))
+            ((> x (node set))
+             (make-tree (node set)
+                        (left-branch set)
+                        (adjoin-set x
+                                    (right-branch set))))))
+    (define (tree->list-1 tree)
+      (cond ((null? tree) '())
+            (else (append (tree->list-1 (left-branch tree))
+                          (cons (node tree))))))
+    (define (tree->list-2 tree) '())))
