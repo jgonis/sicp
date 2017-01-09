@@ -1000,7 +1000,8 @@
           adjoin-set
           tree->list-1
           tree->list-2
-          list->tree)
+          list->tree
+          partial-tree)
   (import (scheme base)
           (sicp tree-lib))
   (begin
@@ -1046,18 +1047,18 @@
                          (length lyst))))
     (define (partial-tree elements n)
       (cond ((= n 0) (cons '() elements))
-            (else (letrec ((left-size (quotient (- n 1) 2))
-                           (left-result (partial-tree elements
-                                                      left-size))
-                           (left-tree (car left-result))
-                           (non-left-elements (cdr left-result))
-                           (right-size (- n (+ left-size 1)))
-                           (this-entry (car non-left-elements))
-                           (right-result (partial-tree
-                                          (cdr non-left-elements)
-                                          right-size))
-                           (right-tree (car right-result))
-                           (remaining-elements (cdr right-result)))
+            (else (let* ((left-size (quotient (- n 1) 2))
+                         (left-result (partial-tree elements
+                                                    left-size))
+                         (left-tree (car left-result))
+                         (non-left-elements (cdr left-result))
+                         (right-size (- n (+ left-size 1)))
+                         (this-entry (car non-left-elements))
+                         (right-result (partial-tree
+                                        (cdr non-left-elements)
+                                        right-size))
+                         (right-tree (car right-result))
+                         (remaining-elements (cdr right-result)))
                     (cons (make-tree this-entry
                                      left-tree
                                      right-tree)
