@@ -32,7 +32,10 @@
     (define (make-tree node left right)
       (list node left right))
 
-    (define (tree-height tree) 0)
+    (define (tree-height tree)
+      (cond ((null? tree) 0)
+            (else (+ 1 (max (tree-height (left-branch tree))
+                            (tree-height (right-branch tree)))))))
 
     (define (tree->list tree)
       (define (copy-to-list tree result-list)
@@ -68,4 +71,3 @@
                                      left-tree
                                      right-tree)
                           remaining-elements)))))))
-
