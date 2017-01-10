@@ -1003,10 +1003,15 @@
           list->tree
           partial-tree)
   (import (scheme base)
-          (sicp tree-lib))
+          (sicp tree-lib)
+          (prefix (sicp ordered-list-sets) ol-))
   (begin
-    (define (union-set set1 set2) 1)
-    (define (intersection-set set1 set2) 1)
+    (define (union-set set1 set2)
+      (list->tree (ol-union-set (tree->list-2 set1)
+                                (tree->list-2 set2))))
+    (define (intersection-set set1 set2)
+      (list->tree (ol-intersection-set (tree->list-2 set1)
+                                       (tree->list-2 set2))))
     (define (element-of-set? x set)
       (cond ((null? set) #f)
             ((= x (node set)) #t)
@@ -1032,6 +1037,7 @@
             (else (append (tree->list-1 (left-branch tree))
                           (cons (node tree)
                                 (tree->list-1 (right-branch tree)))))))
+    
     (define (tree->list-2 tree)
       (define (copy-to-list tree result-list)
         (cond ((null? tree)
@@ -1042,9 +1048,23 @@
                                    (copy-to-list (right-branch tree)
                                                  result-list))))))
       (copy-to-list tree '()))
+    ;;Exercise 2.63 - Both methods of converting a tree to a list
+    ;;convert to the exact same list. The second method will run faster
+    ;;because it is using cons instead of append.  Append runs in
+    ;;linear time while cons runs in constant time.
+    
     (define (list->tree lyst)
       (car (partial-tree lyst
                          (length lyst))))
+    ;;Exercise 2.64
+    ;;partial-tree works by recursively dividing the list "in half",
+    ;;and then calling partial-tree again once for the left tree and
+    ;;once for the right tree. Once the list size we are sub-dividing
+    ;;is down to one we create a tree with no children and return that
+    ;;which in turn becomes the left or right branch of the parent node
+    ;;and so on back up until we hit the (roughly) mid-point of the
+    ;;list, which is our root node. Because we only visit each list
+    ;;element once as we traverse through the list the runtime is O(n).
     (define (partial-tree elements n)
       (cond ((= n 0) (cons '() elements))
             (else (let* ((left-size (quotient (- n 1) 2))
@@ -1063,9 +1083,4 @@
                                      left-tree
                                      right-tree)
                           remaining-elements)))))))
-
-;;Exercise 2.63 - Both methods of converting a tree to a list
-;;convert to the exact same list. The second method will run faster
-;;because it is using cons instead of append.  Append runs in
-;;linear time while cons runs in constant time.
-
+ 
