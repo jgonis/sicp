@@ -1083,4 +1083,20 @@
                                      left-tree
                                      right-tree)
                           remaining-elements)))))))
- 
+
+(define-library (sicp ex266)
+  (export ex266-lookup)
+  (import (scheme base)
+          (sicp tree-lib))
+  (begin
+    (define (ex266-lookup given-key set-of-records)
+      (cond ((null? set-of-records) #f)
+            ((equal? given-key (key (node set-of-records)))
+             (node set-of-records))
+            ((< given-key (key (node set-of-records)))
+             (ex266-lookup given-key
+                           (left-branch set-of-records)))
+            ((> given-key (key (node set-of-records)))
+             (ex266-lookup given-key
+                           (right-branch set-of-records)))))))
+
