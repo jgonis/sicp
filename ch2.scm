@@ -1104,7 +1104,12 @@
   (export make-leaf
           leaf?
           leaf-symbol
-          leaf-weight)
+          leaf-weight
+          make-code-tree
+          left-tree
+          right-tree
+          tree-symbols
+          tree-weight)
   (import (scheme base)
           (scheme cxr))
   (begin
@@ -1115,4 +1120,21 @@
     (define (leaf-symbol leaf)
       (cadr leaf))
     (define (leaf-weight leaf)
-      (caddr leaf))))
+      (caddr leaf))
+    (define (make-code-tree left-tree right-tree)
+      (list left-tree
+            right-tree
+            (append (tree-symbols left-tree)
+                    (tree-symbols right-tree))
+            (+ (tree-weight left-tree)
+               (tree-weight right-tree))))
+    (define (left-tree tree)
+      (car tree))
+    (define (right-tree tree)
+      (cadr tree))
+    (define (tree-symbols tree)
+      (cond ((leaf? tree) (list (leaf-symbol tree)))
+            (else (caddr tree))))
+    (define (tree-weight tree)
+      (cond ((leaf? tree) (leaf-weight tree))
+            (else (cadddr tree))))))
