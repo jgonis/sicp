@@ -1100,3 +1100,19 @@
              (ex266-lookup given-key
                            (right-branch set-of-records)))))))
 
+(define-library (sicp huffman-encoding)
+  (export make-leaf
+          leaf?
+          leaf-symbol
+          leaf-weight)
+  (import (scheme base)
+          (scheme cxr))
+  (begin
+    (define (make-leaf symbol weight)
+      (list 'leaf symbol weight))
+    (define (leaf? node)
+      (eq? (car node) 'leaf))
+    (define (leaf-symbol leaf)
+      (cadr leaf))
+    (define (leaf-weight leaf)
+      (caddr leaf))))
