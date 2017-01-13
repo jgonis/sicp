@@ -1101,12 +1101,11 @@
              (ex266-lookup given-key
                            (right-branch set-of-records)))))))
 
-(define-library (sicp huffman-encoding)
+(define-library (sicp huffman-base)
   (export make-leaf
           leaf?
           leaf-symbol
           leaf-weight
-          make-code-tree
           left-tree
           right-tree
           tree-symbols
@@ -1122,13 +1121,6 @@
       (cadr leaf))
     (define (leaf-weight leaf)
       (caddr leaf))
-    (define (make-code-tree left-tree right-tree)
-      (list left-tree
-            right-tree
-            (append (tree-symbols left-tree)
-                    (tree-symbols right-tree))
-            (+ (tree-weight left-tree)
-               (tree-weight right-tree))))
     (define (left-tree tree)
       (car tree))
     (define (right-tree tree)
@@ -1138,15 +1130,35 @@
             (else (caddr tree))))
     (define (tree-weight tree)
       (cond ((leaf? tree) (leaf-weight tree))
-            (else (cadddr tree))))
-    (define (decode bits tree)
+            (else (cadddr tree))))))
+
+(define-library (sicp huffman-encoding)
+  (export make-code-tree)
+  (import (scheme base)
+          (sicp huffman-base))
+  (begin
+    (define (make-code-tree left-tree right-tree)
+      (list left-tree
+            right-tree
+            (append (tree-symbols left-tree)
+                    (tree-symbols right-tree))
+            (+ (tree-weight left-tree)
+               (tree-weight right-tree))))))
+
+(define-library (sicp huffman-decoding)
+  (export decode)
+  (import (scheme base)
+          (sicp huffman-base))
+  (begin
+        (define (decode bits tree)
       (define (choose-branch bit tree)
         (cond ((= bit 0) (left-tree tree))
               ((= bit 1) (right-tree tree))
               (else (error "bad bit!"))))
       (define (decode-1 bits current-branch)
         (cond ((null? bits) '())
-              (else (let ((next-branch (choose-branch (car bits) current-branch)))
+              (else (let ((next-branch (choose-branch (car bits)
+                                                      current-branch)))
                       (cond ((leaf? next-branch)
                              (cons (leaf-symbol next-branch)
                                    (decode-1 (cdr bits) tree)))
