@@ -18,35 +18,55 @@
   (import (scheme base))
   (begin
     (define (union-set set1 set2 . less-than)
+      (define (helper set1 set2 comparator)
+        (cond ((null? set1) set2)
+              ((null? set2) set1)
+              (else
+               (let ((x1 (car set1))
+                     (x2 (car set2)))
+                 (cond ((comparator x1 x2) (cons x1 (helper (cdr set1)
+                                                            set2
+                                                            comparator)))
+                       ((comparator x2 x1) (cons x2 (helper set1
+                                                            (cdr set2)
+                                                            comparator)))
+                       (else (cons x1 (helper (cdr set1)
+                                              (cdr set2)
+                                              comparator))))))))
       (cond ((null? less-than)
-      (cond ((null? set1) set2)
-            ((null? set2) set1)
-            (else
-             (let ((x1 (car set1))
-                   (x2 (car set2)))
-               (cond ((< x1 x2) (cons x1 (union-set (cdr set1)
-                                                    set2)))
-                     ((> x1 x2) (cons x2 (union-set set1
-                                                    (cdr set2))))
-                     (else (cons x1 (union-set (cdr set1)
-                                               (cdr set2)))))))))
+             (helper set1 set2 (lambda (a b) (< a b))))
+            (else (helper set1 set2 (car less-than)))))
+    
     (define (intersection-set set1 set2 . less-than)
-      (cond ((or (null? set1) (null? set2)) '())
-            (else
-             (let ((x1 (car set1))
-                   (x2 (car set2)))
-               (cond ((= x1 x2) (cons x1 (intersection-set
-                                          (cdr set1)
-                                          (cdr set2))))
-                     ((< x1 x2) (intersection-set (cdr set1)
-                                                  set2))
-                     ((> x1 x2) (intersection-set set1
-                                                  (cdr set2))))))))
+      (define (helper set1 set2 comparator)
+        (cond ((or (null? set1) (null? set2)) '())
+              (else
+               (let ((x1 (car set1))
+                     (x2 (car set2)))
+                 (cond ((and (not (comparator x1 x2))
+                             (not (comparator x2 x1)))
+                        (cons x1 (helper
+                                  (cdr set1)
+                                  (cdr set2)
+                                  comparator)))
+                       ((comparator x1 x2) (helper (cdr set1)
+                                                   set2
+                                                   comparator))
+                       ((comparator x2 x1) (helper set1
+                                                   (cdr set2)
+                                                   comparator)))))))
+      (cond ((null? less-than) (helper set1 set2 (lambda (a b) (< a b))))
+            (else (helper set1 set2 (car less-than)))))
+    
     (define (element-of-set? x set . less-than)
-      (cond ((null? set) #f)
-            ((= x (car set)) #t)
-            ((< x (car set)) #f)
-            (else (element-of-set? x (cdr set)))))
+      (define (helper x set comparator)
+        (cond ((null? set) #f)
+              ((and (not (comparator x (car set)))
+                    (not (comparator (car set) x))) #t)
+              ((comparator x (car set)) #f)
+              (else (helper x (cdr set) comparator))))
+      (cond ((null? less-than) (helper x set (lambda (a b) (< a b))))
+            (else (helper x set (car less-than)))))
     (define (adjoin-set x set . less-than)
       (cond ((null? set) (cons x '()))
             ((less-than x (car set)) (cons x set))
