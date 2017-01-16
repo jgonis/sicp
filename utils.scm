@@ -10,6 +10,49 @@
      (define (average x y)
       (/ (+ x y) 2))))
 
+(define-library (sicp ordered-list-set-lib)
+  (export union-set
+          intersection-set
+          element-of-set?
+          adjoin-set)
+  (import (scheme base))
+  (begin
+    (define (union-set set1 set2 . less-than)
+      (cond ((null? less-than)
+      (cond ((null? set1) set2)
+            ((null? set2) set1)
+            (else
+             (let ((x1 (car set1))
+                   (x2 (car set2)))
+               (cond ((< x1 x2) (cons x1 (union-set (cdr set1)
+                                                    set2)))
+                     ((> x1 x2) (cons x2 (union-set set1
+                                                    (cdr set2))))
+                     (else (cons x1 (union-set (cdr set1)
+                                               (cdr set2)))))))))
+    (define (intersection-set set1 set2 . less-than)
+      (cond ((or (null? set1) (null? set2)) '())
+            (else
+             (let ((x1 (car set1))
+                   (x2 (car set2)))
+               (cond ((= x1 x2) (cons x1 (intersection-set
+                                          (cdr set1)
+                                          (cdr set2))))
+                     ((< x1 x2) (intersection-set (cdr set1)
+                                                  set2))
+                     ((> x1 x2) (intersection-set set1
+                                                  (cdr set2))))))))
+    (define (element-of-set? x set . less-than)
+      (cond ((null? set) #f)
+            ((= x (car set)) #t)
+            ((< x (car set)) #f)
+            (else (element-of-set? x (cdr set)))))
+    (define (adjoin-set x set . less-than)
+      (cond ((null? set) (cons x '()))
+            ((less-than x (car set)) (cons x set))
+            (else (cons (car set) (adjoin-set x (cdr set))))))))
+
+
 (define-library (sicp tree-lib)
   (export node
           left-branch
