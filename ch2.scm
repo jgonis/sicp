@@ -364,7 +364,7 @@
 ;;Exercise 2.22
 ;;In the first case, the list is reversed because cons always adds the
 ;;element to the front of the list, even though we are iterating
-;through
+                                        ;through
 ;;the list from beginning to end.  Thus, the last item in the original
 ;;list will be added to the front of the answer list.
 ;;In the second case, we will get a dotted pair list because the last
@@ -428,9 +428,9 @@
 ;;    '(1 (2 (3 (4 (5 (6 7)))))))))))))))))
 
 ;;Exercise 2.26
-; (append x y) -> (1 2 3 4 5 6)
-; (cons x y) -> ((1 2 3) 4 5 6)
-; (list x y) -> ((1 2 3) (4 5 6))
+;; (append x y) -> (1 2 3 4 5 6)
+;; (cons x y) -> ((1 2 3) 4 5 6)
+;; (list x y) -> ((1 2 3) (4 5 6))
 
 (define-library (sicp ex227)
   (export deep-reverse
@@ -569,24 +569,24 @@
                     (append rest (map (lambda (element)
                                         (cons (car s) element))
                                       rest))))))))
-;The following is the for the example argument of (1 2 3):
-;The subsets function works by iterating to the end of the list
-;and then return a list with an empty list inside of it. From there
-;the recursion continues back through the list, starting with (3),
-;proceeding to (2 3) and ending back at the original (1 2 3). At
-;each step the first element of this list is inserted into each
-;element
-;of a copy of the current result list which is then appended to back
-;of the current result list, creating a new result list that we
-;continue to recurse with.
-;Example we get all the way to the end of the list and return (()).
-;We now recur back to the time when our argument list is (3). We
-;insert
-;3 into a copy of the result list giving us ((3)) and append that to
-;the result list giving (() (3)). We recur again, with our argument
-;list now being (2 3). We insert 2 into a copy of the result list
-;giving ((2) (2 3)) and append this to the result list giving
-;(() (3) (2) (2 3)). We recur once again and repeat this procedure.
+;;The following is the for the example argument of (1 2 3):
+;;The subsets function works by iterating to the end of the list
+;;and then return a list with an empty list inside of it. From there
+;;the recursion continues back through the list, starting with (3),
+;;proceeding to (2 3) and ending back at the original (1 2 3). At
+;;each step the first element of this list is inserted into each
+;;element
+;;of a copy of the current result list which is then appended to back
+;;of the current result list, creating a new result list that we
+;;continue to recurse with.
+;;Example we get all the way to the end of the list and return (()).
+;;We now recur back to the time when our argument list is (3). We
+;;insert
+;;3 into a copy of the result list giving us ((3)) and append that to
+;;the result list giving (() (3)). We recur again, with our argument
+;;list now being (2 3). We insert 2 into a copy of the result list
+;;giving ((2) (2 3)) and append this to the result list giving
+;;(() (3) (2) (2 3)). We recur once again and repeat this procedure.
 
 (define-library (sicp sequence-ops)
   (export accumulate
@@ -942,15 +942,15 @@
       (cond ((element-of-set? x set) set)
             (else (cons x set))))))
 ;;Exercise 2.60
-;Allowing duplicates doesn't change the worst case run-time for
-;element-of-set?, but it could change the constant factors
-;involved as you may have to pass over multiple duplicates
-;Adjoin-set becomes much quicker as you don't need to check for
-;duplicates and can just append the item instantly for constant
-;run-time. Union-set also becomes much quicker as you also do not
-;need to search for duplicates and can instead just append the sets
-;together. Intersection-set remains n^2, but the constant factors
-;will grow as you may be iterating over a large number of duplicates
+;;Allowing duplicates doesn't change the worst case run-time for
+;;element-of-set?, but it could change the constant factors
+;;involved as you may have to pass over multiple duplicates
+;;Adjoin-set becomes much quicker as you don't need to check for
+;;duplicates and can just append the item instantly for constant
+;;run-time. Union-set also becomes much quicker as you also do not
+;;need to search for duplicates and can instead just append the sets
+;;together. Intersection-set remains n^2, but the constant factors
+;;will grow as you may be iterating over a large number of duplicates
 
 (define-library (sicp ordered-list-sets)
   (export union-set
@@ -1016,9 +1016,9 @@
       (cond ((null? set) #f)
             ((= x (node set)) #t)
             ((< x (node set)) (element-of-set? x
-                                              (left-branch set)))
+                                               (left-branch set)))
             ((> x (node set)) (element-of-set? x
-                                              (right-branch set)))))
+                                               (right-branch set)))))
     (define (adjoin-set x set)
       (cond ((null? set) (make-tree x '() '()))
             ((= x (node set)) set)
@@ -1111,7 +1111,8 @@
           tree-symbols
           tree-weight)
   (import (scheme base)
-          (scheme cxr))
+          (scheme cxr)
+          (sicp tree-lib))
   (begin
     (define (make-leaf symbol weight)
       (list 'leaf symbol weight))
@@ -1150,7 +1151,7 @@
   (import (scheme base)
           (sicp huffman-base))
   (begin
-        (define (decode bits tree)
+    (define (decode bits tree)
       (define (choose-branch bit tree)
         (cond ((= bit 0) (left-tree tree))
               ((= bit 1) (right-tree tree))
