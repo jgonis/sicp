@@ -1135,7 +1135,8 @@
 (define-library (sicp huffman-encoding)
   (export make-code-tree
           adjoin-set
-          make-leaf-set)
+          make-leaf-set
+          encode)
   (import (scheme base)
           (sicp huffman-base))
   (begin
@@ -1157,7 +1158,20 @@
             (else (let ((pair (car pairs)))
                     (adjoin-set (make-leaf (car pair)
                                                    (cadr pair))
-                                        (make-leaf-set (cdr pairs)))))))))
+                                        (make-leaf-set (cdr pairs)))))))
+    (define (encode message tree)
+      (cond ((null? message) '())
+            (else (append (encode-symbol (car message)
+                                         tree)
+                          (encode (cdr message)
+                                  tree)))))
+    (define (encode-symbol symbol tree)
+      (define (go-left? symbol symbol-list) #f)
+      (cond ((leaf? tree) (cond ((eq? (leaf-symbol tree) symbol) '())
+                                (else (error "unknown symbol!"))))
+            ((go-left? symbol (tree-symbols (left-tree tree)))
+             (cons 0 (encode-symbol symbol (left-tree tree))))
+            (else (cons 1 (encode-symbol symbol (right-tree tree))))))))
 
 (define-library (sicp huffman-decoding)
   (export decode)
@@ -1181,22 +1195,35 @@
       (decode-1 bits tree))))
 
 (define-library (sicp ex267)
-  (export ex267)
+  (export ex267
+          sample-tree
+          sample-message)
   (import (scheme base)
           (sicp huffman-base)
           (sicp huffman-encoding)
           (sicp huffman-decoding))
   (begin
-    (define (ex267)
-      (define sample-tree
+    (define sample-tree
+      (make-code-tree
+       (make-leaf 'A 4)
+       (make-code-tree
+        (make-leaf 'B 2)
         (make-code-tree
-         (make-leaf 'A 4)
-         (make-code-tree
-          (make-leaf 'B 2)
-          (make-code-tree
-           (make-leaf 'D 1)
-           (make-leaf 'C 1)))))
-      (define sample-message '(0 1 1 0 0 1 0 1 0 1 1 1 0))
+         (make-leaf 'D 1)
+         (make-leaf 'C 1)))))
+    (define sample-message '(0 1 1 0 0 1 0 1 0 1 1 1 0))
+    (define (ex267)
       (decode sample-message sample-tree))))
+
+(define-library (sicp ex268)
+  (export ex268)
+  (import (scheme base)
+          (sicp ex267)
+          (sicp huffman-encoding)
+          (sicp huffman-decoding))
+  (begin
+    (define (ex268)
+      (let ((message (decode sample-message sample-tree)))
+        (encode message sample-tree)))))
 
 
