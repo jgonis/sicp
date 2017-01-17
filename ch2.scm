@@ -1230,4 +1230,36 @@
       (let ((message (decode sample-message sample-tree)))
         (encode message sample-tree)))))
 
+(define-library (sicp ex269)
+  (export generate-huffman-tree)
+  (import (scheme base)
+          (sicp huffman-encoding)
+          (sicp huffman-base))
+  (begin
+    (define (generate-huffman-tree pairs)
+      (define (successive-merge pairs)
+        (define (helper pairs current-tree)
+          (cond ((null? (cdr pairs))
+                 (make-code-tree (car pairs)
+                                 current-tree))
+                (else (helper (cdr pairs)
+                              (make-code-tree (car pairs)
+                                              current-tree)))))
+        (helper (cdr (cdr pairs))
+                (make-code-tree (car pairs)
+                                (car (cdr pairs)))))
+      (successive-merge
+       (make-leaf-set pairs)))))
 
+
+(define-library (sicp ex270)
+  (export ex270)
+  (import (scheme base)
+          (sicp huffman-encoding)
+          (sicp ex269))
+  (begin
+    (define (ex270) 1)
+    (define ex270-alphabet
+      '((A 2) (BOOM 1) (GET 2) (JOB 2)
+        (NA 16) (SHA 3) (YIP 9) (WAH 1)))
+    (define ex270-message '())))
