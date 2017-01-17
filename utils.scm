@@ -67,10 +67,16 @@
               (else (helper x (cdr set) comparator))))
       (cond ((null? less-than) (helper x set (lambda (a b) (< a b))))
             (else (helper x set (car less-than)))))
+    
     (define (adjoin-set x set . less-than)
-      (cond ((null? set) (cons x '()))
-            ((less-than x (car set)) (cons x set))
-            (else (cons (car set) (adjoin-set x (cdr set))))))))
+      (define (helper x set comparator)
+        (cond ((null? set) (cons x '()))
+              ((comparator x (car set)) (cons x set))
+              ((and (not (comparator x (car set)))
+                    (not (comparator (car set) x))) set)
+              (else (cons (car set) (helper x (cdr set) comparator)))))
+      (cond ((null? less-than) (helper x set (lambda (a b) (< a b))))
+            (else (helper x set (car less-than)))))))
 
 
 (define-library (sicp tree-lib)
