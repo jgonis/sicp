@@ -1149,7 +1149,7 @@
                (tree-weight right-tree))))
     (define (adjoin-set x set)
       (cond ((null? set) (list x))
-            ((< (leaf-weight x) (leaf-weight (car set)))
+            ((< (tree-weight x) (tree-weight (car set)))
              (cons x set))
             (else (cons (car set) (adjoin-set x (cdr set))))))
     
@@ -1238,28 +1238,35 @@
   (begin
     (define (generate-huffman-tree pairs)
       (define (successive-merge pairs)
-        (define (helper pairs current-tree)
-          (cond ((null? (cdr pairs))
-                 (make-code-tree (car pairs)
-                                 current-tree))
-                (else (helper (cdr pairs)
-                              (make-code-tree (car pairs)
-                                              current-tree)))))
-        (helper (cdr (cdr pairs))
-                (make-code-tree (car pairs)
-                                (car (cdr pairs)))))
+        (cond ((= (length pairs) 1) (car pairs))
+              (else (let ((first (car pairs))
+                          (second (cadr pairs))
+                          (rest (cddr pairs)))
+                      (successive-merge (adjoin-set (make-code-tree first second)
+                                                    rest))))))
       (successive-merge
        (make-leaf-set pairs)))))
 
 
 (define-library (sicp ex270)
-  (export ex270)
+  (export ex270
+          ex270-alphabet
+          ex270-message)
   (import (scheme base)
           (sicp huffman-encoding)
           (sicp ex269))
   (begin
-    (define (ex270) 1)
+    (define (ex270)
+      (encode ex270-message (generate-huffman-tree ex270-alphabet)))
     (define ex270-alphabet
       '((A 2) (BOOM 1) (GET 2) (JOB 2)
         (NA 16) (SHA 3) (YIP 9) (WAH 1)))
-    (define ex270-message '())))
+    (define ex270-message '(GET A JOB SHA NA NA NA NA NA NA NA NA
+                                GET A JOB SHA NA NA NA NA NA NA NA
+                                NA WAH YIP YIP YIP YIP YIP YIP YIP
+                                YIP YIP SHA BOOM))))
+
+;;Ex2.70
+;;Encoding the song with huffman codes requires 84bits, while using a fixed
+;;length code (3 bits ber alphabet letter as there at 8 letters) multiplied
+;;by the 36 "letters" used is 108 bits for fixed-length coding.
