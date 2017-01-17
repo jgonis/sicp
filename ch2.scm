@@ -1111,8 +1111,7 @@
           tree-symbols
           tree-weight)
   (import (scheme base)
-          (scheme cxr)
-          (sicp tree-lib))
+          (scheme cxr))
   (begin
     (define (make-leaf symbol weight)
       (list 'leaf symbol weight))
@@ -1134,7 +1133,9 @@
             (else (cadddr tree))))))
 
 (define-library (sicp huffman-encoding)
-  (export make-code-tree)
+  (export make-code-tree
+          adjoin-set
+          make-leaf-set)
   (import (scheme base)
           (sicp huffman-base))
   (begin
@@ -1144,7 +1145,19 @@
             (append (tree-symbols left-tree)
                     (tree-symbols right-tree))
             (+ (tree-weight left-tree)
-               (tree-weight right-tree))))))
+               (tree-weight right-tree))))
+    (define (adjoin-set x set)
+      (cond ((null? set) (list x))
+            ((< (leaf-weight x) (leaf-weight (car set)))
+             (cons x set))
+            (else (cons (car set) (adjoin-set x (cdr set))))))
+    
+    (define (make-leaf-set pairs)
+      (cond ((null? pairs) '())
+            (else (let ((pair (car pairs)))
+                    (adjoin-set (make-leaf (car pair)
+                                                   (cadr pair))
+                                        (make-leaf-set (cdr pairs)))))))))
 
 (define-library (sicp huffman-decoding)
   (export decode)
@@ -1166,3 +1179,4 @@
                             (else (decode-1 (cdr bits)
                                             next-branch)))))))
       (decode-1 bits tree))))
+
