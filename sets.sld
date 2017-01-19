@@ -1,9 +1,11 @@
+(include "tree.sld")
 (define-library (sicp ordered-list-set)
   (export union-set
           intersection-set
           element-of-set?
           adjoin-set
-          remove-set)
+          remove-set
+          size-set)
   (import (scheme base))
   (begin
     (define (union-set set1 set2 . less-than)
@@ -66,59 +68,38 @@
               (else (cons (car set) (helper x (cdr set) comparator)))))
       (cond ((null? less-than) (helper x set (lambda (a b) (< a b))))
             (else (helper x set (car less-than)))))
+    
     (define (remove-set element set . less-than)
       (define (helper element set comparator)
         (cond ((null? set) set)
               ((and (not (comparator element (car set)))
-                    (not (comparator (car set) (element))))
+                    (not (comparator (car set) element)))
                (helper element (cdr set) comparator))
               (else (cons (car set) (helper element
                                             (cdr set)
                                             comparator)))))
       (cond ((null? less-than) (helper element set (lambda (a b) (< a b))))
-            (else (helper element set (car less-than)))))))
+            (else (helper element set (car less-than)))))
+    
+    (define (size-set set) (length set))))
 
-(define-library (sicp set-tests)
-  (export test-union
-          test-intersection
-          test-element?
-          test-adjoin
-          test-remove
-          test-all)
-  (import (scheme base)
-          (sicp ordered-list-set)
-          (srfi 78))
-  (begin
-    (define (test-union) (display "union") (newline))
-    (define (test-intersection) (display "intersection") (newline))
-    (define (test-element?) (display "element?") (newline))
-    (define (test-adjoin) (display "adjoin") (newline))
-    (define (test-remove) (display "remove") (newline))
-    (define (test-all)
-      (test-union)
-      (test-intersection)
-      (test-element?)
-      (test-adjoin)
-      (test-remove))))
-
-(define-library (sicp binary-tree-sets)
+(define-library (sicp binary-tree-set)
   (export union-set
           intersection-set
           element-of-set?
           adjoin-set
-          tree->list
           list->tree
           partial-tree)
   (import (scheme base)
           (sicp tree-lib)
-          (prefix (sicp ordered-list-sets) ol-))
+          (prefix (sicp ordered-list-set) ol-))
   (begin
     (define (union-set set1 set2)
-      (list->tree (ol-union-set (tree->list-2 set1)
-                                (tree->list-2 set2))))
+      (list->tree (ol-union-set (tree->list set1)
+                                (tree->list set2))))
     (define (intersection-set set1 set2)
-      (list->tree (ol-intersection-set (tree->list-2 set1)
-                                       (tree->list-2 set2))))
+      (list->tree (ol-intersection-set (tree->list set1)
+                                       (tree->list set2))))
     (define (element-of-set? x set)
       (cond ((null? set) #f)
             ((= x (node set)) #t)
@@ -139,18 +120,7 @@
                         (left-branch set)
                         (adjoin-set x
                                     (right-branch set))))))
-    
-    (define (tree->list tree)
-      (define (copy-to-list tree result-list)
-        (cond ((null? tree)
-               result-list)
-              (else
-               (copy-to-list (left-branch tree)
-                             (cons (node tree)
-                                   (copy-to-list (right-branch tree)
-                                                 result-list))))))
-      (copy-to-list tree '()))
-    
+        
     (define (list->tree lyst)
       (car (partial-tree lyst
                          (length lyst))))
