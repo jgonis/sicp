@@ -125,7 +125,7 @@
         (cond ((null? set) (reverse result))
               ((= x (car set)) (helper x (cdr set) result))
               (else (helper x (cdr set) (cons (car set) result)))))
-       (helper x (tree->list set) '()))
+       (list->balanced-tree (helper x (tree->list set) '())))
     (define (size-set set)
       (length (tree->list set)))))
 
