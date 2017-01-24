@@ -88,18 +88,18 @@
           intersection-set
           element-of-set?
           adjoin-set
-          list->tree
-          partial-tree)
+          remove-set
+          size-set)
   (import (scheme base)
           (sicp tree-lib)
           (prefix (sicp ordered-list-set) ol-))
   (begin
     (define (union-set set1 set2)
-      (list->tree (ol-union-set (tree->list set1)
-                                (tree->list set2))))
+      (list->balanced-tree (ol-union-set (tree->list set1)
+                                         (tree->list set2))))
     (define (intersection-set set1 set2)
-      (list->tree (ol-intersection-set (tree->list set1)
-                                       (tree->list set2))))
+      (list->balanced-tree (ol-intersection-set (tree->list set1)
+                                                (tree->list set2))))
     (define (element-of-set? x set)
       (cond ((null? set) #f)
             ((= x (node set)) #t)
@@ -120,26 +120,13 @@
                         (left-branch set)
                         (adjoin-set x
                                     (right-branch set))))))
-        
-    (define (list->tree lyst)
-      (car (partial-tree lyst
-                         (length lyst))))
+    (define (remove-set x set)
+      (define (helper x set result)
+        (cond ((null? set) (reverse result))
+              ((= x (car set)) (helper x (cdr set) result))
+              (else (helper x (cdr set) (cons (car set) result)))))
+       (helper x (tree->list set) '()))
+    (define (size-set set)
+      (length (tree->list set)))))
 
-    (define (partial-tree elements n)
-      (cond ((= n 0) (cons '() elements))
-            (else (let* ((left-size (quotient (- n 1) 2))
-                         (left-result (partial-tree elements
-                                                    left-size))
-                         (left-tree (car left-result))
-                         (non-left-elements (cdr left-result))
-                         (right-size (- n (+ left-size 1)))
-                         (this-entry (car non-left-elements))
-                         (right-result (partial-tree
-                                        (cdr non-left-elements)
-                                        right-size))
-                         (right-tree (car right-result))
-                         (remaining-elements (cdr right-result)))
-                    (cons (make-tree this-entry
-                                     left-tree
-                                     right-tree)
-                          remaining-elements)))))))
+

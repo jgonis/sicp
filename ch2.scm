@@ -1242,8 +1242,10 @@
               (else (let ((first (car pairs))
                           (second (cadr pairs))
                           (rest (cddr pairs)))
-                      (successive-merge (adjoin-set (make-code-tree first second)
-                                                    rest))))))
+                      (successive-merge (adjoin-set
+                                         (make-code-tree first
+                                                         second)
+                                         rest))))))
       (successive-merge
        (make-leaf-set pairs)))))
 

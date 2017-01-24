@@ -30,17 +30,16 @@
         (cond ((null? tree)
                result-list)
               (else
-               (copy-to-list
-                (left-branch tree)
-                (cons (node tree)
-                      (copy-to-list
-                       (right-branch tree)
-                       result-list))))))
+               (copy-to-list (left-branch tree)
+                             (cons (node tree)
+                                   (copy-to-list (right-branch tree)
+                                                 result-list))))))
       (copy-to-list tree '()))
     
     (define (list->balanced-tree lyst)
       (car (partial-tree lyst
                          (length lyst))))
+    
     (define (partial-tree elements n)
       (cond ((= n 0) (cons '() elements))
             (else (let* ((left-size (quotient (- n 1) 2))
