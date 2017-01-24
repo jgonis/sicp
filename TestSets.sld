@@ -187,66 +187,92 @@
           (sicp ordered-list-set))
   (begin
     (define (test-union)
+      (define (comparator a b)
+        (< a b))
       (check-set-mode! 'summary)
-      (let* ((test-subject1 (adjoin-set 1 '()))
-             (test-subject2 (adjoin-set 1 '()))
-             (result (union-set test-subject1 test-subject2)))
+      (let* ((test-subject1 (adjoin-set 1 '() comparator))
+             (test-subject2 (adjoin-set 1 '() comparator))
+             (result (union-set test-subject1 test-subject2 comparator)))
         (check (size-set result) => 1)
-        (check (element-of-set? 1 result) => #t)
-        (check (element-of-set? 2 result) => #f))
+        (check (element-of-set? 1 result comparator) => #t)
+        (check (element-of-set? 2 result comparator) => #f))
       
-      (let* ((test-subject1 (adjoin-set 1 '()))
+      (let* ((test-subject1 (adjoin-set 1 '() comparator))
              (test-subject2 '())
-             (result (union-set test-subject1 test-subject2)))
+             (result (union-set test-subject1 test-subject2 comparator)))
         (check (size-set result) => 1)
-        (check (element-of-set? 1 result) => #t)
-        (check (element-of-set? 2 result) => #f))
+        (check (element-of-set? 1 result comparator) => #t)
+        (check (element-of-set? 2 result comparator) => #f))
 
       (let* ((test-subject1 '())
-             (test-subject2 (adjoin-set 1 '()))
-             (result (union-set test-subject1 test-subject2)))
+             (test-subject2 (adjoin-set 1 '() comparator))
+             (result (union-set test-subject1 test-subject2 comparator)))
         (check (size-set result) => 1)
-        (check (element-of-set? 1 result) => #t)
-        (check (element-of-set? 2 result) => #f))
-
+        (check (element-of-set? 1 result comparator) => #t)
+        (check (element-of-set? 2 result comparator) => #f))
+                                        
       (let* ((test-subject1 '())
              (test-subject2 '())
-             (result (union-set test-subject1 test-subject2)))
+             (result (union-set test-subject1 test-subject2 comparator)))
         (check (size-set result) => 0)
-        (check (element-of-set? 1 result) => #f))      
+        (check (element-of-set? 1 result comparator) => #f))      
       
-      (let* ((test-subject1 (adjoin-set 1 '()))
-             (test-subject2 (adjoin-set 2 '()))
-             (result (union-set test-subject1 test-subject2)))
+      (let* ((test-subject1 (adjoin-set 1 '() comparator))
+             (test-subject2 (adjoin-set 2 '() comparator))
+             (result (union-set test-subject1 test-subject2 comparator)))
         (check (size-set result) => 2)
-        (check (element-of-set? 1 result) => #t)
-        (check (element-of-set? 2 result) => #t))
+        (check (element-of-set? 1 result comparator) => #t)
+        (check (element-of-set? 2 result comparator) => #t))
       
-      (let* ((test-subject1 (adjoin-set 4
-                                        (adjoin-set 5
-                                                    (adjoin-set 3 '()))))
-             (test-subject2 (adjoin-set 1 (adjoin-set 2 '())))
-             (result (union-set test-subject1 test-subject2)))
-        (check (size-set result) => 5)
-        (check (element-of-set? 1 result) => #t)
-        (check (element-of-set? 2 result) => #t)
-        (check (element-of-set? 3 result) => #t)
-        (check (element-of-set? 4 result) => #t)
-        (check (element-of-set? 5 result) => #t))
-      
-      (let* ((test-subject1 (adjoin-set 3
+      (let* ((test-subject1 (adjoin-set
+                             4
+                             (adjoin-set
+                              5
+                              (adjoin-set
+                               3
+                               '()
+                               comparator)
+                              comparator)
+                             comparator))
+             (test-subject2 (adjoin-set 1
                                         (adjoin-set 2
-                                                    (adjoin-set 1 '()))))
-             (test-subject2 (adjoin-set 5
-                                        (adjoin-set 4
-                                                    (adjoin-set 2 '()))))
-             (result (union-set test-subject1 test-subject2)))
+                                                    '()
+                                                    comparator)
+                                        comparator))
+             (result (union-set test-subject1 test-subject2 comparator)))
         (check (size-set result) => 5)
-        (check (element-of-set? 1 result) => #t)
-        (check (element-of-set? 2 result) => #t)
-        (check (element-of-set? 3 result) => #t)
-        (check (element-of-set? 4 result) => #t)
-        (check (element-of-set? 5 result) => #t))      
+        (check (element-of-set? 1 result comparator) => #t)
+        (check (element-of-set? 2 result comparator) => #t)
+        (check (element-of-set? 3 result comparator) => #t)
+        (check (element-of-set? 4 result comparator) => #t)
+        (check (element-of-set? 5 result comparator) => #t))
+      
+      (let* ((test-subject1 (adjoin-set
+                             3
+                             (adjoin-set
+                              2
+                              (adjoin-set
+                               1
+                               '()
+                               comparator)
+                              comparator)
+                             comparator))
+             (test-subject2 (adjoin-set
+                             5
+                             (adjoin-set
+                              4
+                              (adjoin-set 2
+                                          '()
+                                           comparator)
+                               comparator)
+                              comparator))
+             (result (union-set test-subject1 test-subject2  comparator)))
+        (check (size-set result) => 5)
+        (check (element-of-set? 1 result comparator) => #t)
+        (check (element-of-set? 2 result comparator) => #t)
+        (check (element-of-set? 3 result comparator) => #t)
+        (check (element-of-set? 4 result comparator) => #t)
+        (check (element-of-set? 5 result comparator) => #t))      
       (check-report)
       (check-reset!)
       (display ""))
