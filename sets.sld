@@ -123,24 +123,43 @@
             (else (helper x set (car less-than)))))
     
     (define (adjoin-set x set . less-than)
-      (cond ((null? set) (make-tree x '() '()))
-            ((= x (node set)) set)
-            ((< x (node set))
-             (make-tree (node set)
-                        (adjoin-set x
-                                    (left-branch set))
-                        (right-branch set)))
-            ((> x (node set))
-             (make-tree (node set)
-                        (left-branch set)
-                        (adjoin-set x
-                                    (right-branch set))))))
+      (define (helper x set comparator)
+        (cond ((null? set) (make-tree x '() '()))
+              ((and (not (comparator x (node set))
+                         (comparator (node set) x))) set)
+              ((comparator x (node set))
+               (make-tree (node set)
+                          (helper x
+                                  (left-branch set)
+                                  comparator)
+                          (right-branch set)))
+              ((comparator (node set) x)
+               (make-tree (node set)
+                          (left-branch set)
+                          (helper x
+                                  (right-branch set)
+                                  comparator)))))
+      (cond ((null? less-than) (helper x set (lambda (a b) (< a b))))
+            (else (helper x set (car less-than)))))
+    
     (define (remove-set x set . less-than)
-      (define (helper x set result)
+      (define (remove-helper x set result comparator)
         (cond ((null? set) (reverse result))
-              ((= x (car set)) (helper x (cdr set) result))
-              (else (helper x (cdr set) (cons (car set) result)))))
-       (list->balanced-tree (helper x (tree->list set) '())))
+              ((and (not (comparator x (car set))
+                         (comparator (car set) x))) (remove-helper x
+                                                                   (cdr set)
+                                                                   result
+                                                                   comparator))
+              (else (remove-helper x (cdr set) (cons (car set) result comparator)))))
+       (cond ((null? less-than) (list->balanced-tree
+                                 (remove-helper x
+                                                (tree->list set)
+                                                '()
+                                                (lambda (a b) (< a b)))))
+             (else (list->balanced-tree (remove-helper x
+                                                       (tree->list set)
+                                                       '()
+                                                       (car less-than))))))
     (define (size-set set)
       (length (tree->list set)))))
 

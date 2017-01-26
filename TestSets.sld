@@ -25,7 +25,7 @@
       
       (let* ((test-subject1 (adjoin-set 1 '()))
              (test-subject2 '())
-             (result (union-set test-subject1 test-subject2)))
+             (result (union-set test-subject1 test-subject2 comparator)))
         (check (size-set result) => 1)
         (check (element-of-set? 1 result) => #t)
         (check (element-of-set? 2 result) => #f))
