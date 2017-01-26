@@ -94,20 +94,35 @@
           (sicp tree-lib)
           (prefix (sicp ordered-list-set) ol-))
   (begin
-    (define (union-set set1 set2)
-      (list->balanced-tree (ol-union-set (tree->list set1)
-                                         (tree->list set2))))
-    (define (intersection-set set1 set2)
-      (list->balanced-tree (ol-intersection-set (tree->list set1)
-                                                (tree->list set2))))
-    (define (element-of-set? x set)
-      (cond ((null? set) #f)
-            ((= x (node set)) #t)
-            ((< x (node set)) (element-of-set? x
-                                               (left-branch set)))
-            ((> x (node set)) (element-of-set? x
-                                               (right-branch set)))))
-    (define (adjoin-set x set)
+    (define (union-set set1 set2 . less-than)
+      (define (helper set1 set2 comparator)
+        (list->balanced-tree (ol-union-set (tree->list set1)
+                                           (tree->list set2) comparator)))
+      (cond ((null? less-than) (helper set1 set2 (lambda (a b) (< a b))))
+            (else (helper set1 set2 (car less-than)))))
+    
+    (define (intersection-set set1 set2 . less-than)
+      (define (helper set1 set2 comparator)
+        (list->balanced-tree (ol-intersection-set (tree->list set1)
+                                                  (tree->list set2))))
+      (cond ((null? less-than) (helper set1 set2 (lambda (a b) (< a b))))
+            (else (helper set1 set2 (car less-than)))))
+    
+    (define (element-of-set? x set . less-than)
+      (define (helper x set comparator)
+        (cond ((null? set) #f)
+              ((and (not (comparator x (node set))
+                         (comparator (node set) x))) #t)
+              ((comparator x (node set)) (helper x
+                                                 (left-branch set)
+                                                 comparator))
+              ((comparator (node set) x) (helper x
+                                                 (right-branch set)
+                                                 comparator))))
+      (cond ((null? less-than) (helper x set (lambda (a b) (< a b))))
+            (else (helper x set (car less-than)))))
+    
+    (define (adjoin-set x set . less-than)
       (cond ((null? set) (make-tree x '() '()))
             ((= x (node set)) set)
             ((< x (node set))
@@ -120,7 +135,7 @@
                         (left-branch set)
                         (adjoin-set x
                                     (right-branch set))))))
-    (define (remove-set x set)
+    (define (remove-set x set . less-than)
       (define (helper x set result)
         (cond ((null? set) (reverse result))
               ((= x (car set)) (helper x (cdr set) result))
