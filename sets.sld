@@ -111,8 +111,8 @@
     (define (element-of-set? x set . less-than)
       (define (helper x set comparator)
         (cond ((null? set) #f)
-              ((and (not (comparator x (node set))
-                         (comparator (node set) x))) #t)
+              ((and (not (comparator x (node set)))
+                    (not (comparator (node set) x))) #t)
               ((comparator x (node set)) (helper x
                                                  (left-branch set)
                                                  comparator))
@@ -125,8 +125,8 @@
     (define (adjoin-set x set . less-than)
       (define (helper x set comparator)
         (cond ((null? set) (make-tree x '() '()))
-              ((and (not (comparator x (node set))
-                         (comparator (node set) x))) set)
+              ((and (not (comparator x (node set)))
+                    (not (comparator (node set) x))) set)
               ((comparator x (node set))
                (make-tree (node set)
                           (helper x
@@ -145,12 +145,16 @@
     (define (remove-set x set . less-than)
       (define (remove-helper x set result comparator)
         (cond ((null? set) (reverse result))
-              ((and (not (comparator x (car set))
-                         (comparator (car set) x))) (remove-helper x
-                                                                   (cdr set)
-                                                                   result
-                                                                   comparator))
-              (else (remove-helper x (cdr set) (cons (car set) result comparator)))))
+              ((and (not (comparator x (car set)))
+                    (not (comparator (car set) x)))
+               (remove-helper x
+                              (cdr set)
+                              result
+                              comparator))
+              (else (remove-helper x
+                                   (cdr set)
+                                   (cons (car set) result)
+                                   comparator))))
        (cond ((null? less-than) (list->balanced-tree
                                  (remove-helper x
                                                 (tree->list set)
