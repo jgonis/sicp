@@ -49,8 +49,11 @@
     (define (remove-set x set)
       (define (helper x old-list new-list)
         (cond ((null? old-list) (reverse new-list))
-              ((= x (car (car old-list))) (helper (cdr old-list)
+              ((= x (car (car old-list))) (helper x
+                                                  (cdr old-list)
                                                   new-list))
-              (else (helper (cdr old-list) (cons (car old-list)
-                                                 new-list)))))
-      (helper x (tree->list set)))))
+              (else (helper x
+                            (cdr old-list)
+                            (cons (car old-list)
+                                  new-list)))))
+      (helper x (tree->list set) '()))))
