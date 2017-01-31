@@ -56,4 +56,4 @@
                             (cdr old-list)
                             (cons (car old-list)
                                   new-list)))))
-      (helper x (tree->list set) '()))))
+      (list->balanced-tree (helper x (tree->list set) '())))))
