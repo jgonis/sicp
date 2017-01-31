@@ -1,6 +1,8 @@
 (include "tree.sld")
+(include "sets.sld")
 (define-library (sicp multi-sets)
-  (export union-set
+  (export create-multiset
+          union-set
           intersection-set
           element-of-set?
           element-count
@@ -8,10 +10,21 @@
           remove-set
           size-set)
   (import (scheme base)
-          (sicp tree-lib))
+          (sicp tree-lib)
+          (prefix (sicp ordered-list-set) ol-))
   (begin
-    (define (union-set set1 set2) '())
-    (define (intersection-set set1 set2) '())
+    (define (create-multiset list-of-items)
+      (define (helper list-of-items multi-set)
+        (cond ((null? list-of-items)
+               (list->balanced-tree (tree->list multi-set)))
+              (else (helper (cdr list-of-items)
+                            (adjoin-set (car list-of-items)
+                                        multi-set)))))
+      (helper list-of-items '()))
+    (define (union-set set1 set2)
+      (ol-union-set (tree->list set1) (tree->list set2)))
+    (define (intersection-set set1 set2)
+      (ol-intersection-set (tree->list set1) (tree->list set2)))
     (define (element-of-set? x set)
       (cond ((null? set) #f)
             ((= x (car (node set))) #t)
