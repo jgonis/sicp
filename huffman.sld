@@ -1,7 +1,4 @@
 (include "Multisets.sld")
-(import (scheme file))
-(import (scheme write))
-(import (scheme process-context))
 
 (define-library (sicp huffman-base)
   (export make-leaf
