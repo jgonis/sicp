@@ -1,5 +1,6 @@
 (include "ch1.scm")
 (include "utils.scm")
+(include "tree.sld")
 
 (define-library (sicp ch211)
   (export make-rational-number
@@ -1272,3 +1273,65 @@
 ;;Encoding the song with huffman codes requires 84bits, while using a fixed
 ;;length code (3 bits ber alphabet letter as there at 8 letters) multiplied
 ;;by the 36 "letters" used is 108 bits for fixed-length coding.
+
+(define-library (sicp type-tags)
+  (export attach-tag
+          type-tag
+          contents)
+  (import (scheme base))
+  (begin
+    (define (attach-tag type-tag contents)
+      (cons type-tag contents))
+    (define (type-tag datum)
+      (cond ((pair? datum) (car datum))
+            (else (error "Bad tagged datum: TYPE-TAG" datum))))
+    (define (contents datum)
+      (cond ((pair? datum) (cdr datum))
+            (else (error "Bad tagged datum: CONTENTS" datum))))))
+
+(define-library (sicp complex-num-lib)
+  (export rectangular?
+          polar?
+          add-complex
+          sub-complex
+          mul-complex
+          div-complex
+          real-part
+          imag-part
+          magnitude
+          angle
+          make-from-real-imag
+          make-from-mag-angle)
+  (import (scheme base)
+          (scheme inexact)
+          (sicp type-tags))
+  (begin
+    (define  (rectangular? z)
+      (eq? (type-tag z) 'rectangular))
+    (define (polar? z)
+      (eq? (type-tag z) 'polar))
+    (define (add-complex z1 z2)
+      (make-from-real-imag (+ (real-part z1) (real-part z2))
+                           (+ (imag-part z1) (imag-part z2))))
+    (define (sub-complex z1 z2)
+      (make-from-real-imag (- (real-part z1) (real-part z2))
+                           (- (imag-part z1) (imag-part z2))))
+    (define (mul-complex z1 z2)
+      (make-from-mag-angle (* (magnitude z1) (magnitude z2))
+                         (+ (angle z1) (angle z2))))
+    (define (div-complex z1 z2)
+      (make-from-mag-angle (/ (magnitude z1) (magnitude z2))
+                           (- (angle z1) (angle z2))))
+    (define (real-part z)
+      (car z))
+    (define (imag-part z)
+      (cdr z))
+    (define (magnitude z)
+      (sqrt (+ (* (real-part z) (real-part z))
+               (* (imag-part z) (imag-part z)))))
+    (define (angle z)
+      (atan (imag-part z) (real-part z)))
+    (define (make-from-real-imag x y)
+      (cons x y))
+    (define (make-from-mag-angle r a)
+      (cons (* r (cos a)) (* r (sin a))))))
