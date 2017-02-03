@@ -1,13 +1,23 @@
 (include "tree.sld")
 (define-library (sicp ordered-list-set)
-  (export union-set
+  (export make-set
+          union-set
           intersection-set
           element-of-set?
           adjoin-set
           remove-set
-          size-set)
+          size-set
+          )
   (import (scheme base))
   (begin
+    (define (make-set lyst . less-than)
+      (define (helper lyst result comparator)
+        (cond ((null? lyst) result)
+              (else (helper (cdr lyst)
+                            (adjoin-set (car lyst) result comparator)
+                            comparator))))
+      (cond ((null? less-than) (helper lyst '() (lambda (a b) (< a b))))
+            (else (helper lyst '()  (car less-than)))))
     (define (union-set set1 set2 . less-than)
       (define (helper set1 set2 comparator)
         (cond ((null? set1) set2)
