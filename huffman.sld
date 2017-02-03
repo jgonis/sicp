@@ -1,5 +1,6 @@
 (include "Multisets.sld")
 (include "tree.sld")
+(include "sets.sld")
 
 (define-library (sicp huffman-base)
   (export leaf?
@@ -34,20 +35,16 @@
           encode)
   (import (scheme base)
           (sicp huffman-base)
-          (sicp tree-lib))
-  (begin
-    (define (adjoin-set x set)
-      (cond ((null? set) (list x))
-            ((< (tree-weight x) (tree-weight (car set)))
-             (cons x set))
-            (else (cons (car set) (adjoin-set x (cdr set))))))
-    
+          (sicp tree-lib)
+          (sicp ordered-list-set))
+  (begin    
     (define (make-leaf-set pairs)
-      (cond ((null? pairs) '())
-            (else (let ((pair (car pairs)))
-                    (adjoin-set (make-leaf (car pair)
-                                                   (cadr pair))
-                                        (make-leaf-set (cdr pairs)))))))
+      (make-set (map (lambda (pair) (make-leaf (car pair)
+                                               (cadr pair)))
+                     pairs)
+                (lambda (a b) (< (tree-weight a)
+                                 (tree-weight b)))))
+    
     (define (encode message tree)
       (cond ((null? message) '())
             (else (append (encode-symbol (car message)
