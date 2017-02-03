@@ -17,17 +17,15 @@
     (define (tree-weight tree)
       (cadr (node tree)))
     (define (make-code-tree left-tree right-tree)
-      (make-tree 
-       (list (append (tree-symbols left-tree)
-                     (tree-symbols right-tree))
-             (+ (tree-weight left-tree)
-                (tree-weight right-tree)))
-       left-tree
-       right-tree))))
+      (make-tree (list (append (tree-symbols left-tree)
+                               (tree-symbols right-tree))
+                       (+ (tree-weight left-tree)
+                          (tree-weight right-tree)))
+                 left-tree
+                 right-tree))))
 
 (define-library (sicp huffman-encoding)
-  (export make-code-tree
-          adjoin-set
+  (export adjoin-set
           make-leaf-set
           encode)
   (import (scheme base)
@@ -51,6 +49,7 @@
                                          tree)
                           (encode (cdr message)
                                   tree)))))
+    
     (define (encode-symbol symbol tree)
       (define (go-left? symbol symbol-list)
         (cond ((null? symbol-list) #f)
