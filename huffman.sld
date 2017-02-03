@@ -1,35 +1,29 @@
 (include "Multisets.sld")
+(include "tree.sld")
 
 (define-library (sicp huffman-base)
-  (export make-leaf
-          leaf?
-          leaf-symbol
-          leaf-weight
-          left-tree
-          right-tree
+  (export make-code-tree
+          make-leaf
           tree-symbols
           tree-weight)
   (import (scheme base)
-          (scheme cxr))
+          (scheme cxr)
+          (sicp tree-lib))
   (begin
     (define (make-leaf symbol weight)
-      (list 'leaf symbol weight))
-    (define (leaf? node)
-      (eq? (car node) 'leaf))
-    (define (leaf-symbol leaf)
-      (cadr leaf))
-    (define (leaf-weight leaf)
-      (caddr leaf))
-    (define (left-tree tree)
-      (car tree))
-    (define (right-tree tree)
-      (cadr tree))
+      (make-tree (list (list symbol) weight) '() '()))
     (define (tree-symbols tree)
-      (cond ((leaf? tree) (list (leaf-symbol tree)))
-            (else (caddr tree))))
+      (car (node tree)))
     (define (tree-weight tree)
-      (cond ((leaf? tree) (leaf-weight tree))
-            (else (cadddr tree))))))
+      (cadr (node tree)))
+    (define (make-code-tree left-tree right-tree)
+      (make-tree 
+       (list (append (tree-symbols left-tree)
+                     (tree-symbols right-tree))
+             (+ (tree-weight left-tree)
+                (tree-weight right-tree)))
+       left-tree
+       right-tree))))
 
 (define-library (sicp huffman-encoding)
   (export make-code-tree
@@ -39,13 +33,6 @@
   (import (scheme base)
           (sicp huffman-base))
   (begin
-    (define (make-code-tree left-tree right-tree)
-      (list left-tree
-            right-tree
-            (append (tree-symbols left-tree)
-                    (tree-symbols right-tree))
-            (+ (tree-weight left-tree)
-               (tree-weight right-tree))))
     (define (adjoin-set x set)
       (cond ((null? set) (list x))
             ((< (tree-weight x) (tree-weight (car set)))
