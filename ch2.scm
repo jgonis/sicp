@@ -1406,3 +1406,23 @@
       (make-from-real-imag-rectangular x y))
     (define (make-from-mag-angle r a)
       (make-from-mag-angle-polar r a))))
+
+;;Ex 2.76
+;;In a message passing system adding a new type requires you to
+;;implement all of the generic operations that type will support
+;;but it does not require you to alter any already existing types
+;;or implementations in order to add support. If you add in a new
+;;generic operation you have then update all existing types to
+;;support this new method.  
+
+;;In data directed programming adding in a new type means you must
+;;edit the source of every generic method so that it can accept
+;;the new type. Adding a new generic operation can be done without
+;;altering any existing methods, as long as the generic method can
+;;be implemented with the currently existing specific
+;;implementations each type defines.
+
+;;Because of this message passing is more appropriate when you
+;;have a system that is adding new types more often and data directed
+;;is more appropriate when you have a system that is adding new generic
+;;methods more often.
