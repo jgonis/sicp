@@ -79,8 +79,20 @@
                           (helper x
                                   (right-branch set)
                                   comparator)))))
-      (cond ((null? less-than) (helper x set (lambda (a b) (< a b))))
-            (else (helper x set (car less-than)))))
+      (cond ((null? less-than)
+              (let  ((temp (helper x set (lambda (a b) (< a b)))))
+                (cond ((> (abs (- (tree-height (left-branch temp))
+                                  (tree-height (right-branch temp))))
+                          2)
+                       (list->balanced-tree (tree->list temp)))
+                      (else temp))))
+            (else
+             (let ((temp (helper x set (car less-than))))
+               (cond ((> (abs (- (tree-height (left-branch temp))
+                                 (tree-height (right-branch temp))))
+                         2)
+                      (list->balanced-tree (tree->list temp)))
+                     (else temp))))))
 
     (define (size-set set)
       (length (tree->list set)))
