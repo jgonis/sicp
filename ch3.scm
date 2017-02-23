@@ -7,3 +7,14 @@
       (lambda (x)
         (set! n (+ n x))
         n))))
+
+(define-library (sicp ex32)
+  (export ex32)
+  (import (scheme base))
+  (begin
+    (define (ex32 func)
+      (let ((call-count 0))
+        (lambda (input)
+          (cond ((eq? input 'how-many-calls?) call-count)
+                (else (set! call-count (+ call-count 1))
+                      (func input))))))))
