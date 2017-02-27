@@ -64,7 +64,7 @@
                  (cond ((eq? m 'withdraw) withdraw)
                        ((eq? m 'deposit) deposit)
                        (else (error "Unknown message" m))))
-                (else (cond ((= login-tries 7) call-the-cops)
+                (else (cond ((>= login-tries 7) call-the-cops)
                             (else (set! login-tries (+ login-tries 1))
                                   incorrect-password)))))
         dispatch))))
