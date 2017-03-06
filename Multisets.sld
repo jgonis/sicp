@@ -13,14 +13,18 @@
           (sicp tree-lib)
           (prefix (sicp ordered-list-set) ol-))
   (begin
-    (define (create-multiset list-of-items)
-      (define (helper list-of-items multi-set)
+    (define (create-multiset list-of-items . less-than)
+      (define (helper list-of-items multi-set comparator)
         (cond ((null? list-of-items)
                (list->balanced-tree (tree->list multi-set)))
               (else (helper (cdr list-of-items)
                             (adjoin-set (car list-of-items)
-                                        multi-set)))))
-      (helper list-of-items '()))
+                                        multi-set
+                                        comparator)
+                            comparator))))
+      (cond ((null? less-than) (helper list-of-items '()
+                                       (lambda (a b) (< a b))))
+            (else (helper list-of-items '() (car less-than)))))
 
     (define (union-set set1 set2 . less-than)
       (define (helper set1 set2 comparator)
