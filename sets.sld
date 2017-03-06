@@ -6,8 +6,7 @@
           element-of-set?
           adjoin-set
           remove-set
-          size-set
-          )
+          size-set)
   (import (scheme base))
   (begin
     (define (make-set lyst . less-than)
