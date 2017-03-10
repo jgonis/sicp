@@ -54,6 +54,8 @@
         (define (deposit amount)
           (set! balance (+ balance amount))
           balance)
+        (define (get-balance)
+          balance)
         (define (call-the-cops . args)
           "Calling the cops!")
         (define (incorrect-password . args)
@@ -63,6 +65,7 @@
                  (set! login-tries 0)
                  (cond ((eq? m 'withdraw) withdraw)
                        ((eq? m 'deposit) deposit)
+                       ((eq? m 'balance) get-balance)
                        (else (error "Unknown message" m))))
                 (else (cond ((>= login-tries 7) call-the-cops)
                             (else (set! login-tries (+ login-tries 1))
@@ -121,3 +124,16 @@
     (define (random-in-range low high)
       (let ((range (- high low)))
         (+ low (random-integer range))))))
+
+
+(define-library (sicp ex38)
+  (export ex38)
+  (import (scheme base)
+          (sicp ex34))
+  (begin
+    (define (ex38 account old-password new-password)
+      (define (dispatch password m)
+        (cond ((equal? password new-password)
+               (account old-password m))
+              (else (error "Unknown password"))))
+      dispatch)))
