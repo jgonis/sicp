@@ -137,3 +137,29 @@
                (account old-password m))
               (else (error "Unknown password"))))
       dispatch)))
+
+
+;; Ex 3.12 - (define x (list 'a 'b))
+;;           (define y (list 'c 'd))
+;;           (define z (append x y))
+;;           (cdr x) -> (b)
+;;           (define w (append! x y))
+;;           (cdr x) -> (b c d)
+
+;; Ex 3.13 - The make-cycle function makes a circularly linked list
+;; Calling last-pair on the result of that function will cause an
+;; infinite loop.
+
+(define-library (sicp ex314)
+  (export mystery)
+  (import (scheme base))
+  (begin
+    (define (mystery x)
+      (define (loop x y)
+        (cond ((null? x) y)
+              (else (let ((temp (cdr x)))
+                      (set-cdr! x y)
+                      (loop temp x)))))
+      (loop x '()))))
+;; Calling (mystery '(a b c d)) will result in (d c b a) as the
+;; mystery function reverses lists.
