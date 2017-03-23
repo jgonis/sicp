@@ -163,3 +163,64 @@
       (loop x '()))))
 ;; Calling (mystery '(a b c d)) will result in (d c b a) as the
 ;; mystery function reverses lists.
+(define-library (sicp ex316)
+  (export count-pairs)
+  (import (scheme base))
+  (begin
+    (define (count-pairs x)
+      (cond ((not (pair? x)) 0)
+            (else (+ (count-pairs (car x))
+                     (count-pairs (cdr x))
+                     1))))))
+
+;; Ex 3.16
+;;3 pairs, returns 3 count
+;;(define p3 (cons 3 '()))
+;;(define p2 (cons 2 p3))
+;;(define p1 (cons 1 p2))
+;; (count-pairs p1)  -> 3
+
+;;3 pairs, returns 4 count
+;;(set-car! p1 p2)
+;;(set-cdr! p1 p3)
+;;(set-car! p2 p3)
+;; (count-pairs p1) -> 4
+
+;;3 pairs, returns 7 count
+;;(set-car! p1 p2)
+;;(set-cdr! p1 p2)
+;;(set-car! p2 p3)
+;;(set-cdr! p2 p3)
+;;(set-car! p3 1)
+;;(count-pairs p1) -> 7
+
+;;3 pairs, never returns at all
+;;(set-car! p1 p2)
+;;(set-car! p2 p1)
+;; (count-pairs p1) -> infinite loop
+
+(define-library (sicp ex317)
+  (export correct-count-pairs)
+  (import (scheme base))
+  (begin
+        (define (correct-count-pairs x)
+          (let ((visited '()))
+            (define (find-in-list item lyst)
+              (cond ((null? lyst) #f)
+                    ((eq? item (car lyst)) #t)
+                    (else (find-in-list item (cdr lyst)))))
+            (define (helper x)
+              (cond ((not (pair? x)) 0)
+                    ((find-in-list x visited) (+ (helper (car x))
+                                                 (helper (cdr x))))
+                    (else (set! visited (cons x visited))
+                          (+ 1
+                             (helper (car x))
+                             (helper (cdr x))))))
+            (helper x)))))
+
+(define-library (sicp ex318)
+  (export contains-cycle?)
+  (import (scheme base))
+  (begin
+    (define (contains-cycle? lyst) #f)))
