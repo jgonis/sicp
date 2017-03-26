@@ -209,7 +209,7 @@
               (cond ((null? lyst) #f)
                     ((eq? item (car lyst)) #t)
                     (else (find-in-list item (cdr lyst)))))
-            (define (helper x visited)
+            (define (helper x)
               (cond ((not (pair? x)) 0)
                     ((find-in-list x visited) (+ (helper (car x))
                                                  (helper (cdr x))))
@@ -234,3 +234,16 @@
               (else (or (helper (car x) (cons x visited))
                         (helper (cdr x) (cons x visited))))))
       (helper lyst '()))))
+
+(define-library (sicp ex319)
+  (export ex319)
+  (import (scheme base))
+  (begin
+    (define (ex319 lyst)
+      #f)))
+
+;;Tortoise and Hare algorith.
+;;Tortoise goes 1 cdr forward, hare goes 2 cdrs forward
+;;at each step check to see if node tortoise is at is eq?
+;;to node hare is at.  If so you have a cycle.
+;;Also need to deal with a node pointing to a
