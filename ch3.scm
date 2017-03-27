@@ -240,7 +240,15 @@
   (import (scheme base))
   (begin
     (define (ex319 lyst)
-      #f)))
+      (define (detect-cycle tortoise hare)
+        (cond ((eq? tortoise hare) #t)
+              ((null? (cdr hare)) #f)
+              ((null? (cdr (cdr hare))) #f)
+              (else (detect-cycle (cdr tortoise) (cdr (cdr hare))))))
+      (cond ((null? lyst) #f)
+            ((null? (cdr lyst)) #f)
+            ((null? (cdr (cdr lyst))) #f)
+            (else (detect-cycle lyst (cdr (cdr lyst))))))))
 
 ;;Tortoise and Hare algorith.
 ;;Tortoise goes 1 cdr forward, hare goes 2 cdrs forward
