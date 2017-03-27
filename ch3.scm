@@ -244,10 +244,14 @@
         (cond ((eq? tortoise hare) #t)
               ((null? (cdr hare)) #f)
               ((null? (cdr (cdr hare))) #f)
+              ((pair? (car tortoise)) (or (ex319 (car tortoise))
+                                          (detect-cycle (cdr tortoise) (cdr (cdr hare)))))
               (else (detect-cycle (cdr tortoise) (cdr (cdr hare))))))
       (cond ((null? lyst) #f)
             ((null? (cdr lyst)) #f)
             ((null? (cdr (cdr lyst))) #f)
+            ((pair? (car lyst)) (or (ex319 (car lyst))
+                                    (detect-cycle lyst (cdr (cdr lyst)))))
             (else (detect-cycle lyst (cdr (cdr lyst))))))))
 
 ;;Tortoise and Hare algorith.
