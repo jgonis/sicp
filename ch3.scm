@@ -245,7 +245,8 @@
               ((null? (cdr hare)) #f)
               ((null? (cdr (cdr hare))) #f)
               ((pair? (car tortoise)) (or (ex319 (car tortoise))
-                                          (detect-cycle (cdr tortoise) (cdr (cdr hare)))))
+                                          (detect-cycle (cdr tortoise)
+                                                        (cdr (cdr hare)))))
               (else (detect-cycle (cdr tortoise) (cdr (cdr hare))))))
       (cond ((null? lyst) #f)
             ((null? (cdr lyst)) #f)
@@ -258,4 +259,18 @@
 ;;Tortoise goes 1 cdr forward, hare goes 2 cdrs forward
 ;;at each step check to see if node tortoise is at is eq?
 ;;to node hare is at.  If so you have a cycle.
-;;Also need to deal with a node pointing to a
+;;Also need to deal with a node pointing to a list itself
+
+(define-library (sicp ch332)
+  (export make-queue
+          empty-queue?
+          front-queue
+          insert-queue!
+          delete-queue!)
+  (import (scheme base))
+  (begin
+    (define (make-queue) '())
+    (define (empty-queue? q) #f)
+    (define (front-queue q) '())
+    (define (insert-queue! q elem) '())
+    (define (delete-queue! q) '())))
