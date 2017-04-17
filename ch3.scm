@@ -301,3 +301,29 @@
       (set-car! q item))
     (define (set-rear-ptr! q item)
       (set-cdr! q item))))
+
+(define-library (sicp ex322)
+  (export make-queue)
+  (import (scheme base)
+          (scheme write))
+  (begin
+    (define (make-queue)
+      (let ((front-ptr '())
+            (rear-ptr '())a)
+        (define (front-ptr) #f)
+        (define (rear-ptr) #f)
+        (define (set-front-ptr!) #f)
+        (define (set-rear-ptr!) #f)
+        (define (dispatch m)
+          empty-queue?
+          front-queue
+          insert-queue!
+          delete-queue!
+          print-queue
+          (cond ((eq? m 'empty-queue?) #f)
+                ((eq? m 'front-queue) #f)
+                ((eq? m 'insert-queue!) #f)
+                ((eq? m 'delete-queue!) #f)
+                ((eq? m 'print-queue) (display "blah")
+                 (newline))))
+        dispatch))))
