@@ -268,7 +268,8 @@
           insert-queue!
           delete-queue!
           print-queue)
-  (import (scheme base))
+  (import (scheme base)
+          (scheme write))
   (begin
     (define (make-queue)
       (cons '() '()))
@@ -283,7 +284,7 @@
                (set-front-ptr! q item-to-insert)
                (set-rear-ptr! q item-to-insert)
                q)
-              (else (set-cdr! (read-ptr q) item-to-insert)
+              (else (set-cdr! (rear-ptr q) item-to-insert)
                     (set-rear-ptr! q item-to-insert)
                     q))))
     (define (delete-queue! q)
@@ -291,12 +292,12 @@
             (else (set-front-ptr! q (cdr (front-ptr q)))
                   q)))
     (define (print-queue q)
-      (display "blah"))
+      (display (front-ptr q))
+      (newline))
     ;;non-public methods that implement queue internals
     (define (front-ptr q) (car q))
     (define (rear-ptr q) (cdr q))
     (define (set-front-ptr! q item)
       (set-car! q item))
     (define (set-rear-ptr! q item)
-      (set-cdr! q item))
-    ))
+      (set-cdr! q item))))
