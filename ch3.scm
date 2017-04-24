@@ -336,3 +336,27 @@
                 ((eq? m 'delete-queue!) delete-queue!)
                 ((eq? m 'print-queue) print-queue)))
         dispatch))))
+
+(define-library (sicp ex323)
+  (export make-deque ;;constructor
+          empty-deque? ;;predicate
+          front-deque ;;selector
+          rear-deque  ;;selector
+          front-insert-deque! ;;mutator
+          rear-insert-deque!  ;;mutator
+          front-delete-deque! ;;mutator
+          rear-delete-deque!  ;;mutator
+          print-deque
+          )
+  (import (scheme base)
+          (scheme write))
+  (begin
+     (define (make-deque) #f) 
+     (define (empty-deque? dek) #f) 
+     (define (front-deque dek) '()) 
+     (define (rear-deque dek) '())  
+     (define (front-insert-deque! dek item) '()) 
+     (define (rear-insert-deque! dek item) '())  
+     (define (front-delete-deque! dek) '()) 
+     (define (rear-delete-deque! dek) '())  
+     (define (print-deque dek) (display ""))))
