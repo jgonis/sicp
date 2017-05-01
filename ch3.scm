@@ -346,8 +346,7 @@
           rear-insert-deque!  ;;mutator
           front-delete-deque! ;;mutator
           rear-delete-deque!  ;;mutator
-          print-deque
-          )
+          print-deque)
   (import (scheme base)
           (scheme write))
   (begin
@@ -375,12 +374,12 @@
                 (set-rear-ptr! dek new-item)
                 del)
                (else (set-cdr! (rear-ptr dek) new-item)
-                     (set-rear-ptr! new-item)
+                     (set-rear-ptr! dek new-item)
                      dek))))  
      (define (front-delete-deque! dek)
        (cond ((empty-deque? dek)
               (error "You have tried to delete from an empty deque!"))
-             (else))) 
+             (else ))) 
      (define (rear-delete-deque! dek) '())  
      (define (print-deque dek) (display (front-ptr dek))
        (newline))
@@ -388,5 +387,13 @@
      (define (front-ptr dek) (car dek))
      (define (rear-ptr dek) (cdr dek))
      (define (set-front-ptr! dek item) '())
-     (define (set-rear-ptr! dek item) '())
-     ))
+     (define (set-rear-ptr! dek item) '())))
+
+(define-library (sicp ch333)
+  (export lookup)
+  (import (scheme base))
+  (begin
+    (define (lookup key table)
+      (let ((record (assoc key (cdr table))))
+        (cond ((null? record) (cdr record))
+              (else #f))))))
