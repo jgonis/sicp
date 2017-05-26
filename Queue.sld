@@ -1,7 +1,7 @@
 (define-library (sicp queues)
   (export make-queue
-          queue-pop
-          queue-push
+          queue-pop!
+          queue-push!
           queue-peek
           queue-print
           queue-length
@@ -11,7 +11,7 @@
   (begin
    (define (make-queue)
      (cons (cons '() '()) 0))
-   (define (queue-pop queue)
+   (define (queue-pop! queue)
      (cond ((queue-empty? queue) (error "can't pop an empty queue!"))
            (else (let ((item (front-ptr queue)))
                    (cond ((= (queue-length queue) 1)
@@ -24,7 +24,7 @@
                                (dec-queue-count! queue)
                                (set-cdr! item '())
                                (car item)))))))
-   (define (queue-push queue item)
+   (define (queue-push! queue item)
      (let ((new-item (cons item '())))
        (cond ((queue-empty? queue) (set-front-ptr! queue new-item)
               (set-rear-ptr! queue new-item)
