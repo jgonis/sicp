@@ -5,7 +5,8 @@
           queue-peek
           queue-print
           queue-length
-          queue-empty?)
+          queue-empty?
+          queue-copy)
   (import (scheme base)
           (scheme write))
   (begin
@@ -49,6 +50,13 @@
                  (helper (front-ptr queue) (rear-ptr queue)))))
    (define (queue-length queue) (queue-count queue))
    (define (queue-empty? queue) (= (queue-count queue) 0))
+   (define (queue-copy q)
+     (define (helper q-item q2)
+       (cond ((null? q-item) q2)
+             (else
+              (queue-push! q2 (car q-item))
+              (helper (cdr q-item) q2))))
+     (helper (front-ptr q) (make-queue)))
    ;;non-exported methods
    (define (set-front-ptr! queue item) (set-car! (car queue) item))
    (define (set-rear-ptr! queue item) (set-cdr! (car queue) item))
