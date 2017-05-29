@@ -30,7 +30,7 @@
                  right-tree))))
 
 (define-library (sicp huffman-encoding)
-  (export adjoin-set
+  (export encode-symbol
           make-leaf-set
           encode)
   (import (scheme base)
