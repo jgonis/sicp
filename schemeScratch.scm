@@ -1,3 +1,12 @@
+(include "Queue.sld")
+(include "Multisets.sld")
+(include "tree.sld")
+
+(import (sicp tree-lib))
+(import (sicp queues))
+(import (sicp multi-sets))
+(import (scheme file))
+
 (define file-name "./testinputs/test.txt")
 (define ip (open-input-file file-name))
 (define (read-file input-port)
@@ -32,6 +41,6 @@
   (let* ((in-file (open-input-file file-name))
          (q (read-file in-file))
          (ms (create-input-set q (create-multiset '())))
-         (ls (tree->list ms2))
+         (ls (tree->list ms))
          (sorted-list (sort-largest->smallest ls)))
     sorted-list))
