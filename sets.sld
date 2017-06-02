@@ -16,7 +16,8 @@
                             (adjoin-set (car lyst) result comparator)
                             comparator))))
       (cond ((null? less-than) (helper lyst '() (lambda (a b) (< a b))))
-            (else (helper lyst '()  (car less-than)))))
+            (else (helper lyst '() (car less-than)))))
+    
     (define (union-set set1 set2 . less-than)
       (define (helper set1 set2 comparator)
         (cond ((null? set1) set2)
