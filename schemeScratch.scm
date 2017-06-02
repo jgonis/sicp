@@ -6,6 +6,8 @@
 (import (sicp queues))
 (import (sicp multi-sets))
 (import (scheme file))
+(import (gauch time))
+(import (srfi 95))
 
 (define file-name "./testinputs/test.txt")
 (define ip (open-input-file file-name))
