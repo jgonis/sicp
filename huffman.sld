@@ -57,7 +57,7 @@
               (else (go-left? symbol (cdr symbol-list)))))
       (cond ((leaf? tree) (cond ((eq? (car (tree-items tree)) symbol) '())
                                 (else (error "unknown symbol!"))))
-            ((go-left? symbol (tree-item (left-branch tree)))
+            ((go-left? symbol (tree-items (left-branch tree)))
              (cons 0 (encode-item symbol (left-branch tree))))
             (else (cons 1 (encode-item symbol (right-branch tree))))))))
 
