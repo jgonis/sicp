@@ -39,7 +39,7 @@
           (sicp ordered-list-set))
   (begin    
     (define (make-leaf-set pairs)
-      (make-set (map (lambda (pair) (make-leaf (car pair) (cadr pair)))
+      (make-set (map (lambda (pair) (make-leaf (car pair) (cdr pair)))
                      pairs)
                 (lambda (a b) (< (tree-weight a) (tree-weight b)))))
     
