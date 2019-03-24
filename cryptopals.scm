@@ -2,7 +2,8 @@
   (import (scheme base)
           (scheme list)
           (srfi 151))
-  (export hex->base64)
+  (export hex->base64
+          fixed-xor)
   (begin
     (define base-64-table
       (lambda (number)
@@ -93,4 +94,17 @@
                                                           6)))))))
                (helper bit-list result-str (- (string-length
                                                result-str)
-                                              1))))))))
+                                              1))))))
+    (define (fixed-xor hex-string1
+                       hex-string2)
+      (cond ((not (= (string-length hex-string1)
+                     (string-length hex-string2)))
+              (error "Hex strings not equal in length"
+                      hex-string1
+                      hex-string2))
+            (else (let ((hex-num1 (string->number hex-string1 16))
+                        (hex-num2 (string->number hex-string2 16)))
+                    (number->string (bitwise-xor hex-num1 hex-num2)
+                                    16)))))))
+    
+
