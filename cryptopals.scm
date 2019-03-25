@@ -105,6 +105,17 @@
             (else (let ((hex-num1 (string->number hex-string1 16))
                         (hex-num2 (string->number hex-string2 16)))
                     (number->string (bitwise-xor hex-num1 hex-num2)
-                                    16)))))))
-    
+                                    16)))))
+    (define (hex-string->vector hex-string)
+      (define (helper hex-string result-vec index)
+        )
+      (let* ((str-len (string-length hex-string))
+             (result-vector (cond ((= 0 (remainder str-len 2))
+                                   (make-vector (/ str-len 2)))
+                                  (else (make-vector
+                                         (+ 1
+                                            (quotient str-len 2))))))
+             (str (list->string (reverse (string->list hex-string)))))
+        ()))))
+
 
