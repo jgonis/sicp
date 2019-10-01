@@ -1,8 +1,11 @@
 (define-library (little-schemer)
-  (export test-func)
+  (export atom?)
   (import (scheme base)
           (scheme write))
   (begin
-    (define test-func
+    (define atom?
       (lambda (x)
-        (* x 4)))))
+        (and (not (pair? x)) (not (null? x)))))))
+
+;;You can't ask for the car of a null list and you can't ask for
+;;the cdr of a null list

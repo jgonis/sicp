@@ -8,13 +8,9 @@
   (begin
     (define run-tests
       (lambda ()
-        (test1)
-        (test2)
+        (test-atom?)
         (check-report)
         (check-reset!)))
-    (define test1
+    (define test-atom?
       (lambda ()
-        (check (test-func 2) => 8)))
-    (define test2
-      (lambda ()
-        (check (> (test-func 2) 5) => #t)))))
+        (check (atom? (quote ())) => #f)))))
