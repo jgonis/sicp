@@ -23,7 +23,9 @@
         (test-pick)
         (test-rempick)
         (test-no-nums)
-        (test-all-nums)))
+        (test-all-nums)
+        (test-occurs)
+        (test-one?)))
     (define test-j+
       (lambda ()
         (check (j+ 46 12) => 58)))
@@ -114,4 +116,10 @@
                => 2)
         (check (occurs 'toast
                        '(bacon lettuce and tomato))
-               => 0)))))
+               => 0)))
+    (define test-one?
+      (lambda ()
+        (check (one? 1) => #t)
+        (check (one? 2) => #f)
+        (check (one? 'j) => #f)
+        (check (one? '()) => #f)))))
