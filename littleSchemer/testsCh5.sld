@@ -9,7 +9,9 @@
     (define run-tests-ch5
       (lambda ()
         (test-rember*)
-        (test-insertR*)))
+        (test-insertR*)
+        (test-occurs*)
+        (test-subst*)))
     (define test-rember*
       (lambda ()
         (check (rember* 'cup '((coffee) cup ((tea) cup) (and (hick)) cup))
@@ -31,4 +33,81 @@
                     ((a (wood) chuck roast))
                     (((chuck roast)))
                     (if (a) ((wood chuck roast)))
-                    could chuck roast wood))))))
+                    could chuck roast wood))
+        (check (insertR* 'roast
+                         'chuck
+                         '((how much (wood))
+                           could
+                           ((a (wood) squirrel))
+                           (((throw)))
+                           (if (a) ((wood squirrel)))
+                           could throw wood))
+               => '((how much (wood))
+                    could
+                    ((a (wood) squirrel))
+                    (((throw)))
+                    (if (a) ((wood squirrel)))
+                    could throw wood))
+        (check (insertR* 'roast
+                         'chuck
+                         '())
+               => '())))
+    (define test-occurs*
+      (lambda ()
+        (check (occurs* 'chuck
+                        '((how much (wood))
+                          could
+                          ((a (wood) chuck))
+                          (((chuck)))
+                          (if (a) ((wood chuck)))
+                          could chuck wood))
+               => 4)
+        (check (occurs* 'chuck
+                        '())
+               => 0)
+        (check (occurs* 'chuck
+                        '((how much (wood))
+                           could
+                           ((a (wood) squirrel))
+                           (((throw)))
+                           (if (a) ((wood squirrel)))
+                           could throw wood))
+               => 0)))
+    (define test-subst*
+      (lambda ()
+        (check (subst* 'orange
+                      'banana
+                      '())
+               => '())
+        (check (subst* 'orange
+                       'banana
+                       '((banana)
+                         (split ((((banana ice)))
+                                 (cream (banana))
+                                 sherbet))
+                         (banana)
+                         (bread)
+                         (banana brandy)))
+               => '((orange)
+                    (split ((((orange ice)))
+                            (cream (orange))
+                            sherbet))
+                    (orange)
+                    (bread)
+                    (orange brandy)))
+        (check (subst* 'orange
+                       'banana
+                       '((plum)
+                         (split ((((plum ice)))
+                                 (cream (plum))
+                                 sherbet))
+                         (plum)
+                         (bread)
+                         (plum brandy)))
+               => '((plum)
+                    (split ((((plum ice)))
+                            (cream (plum))
+                            sherbet))
+                    (plum)
+                    (bread)
+                    (plum brandy)))))))
