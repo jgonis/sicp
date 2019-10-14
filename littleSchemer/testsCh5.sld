@@ -11,7 +11,10 @@
         (test-rember*)
         (test-insertR*)
         (test-occurs*)
-        (test-subst*)))
+        (test-subst*)
+        (test-insertL*)
+        (test-member*?)
+        (test-eqlist?)))
     (define test-rember*
       (lambda ()
         (check (rember* 'cup '((coffee) cup ((tea) cup) (and (hick)) cup))
@@ -110,4 +113,50 @@
                             sherbet))
                     (plum)
                     (bread)
-                    (plum brandy)))))))
+                    (plum brandy)))))
+    (define test-insertL*
+      (lambda ()
+        (check (insertL* 'pecker
+                         'chuck
+                         '((how much (wood))
+                           could
+                           ((a (wood) chuck))
+                           (((chuck)))
+                           (if (a) ((wood chuck)))
+                           could chuck wood))
+               => '((how much (wood))
+                    could
+                    ((a (wood) pecker chuck))
+                    (((pecker chuck)))
+                    (if (a) ((wood pecker chuck)))
+                    could pecker chuck wood))))
+    (define test-member*?
+      (lambda ()
+        (check (member*? 'chips
+                         '())
+               => #f)
+        (check (member*? 'chips
+                         '((potato)
+                           (crisps ((with) fish) (crisps))))
+               => #f)
+        (check (member*? 'chips
+                         '((potato)
+                           (chips ((with) fish) (chips))))
+               => #t)))
+    (define test-eqlist?
+      (lambda ()
+        (check (eqlist? '(strawberry ice cream)
+                        '(strawberry ice cream))
+               => #t)
+        (check (eqlist? '(strawberry ice cream)
+                        '(strawberry cream ice))
+               => #f)
+        (check (eqlist? '(banana ((split)))
+                        '((banana) (split)))
+               => #f)
+        (check (eqlist? '(beef ((sausage)) (and (soda)))
+                        '(beef ((salami)) (and (soda))))
+               => #f)
+        (check (eqlist? '(beef ((sausage)) (and (soda)))
+                        '(beef ((sausage)) (and (soda))))
+               => #t)))))
