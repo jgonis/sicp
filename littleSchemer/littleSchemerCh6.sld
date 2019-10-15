@@ -2,9 +2,12 @@
 (include "littleSchemerCh4.sld")
 (define-library (little-schemer ch6)
   (export numbered?
+          operator
           value
           prefix-value
-          sero?)
+          sero?
+          edd1
+          zub1)
   (import (scheme base)
           (scheme write)
           (little-schemer ch1)
@@ -54,10 +57,7 @@
                    (prefix-value (2nd-sub-exp aexp))))
               ((eq? '^ (operator aexp))
                (^ (prefix-value (1st-sub-exp aexp))
-                  (prefix-value (2nd-sub-exp aexp)))))))
-    (define sero?
-      (lambda (n)
-        (null? n)))))
+                  (prefix-value (2nd-sub-exp aexp)))))))))
 
 
 

@@ -103,8 +103,22 @@
       (lambda ()
         (check (multiinsertR 'pear
                              'mint
-                            '(lamb chops and mint flavored mint jelly))
-               => '(lamb chops and mint pear flavored mint pear jelly))
+                            '(lamb
+                              chops
+                              and
+                              mint
+                              flavored
+                              mint
+                              jelly))
+               => '(lamb
+                    chops
+                    and
+                    mint
+                    pear
+                    flavored
+                    mint
+                    pear
+                    jelly))
         (check (multiinsertR 'egg
                              'toast
                             '(bacon lettuce and tomato))
@@ -117,8 +131,22 @@
       (lambda ()
         (check (multiinsertL 'pear
                              'mint
-                            '(lamb chops and mint flavored mint jelly))
-               => '(lamb chops and pear mint flavored pear mint jelly))
+                            '(lamb
+                              chops
+                              and
+                              mint
+                              flavored
+                              mint
+                              jelly))
+               => '(lamb
+                    chops
+                    and
+                    pear
+                    mint
+                    flavored
+                    pear
+                    mint
+                    jelly))
         (check (multiinsertL 'egg
                              'toast
                             '(bacon lettuce and tomato))
@@ -131,7 +159,13 @@
       (lambda ()
         (check (multisubst 'pear
                            'mint
-                           '(lamb chops and mint flavored mint jelly))
+                           '(lamb
+                             chops
+                             and
+                             mint
+                             flavored
+                             mint
+                             jelly))
                => '(lamb chops and pear flavored pear jelly))
         (check (multisubst 'egg
                            'toast
