@@ -14,7 +14,7 @@
     (define member?
       (lambda (a lat)
         (cond ((null? lat) #f)
-              ((eq? a (car lat)) #t)
+              ((equal? a (car lat)) #t)
               (else (member? a (cdr lat))))))))
 
 
