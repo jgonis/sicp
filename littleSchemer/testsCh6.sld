@@ -8,8 +8,30 @@
   (begin
     (define run-tests-ch6
       (lambda ()
-        (test-numbered?)))
+        (test-numbered?)
+        (test-value)
+        (test-prefix-value)))
     (define test-numbered?
       (lambda ()
-        (check (numbered? '(1 + 3))
-               => #f)))))
+        (check (numbered? 1)
+               => #t)
+        (check (numbered? '(3 + (4 ^ 5)))
+               => #t)
+        (check (numbered? '(2 * sausage))
+               => #f)))
+    (define test-value
+      (lambda ()
+        (check (value 13)
+               => 13)
+        (check (value '(1 + 3))
+               => 4)
+        (check (value '(1 + (3 ^ 4)))
+               => 82)
+        (check (value '((3 * 6) + (8 ^ 2)))
+               => 82)))
+    (define test-prefix-value
+      (lambda ()
+        (check (prefix-value '(+ 3 4))
+               => 7)
+        (check (prefix-value '(+ (* 3 6) (^ 8 2)))
+               => 82)))))

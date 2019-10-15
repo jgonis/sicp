@@ -20,7 +20,11 @@
           all-nums
           eqan?
           occurs
-          one?)
+          one?
+          sero?
+          edd1
+          zub1
+          alt-j+)
   (import (scheme base)
           (scheme write)
           (little-schemer ch1))
@@ -116,7 +120,20 @@
               (else (occurs a (cdr lat))))))
     (define one?
       (lambda (n)
-        (eqan? n 1)))))
+        (eqan? n 1)))
+    (define sero?
+      (lambda (n)
+        (null? n)))
+    (define edd1
+      (lambda (n)
+        (cons (quote '()) n)))
+    (define zub1
+      (lambda (n)
+        (cdr n)))
+    (define alt-j+
+      (lambda (x y)
+        (cond ((sero? y) x)
+              (else (alt-j+ (edd1 x) (zub1 y))))))))
 
 ;;You can't ask for the car of a null list and you can't ask for
 ;;the cdr of a null list

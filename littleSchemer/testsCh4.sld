@@ -90,9 +90,17 @@
         (check (j-length '(ham and cheese on rye)) => 5)))
     (define test-pick
       (lambda ()
-        (check (pick 4 '(lasagna spaghetti ravioli macaroni meatball))
+        (check (pick 4 '(lasagna
+                         spaghetti
+                         ravioli
+                         macaroni
+                         meatball))
                => 'macaroni)
-        (check (pick 1 '(lasagna spaghetti ravioli macaroni meatball))
+        (check (pick 1 '(lasagna
+                         spaghetti
+                         ravioli
+                         macaroni
+                         meatball))
                => 'lasagna)))
     (define test-rempick
       (lambda ()
