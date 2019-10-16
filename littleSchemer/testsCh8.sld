@@ -21,7 +21,9 @@
         (test-insert-gen insert-left insertL-f)
         (test-insert-gen insert-right insertR-f)
         (test-insert-gen insert-only-new subst-f)
-        (test-insert-gen-rember insert-nothing)))
+        (test-insert-gen-rember insert-nothing)
+        (test-multirember-f eq?)
+        (test-multiremberT)))
     (define test-rember-f
       (lambda ()
         (check (rember-f =
@@ -149,4 +151,15 @@
                 '(lemonade (pop corn) and (cake)))
                => (rember-f equal?
                             '(pop corn)
-                            '(lemonade (pop corn) and (cake))))))))
+                            '(lemonade (pop corn) and (cake))))))
+    (define test-multirember-f
+      (lambda (test-func)
+        (check ((multirember-f test-func)
+                'tuna
+                '(shrimp salad tuna salad and tuna))
+               => '(shrimp salad salad and))))
+    (define test-multiremberT
+      (lambda ()
+        (check (multiremberT (lambda (x) (eq? x 'tuna))
+                              '(shrimp salad tuna salad and tuna))
+               => '(shrimp salad salad and))))))

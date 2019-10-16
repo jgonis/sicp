@@ -7,7 +7,8 @@
           prefix-value
           sero?
           edd1
-          zub1)
+          zub1
+          alt-value)
   (import (scheme base)
           (scheme write)
           (little-schemer ch1)
@@ -57,7 +58,18 @@
                    (prefix-value (2nd-sub-exp aexp))))
               ((eq? '^ (operator aexp))
                (^ (prefix-value (1st-sub-exp aexp))
-                  (prefix-value (2nd-sub-exp aexp)))))))))
+                  (prefix-value (2nd-sub-exp aexp)))))))
+    (define atom-to-operator
+      (lambda (x)
+        (cond ((eq? x '+ ) j+)
+              ((eq? x '*) j*)
+              ((eq? x '^) ^))))
+    (define alt-value
+      (lambda (prefix-aexp)
+        (cond ((atom? prefix-aexp) prefix-aexp)
+              (else ((atom-to-operator (operator prefix-aexp))
+                     (alt-value (1st-sub-exp prefix-aexp))
+                     (alt-value (2nd-sub-exp prefix-aexp)))))))))
 
 
 

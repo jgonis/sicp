@@ -9,7 +9,9 @@
           insert-right
           insert-only-new
           insert-nothing
-          insert-gen)
+          insert-gen
+          multirember-f
+          multiremberT)
   (import (scheme base)
           (scheme write)
           (little-schemer ch1))
@@ -85,7 +87,24 @@
                               (((insert-gen insert-func) test?)
                                new
                                old
-                               (cdr lat)))))))))))
+                               (cdr lat)))))))))
+    (define multirember-f
+      (lambda (test?)
+        (lambda (a lat)
+          (cond ((null? lat) '())
+                ((test? a (car lat)) ((multirember-f test?)
+                                      a
+                                      (cdr lat)))
+                (else (cons (car lat) ((multirember-f test?)
+                                       a
+                                       (cdr lat))))))))
+    (define multiremberT
+      (lambda (test-func lat)
+        (cond ((null? lat) '())
+              ((test-func (car lat)) (multiremberT test-func
+                                                   (cdr lat)))
+              (else (cons (car lat)
+                          (multiremberT test-func (cdr lat)))))))))
 
 
 

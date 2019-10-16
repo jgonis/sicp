@@ -10,7 +10,8 @@
       (lambda ()
         (test-numbered?)
         (test-value)
-        (test-prefix-value)))
+        (test-prefix-value)
+        (test-alt-value)))
     (define test-numbered?
       (lambda ()
         (check (numbered? 1)
@@ -33,5 +34,13 @@
       (lambda ()
         (check (prefix-value '(+ 3 4))
                => 7)
+        (check (prefix-value 3) => 3)
         (check (prefix-value '(+ (* 3 6) (^ 8 2)))
+               => 82)))
+    (define test-alt-value
+      (lambda ()
+        (check (alt-value '(+ 3 4))
+               => 7)
+        (check (alt-value 3) => 3)
+        (check (alt-value '(+ (* 3 6) (^ 8 2)))
                => 82)))))
