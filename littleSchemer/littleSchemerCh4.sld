@@ -13,6 +13,7 @@
           alt-j=
           ^
           j/
+          j-even?
           j-length
           pick
           rempick
@@ -85,6 +86,9 @@
       (lambda (x y)
         (cond ((j< x y) 0)
               (else (add1 (j/ (j- x y) y))))))
+    (define j-even?
+      (lambda (n)
+        (j= (j* (j/ n 2) 2) n)))
     (define j-length
       (lambda (lat)
         (cond ((null? lat) 0)

@@ -19,6 +19,7 @@
         (test-alt-j=)
         (test-^)
         (test-j/)
+        (test-j-even?)
         (test-j-length)
         (test-pick)
         (test-rempick)
@@ -78,6 +79,12 @@
       (lambda ()
         (check (j/ 15 4) => 3)
         (check (j/ 3 6) => 0)))
+    (define test-j-even?
+      (lambda ()
+        (check (j-even? 4) => #t)
+        (check (j-even? 3) => #f)
+        (check (j-even? 2) => #t)
+        (check (j-even? 1) => #f)))
     (define test-j-length
       (lambda ()
         (check (j-length '(hotdogs
