@@ -7,6 +7,7 @@
 (include "testsCh7.sld")
 (include "testsCh8.sld")
 (include "testsCh9.sld")
+(include "testsCh10.sld")
 (define-library (little-schemer tests all)
   (export run-tests)
   (import (scheme base)
@@ -20,7 +21,8 @@
           (little-schemer tests ch6)
           (little-schemer tests ch7)
           (little-schemer tests ch8)
-          (little-schemer tests ch9))
+          (little-schemer tests ch9)
+          (little-schemer tests ch10))
   (begin
     (define run-tests
       (lambda ()
@@ -35,5 +37,6 @@
         (run-tests-ch7)
         (run-tests-ch8)
         (run-tests-ch9)
+        (run-tests-ch10)
         (check-report)
         (check-reset!)))))

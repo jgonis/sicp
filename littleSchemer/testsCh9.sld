@@ -8,8 +8,30 @@
   (begin
     (define run-tests-ch9
       (lambda ()
-        (test-test-func)))
-    (define test-test-func
+        (test-looking)
+        (test-shift)
+        (test-atom-count)))
+    (define test-looking
       (lambda ()
-        (check (test-func)
-               => #f)))))
+        (check (looking 'caviar '(6 2 4 caviar 5 7 3))
+               => #t)
+        (check (looking 'caviar '(6 2 grits caviar 5 7 3))
+               => #f)))
+    (define test-shift
+      (lambda ()
+        (check (shift '((a b) c))
+               => '(a (b c)))
+        (check (shift '((a b) (c d)))
+               => '(a (b (c d))))))
+    (define test-atom-count
+      (lambda ()
+        (check (atom-count '())
+               => 0)
+        (check (atom-count '((a b) c))
+               => 3)
+        (check (atom-count (shift '((a b) c)))
+               => 3)
+        (check (atom-count '((a b) (c d)))
+               => 4)
+        (check (atom-count (shift '((a b) (c d))))
+               => 4)))))
