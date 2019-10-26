@@ -9,7 +9,8 @@
     (define run-tests-ch10
       (lambda ()
         (test-lookup-in-entry)
-        (test-lookup-in-table)))
+        (test-lookup-in-table)
+        (test-value)))
     (define test-lookup-in-entry
       (lambda ()
         (let ((food (new-entry '(appetizer entree beverages)
@@ -46,4 +47,6 @@
                                   table
                                   (lambda (name)
                                     'name-not-found))
-                 => 'name-not-found))))))
+                 => 'name-not-found))))
+    (define test-value
+      (lambda ()))))
