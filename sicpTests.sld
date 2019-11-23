@@ -1,0 +1,15 @@
+(include "sicpCh1Tests.sld")
+(define-library (sicp tests all)
+  (export run-tests)
+  (import (scheme base)
+          (scheme write)
+          (srfi 78)
+          (sicp tests ch1))
+  (begin
+    (define run-tests
+      (lambda ()
+        (check-reset!)
+        (check-set-mode! 'report-failed)
+        (run-tests-ch1)
+        (check-report)
+        (check-reset!)))))
