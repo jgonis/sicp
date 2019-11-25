@@ -5,9 +5,6 @@
           operator
           value
           prefix-value
-          sero?
-          edd1
-          zub1
           alt-value)
   (import (scheme base)
           (scheme write)

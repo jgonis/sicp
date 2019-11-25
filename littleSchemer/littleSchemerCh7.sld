@@ -15,6 +15,7 @@
           a-pair?
           first
           second
+          third
           build-pair
           all-pairs?
           relation?
@@ -97,6 +98,9 @@
     (define second
       (lambda (pair)
         (car (cdr pair))))
+    (define third
+      (lambda (l)
+        (car (cdr (cdr l)))))
     (define seconds
       (lambda (l-of-pairs)
         (cond ((null? l-of-pairs) (quote ()))
