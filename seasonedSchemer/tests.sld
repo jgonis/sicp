@@ -1,0 +1,15 @@
+(include "testsCh1.sld")
+(define-library (seasoned-schemer tests all)
+  (export run-tests)
+  (import (scheme base)
+          (scheme write)
+          (srfi 78)
+          (seasoned-schemer tests ch1))
+  (begin
+    (define run-tests
+      (lambda ()
+        (check-reset!)
+        (check-set-mode! 'report-failed)
+        (run-tests-ch1)
+        (check-report)
+        (check-reset!)))))
