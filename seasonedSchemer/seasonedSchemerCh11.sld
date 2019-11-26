@@ -1,7 +1,7 @@
 (include "../littleSchemer/littleSchemerCh1.sld")
 (include "../littleSchemer/littleSchemerCh2.sld")
 (include "../littleSchemer/littleSchemerCh4.sld")
-(define-library (seasoned-schemer ch1)
+(define-library (seasoned-schemer ch11)
   (export letcc
           try
           two-in-a-row?

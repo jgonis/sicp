@@ -1,12 +1,12 @@
-(include "seasonedSchemerCh1.sld")
-(define-library (seasoned-schemer tests ch1)
-  (export run-tests-ch1)
+(include "seasonedSchemerCh11.sld")
+(define-library (seasoned-schemer tests ch11)
+  (export run-tests-ch11)
   (import (scheme base)
           (scheme write)
           (srfi 78)
-          (seasoned-schemer ch1))
+          (seasoned-schemer ch11))
   (begin
-    (define run-tests-ch1
+    (define run-tests-ch11
       (lambda ()
         (test-two-in-a-row?)
         (test-sum-of-prefixes)
