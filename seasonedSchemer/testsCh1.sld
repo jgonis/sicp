@@ -8,7 +8,11 @@
   (begin
     (define run-tests-ch1
       (lambda ()
-        (test-ch1test)))
-    (define test-ch1test
+        (test-two-in-a-row?)))
+    (define test-two-in-a-row?
       (lambda ()
-        (check (ch1test 3) => 3)))))
+        (check (two-in-a-row? '(italian
+                                sardines
+                                spaghetti
+                                parsley))
+               => #f)))))

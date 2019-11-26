@@ -1,9 +1,15 @@
+(include "../littleSchemer/littleSchemerCh1.sld")
+(include "../littleSchemer/littleSchemerCh2.sld")
+(include "../littleSchemer/littleSchemerCh4.sld")
 (define-library (seasoned-schemer ch1)
   (export letcc
           try
-          ch1test)
+          two-in-a-row?)
   (import (scheme base)
-          (scheme write))
+          (scheme write)
+          (little-schemer ch1)
+          (little-schemer ch2)
+          (little-schemer ch4))
   (begin
     (define-syntax letcc 
       (syntax-rules () 
@@ -15,6 +21,7 @@
         ((try var a . b) 
          (letcc success 
                 (letcc var (success a)) . b)))) 
-    (define ch1test
-      (lambda (x)
-        x))))
+    (define two-in-a-row?
+      (lambda (lat)
+        (cond ((null? lat) #f)
+              (else #f))))))
