@@ -5,7 +5,6 @@
   (export letcc
           try
           two-in-a-row?
-          two-in-a-row-b?
           sum-of-prefixes
           scramble)
   (import (scheme base)
@@ -35,8 +34,14 @@
               (else (two-in-a-row? lat)))))
     (define two-in-a-row?
       (lambda (lat)
-        (cond ((null? lat) #f)
-              (else (two-in-a-row-b? (car lat) (cdr lat))))))
+        (letrec ((two-in-a-row-helper
+                  (lambda (a lat)
+                    (cond  ((null? lat) #f)
+                           ((eq? a (car lat)) #t)
+                           (else (two-in-a-row-helper (car lat)
+                                                      (cdr lat)))))))
+          (cond ((null? lat) #f)
+                (else (two-in-a-row-helper (car lat) (cdr lat)))))))
     (define two-in-a-row-b?
       (lambda (a lat)
         (cond ((null? lat) #f)
@@ -44,8 +49,15 @@
               (else (two-in-a-row-b? (car lat) (cdr lat))))))
     (define sum-of-prefixes
       (lambda (tup)
-        (cond ((null? tup) '())
-              (else (sum-of-prefixes-b 0 tup)))))
+        (letrec ((sum-of-prefixes-helper
+                  (lambda (sum tup)
+                    (cond ((null? tup) '())
+                          (else (cons (+ sum (car tup))
+                                      (sum-of-prefixes-helper
+                                       (+ sum (car tup))
+                                       (cdr tup))))))))
+          (cond ((null? tup) '())
+                (else (sum-of-prefixes-helper 0 tup))))))
     (define sum-of-prefixes-b
       (lambda (sum tup)
         (cond ((null? tup) '())
@@ -54,9 +66,22 @@
                                              (cdr tup)))))))
     (define scramble
       (lambda (tup)
-        (cond ((null? tup) '())
-              (else (scramble-b '()
-                                tup)))))
+        (letrec ((scramble-helper
+                  (lambda (reversed-prefix tup)
+                    (cond ((null? tup) '())
+                          (else (cons (pick-helper (car tup)
+                                                   (cons (car tup)
+                                                         reversed-prefix))
+                                      (scramble-helper
+                                       (cons (car tup) reversed-prefix)
+                                       (cdr tup)))))))
+                 (pick-helper (lambda (n lat)
+                                (cond ((one? n) (car lat))
+                                      (else (pick-helper (sub1 n)
+                                                         (cdr lat)))))))
+          (cond ((null? tup) '())
+                (else (scramble-helper '()
+                                       tup))))))
     (define scramble-b
       (lambda (reversed-prefix tup)
         (cond ((null? tup) '())
