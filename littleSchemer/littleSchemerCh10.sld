@@ -140,9 +140,9 @@
       (lambda (cond-line)
         (second cond-line)))
     (define *application
-      (lambda (expr table))
-      (my-apply (meaning (function-of expr) table)
-                (evlist (arguments-of expr) table)))
+      (lambda (expr table)
+        (my-apply (meaning (function-of expr) table)
+                  (evlist (arguments-of expr) table))))
     (define function-of
       (lambda (expr)
         (first expr)))
