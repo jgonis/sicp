@@ -69,23 +69,23 @@
         (letrec ((scramble-helper
                   (lambda (reversed-prefix tup)
                     (cond ((null? tup) '())
-                          (else (cons (pick-helper (car tup)
-                                                   (cons (car tup)
-                                                         reversed-prefix))
-                                      (scramble-helper
-                                       (cons (car tup) reversed-prefix)
-                                       (cdr tup)))))))
+                          (else
+                           (let ((val (cons (car tup) reversed-prefix)))
+                             (cons (pick-helper (car tup) val)
+                                   (scramble-helper val
+                                                    (cdr tup))))))))
                  (pick-helper (lambda (n lat)
                                 (cond ((one? n) (car lat))
                                       (else (pick-helper (sub1 n)
                                                          (cdr lat)))))))
           (cond ((null? tup) '())
-                (else (scramble-helper '()
-                                       tup))))))
+                (else (scramble-helper '() tup))))))
     (define scramble-b
       (lambda (reversed-prefix tup)
         (cond ((null? tup) '())
-              (else (cons (pick (car tup) (cons (car tup) reversed-prefix))
-                          (scramble-b (cons (car tup) reversed-prefix)
-                                      (cdr tup)))))))))
+              (else
+               (let ((val (cons (car tup) reversed-prefix)))
+                 (cons (pick (car tup) val)
+                       (scramble-b val
+                                   (cdr tup))))))))))
 
