@@ -1,6 +1,7 @@
 (include "testsCh11.sld")
 (include "testsCh12.sld")
 (include "testsCh13.sld")
+(include "testsCh14.sld")
 (define-library (seasoned-schemer tests all)
   (export run-tests)
   (import (scheme base)
@@ -8,7 +9,8 @@
           (srfi 78)
           (seasoned-schemer tests ch11)
           (seasoned-schemer tests ch12)
-          (seasoned-schemer tests ch13))
+          (seasoned-schemer tests ch13)
+          (seasoned-schemer tests ch14))
   (begin
     (define run-tests
       (lambda ()
@@ -17,5 +19,6 @@
         (run-tests-ch11)
         (run-tests-ch12)
         (run-tests-ch13)
+        (run-tests-ch14)
         (check-report)
         (check-reset!)))))
