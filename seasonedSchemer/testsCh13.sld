@@ -9,7 +9,9 @@
     (define run-tests-ch13
       (lambda ()
         (test-lr-intersect)
-        (test-lr-intersectall)))
+        (test-lr-intersectall)
+        (test-lr-rember)
+        (test-rember-beyond-first)))
     (define test-lr-intersect
       (lambda ()
         (check (lr-intersect '() '())
@@ -44,4 +46,57 @@
         (check (lr-intersectall '((3 mangoes and)
                                   ()
                                   (3 diet hamburgers)))
-               => '())))))
+               => '())))
+    (define test-lr-rember
+      (lambda ()
+        (check (lr-rember 'mint '(lamb chops and mint jelly))
+               => '(lamb chops and jelly))
+        (check (lr-rember 'mint
+                          '(lamb
+                            chops
+                            and
+                            mint
+                            flavored
+                            mint
+                            jelly))
+               => '(lamb chops and flavored mint jelly))
+        (check (lr-rember 'toast
+                          '(bacon lettuce and tomato))
+               => '(bacon lettuce and tomato))
+        (check (lr-rember 'cup
+                          '(coffee cup tea cup and hick cup))
+               => '(coffee tea cup and hick cup))))
+    (define test-rember-beyond-first
+      (lambda ()
+        (let ((input1 '(noodles
+                        spaghetti
+                        spatzle
+                        bean-thread
+                        roots
+                        potatoes
+                        yam
+                        others
+                        rice)))
+          (check (rember-beyond-first 'test '())
+                 => '())
+          (check (rember-beyond-first 'rice input1)
+                 => '(noodles
+                      spaghetti
+                      spatzle
+                      bean-thread
+                      roots
+                      potatoes
+                      yam
+                      others))
+          (check (rember-beyond-first 'roots input1)
+                 => '(noodles spaghetti spatzle bean-thread))
+          (check (rember-beyond-first 'others input1)
+                 => '(noodles
+                      spaghetti
+                      spatzle
+                      bean-thread
+                      roots
+                      potatoes
+                      yam))
+          (check (rember-beyond-first 'sweetthing input1)
+                 => input1))))))

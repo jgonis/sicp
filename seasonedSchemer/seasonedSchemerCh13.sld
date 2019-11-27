@@ -1,7 +1,9 @@
 (include "seasonedSchemerCh11.sld")
 (define-library (seasoned-schemer ch13)
   (export lr-intersect
-          lr-intersectall)
+          lr-intersectall
+          lr-rember
+          rember-beyond-first)
   (import (scheme base)
           (scheme write)
           (seasoned-schemer ch11))
@@ -34,7 +36,8 @@
                        (cond ((null? (car lset)) (hop (quote ())))
                              ((null? (cdr lset)) (car lset))
                              (else (intersect (car lset)
-                                              (iall-helper (cdr lset)))))))
+                                              (iall-helper
+                                               (cdr lset)))))))
                     (member?
                      (lambda (a lat)
                        (cond ((null? lat) #f)
@@ -53,4 +56,23 @@
                          (cond ((null? set2) (hop '()))
                                (else (i-helper set1)))))))
                  (cond ((null? lset) '())
-                       (else (iall-helper lset)))))))))
+                       (else (iall-helper lset)))))))
+    (define lr-rember
+      (lambda (a lat)
+        (letcc hop
+               (letrec ((helper
+                         (lambda (lat)
+                           (cond ((null? lat) '())
+                                 ((eq? a (car lat)) (cdr lat))
+                                 (else (cons (car lat)
+                                             (helper (cdr lat))))))))
+                 (helper lat)))))
+    (define rember-beyond-first
+      (lambda (a lat)
+        (letrec ((helper
+                  (lambda (lat)
+                    (cond ((or (null? lat)
+                               (eq? a (car lat))) '())
+                          (else (cons (car lat)
+                                      (helper (cdr lat))))))))
+          (helper lat))))))
