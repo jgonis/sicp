@@ -1,10 +1,44 @@
+(include "../littleSchemer/littleSchemerCh1.sld")
+(include "../littleSchemer/littleSchemerCh4.sld")
+(include "../littleSchemer/littleSchemerCh5.sld")
 (include "seasonedSchemerCh11.sld")
 (define-library (seasoned-schemer ch14)
-  (export ch14)
+  (export leftmost
+          rember1*
+          depth*)
   (import (scheme base)
           (scheme write)
+          (little-schemer ch1)
+          (little-schemer ch4)
+          (little-schemer ch5)
           (seasoned-schemer ch11))
   (begin
-    (define ch14
-      (lambda (x)
-        (* x 2)))))
+    (define leftmost
+      (lambda (l)
+        (cond ((null? l) '())
+              ((atom? (car l)) (car l))
+              (else (let ((val (leftmost (car l))))
+                      (cond ((atom? val) val)
+                            (else (leftmost (cdr l)))))))))
+    (define rember1*
+      (lambda (a l)
+        (letrec ((helper
+                  (lambda (l)
+                    (cond ((null? l) '())
+                          ((atom? (car l))
+                           (cond ((eq? (car l) a) (cdr l))
+                                 (else (cons (car l)
+                                             (helper (cdr l))))))
+                          (else (let ((result (helper (car l))))
+                                  (cond ((eqlist? result
+                                                  (car l))
+                                         (cons (car l) (helper (cdr l))))
+                                        (else (cons result
+                                                    (cdr l))))))))))
+          (helper l))))
+    (define depth*
+      (lambda (l)
+        (cond ((null? l) 1)
+              ((atom? (car l)) (depth* (cdr l)))
+              (else (max (depth* (cdr l))
+                         (add1 (depth* (car l))))))))))
