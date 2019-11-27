@@ -79,12 +79,12 @@
           (helper lat))))
     (define rember-upto-last
       (lambda (a lat)
-        (letcc hop
-               (letrec
-                   ((helper
-                     (lambda (helper-lat)
-                       (cond ((null? helper-lat) (hop lat))
-                             ((eq? (car helper-lat) a)
-                              (rember-upto-last a (cdr lat))) 
-                             (else (helper (cdr helper-lat)))))))
+        (letcc skip
+               (letrec ((helper
+                         (lambda (lat)
+                           (cond ((null? lat) '())
+                                 ((eq? (car lat) a)
+                                  (skip (helper (cdr lat))))
+                                  (else (cons (car lat)
+                                              (helper (cdr lat))))))))
                  (helper lat)))))))

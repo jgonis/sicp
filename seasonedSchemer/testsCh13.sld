@@ -79,26 +79,26 @@
                         others
                         rice)))
           (check (rember-beyond-first 'test '())
-                 => '())
+          => '())
           (check (rember-beyond-first 'rice input1)
-                 => '(noodles
-                      spaghetti
-                      spatzle
-                      bean-thread
-                      roots
-                      potatoes
-                      yam
-                      others))
+          => '(noodles
+               spaghetti
+               spatzle
+               bean-thread
+               roots
+               potatoes
+               yam
+               others))
           (check (rember-beyond-first 'roots input1)
-                 => '(noodles spaghetti spatzle bean-thread))
+          => '(noodles spaghetti spatzle bean-thread))
           (check (rember-beyond-first 'others input1)
-                 => '(noodles
-                      spaghetti
-                      spatzle
-                      bean-thread
-                      roots
-                      potatoes
-                      yam))
+          => '(noodles
+               spaghetti
+               spatzle
+               bean-thread
+               roots
+               potatoes
+               yam))
           (check (rember-beyond-first 'sweetthing input1)
                  => input1))))
     (define test-rember-upto-last
@@ -115,7 +115,7 @@
           (check (rember-upto-last 'roots '())
                  => '())
           (check (rember-upto-last 'rice input)
-                 => '())
+                  => '())
           (check (rember-upto-last 'roots input)
                  => '(potatoes yam others rice))
           (check (rember-upto-last 'sweetthing input)
@@ -130,9 +130,9 @@
                                 more cookies
                                 gingerbreadman chocolate
                                 chip brownies)))
-          (check (rember-upto-last 'cookies
-                                    desert-input)
-                 => '(gingerbreadman
-                      chocolate
-                      chip
-                      brownies))))))))
+            (check (rember-upto-last 'cookies
+                              desert-input)
+                   => '(gingerbreadman
+                        chocolate
+                        chip
+                        brownies))))))))
