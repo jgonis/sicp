@@ -15,11 +15,15 @@
   (begin
     (define leftmost
       (lambda (l)
-        (cond ((null? l) '())
-              ((atom? (car l)) (car l))
-              (else (let ((val (leftmost (car l))))
-                      (cond ((atom? val) val)
-                            (else (leftmost (cdr l)))))))))
+        (letcc skip
+               (letrec ((helper
+                         (lambda (l)
+                           (cond ((null? l) '())
+                                 ((atom? (car l)) (skip (car l)))
+                                 (else (begin
+                                         (helper (car l))
+                                         (helper (cdr l))))))))
+                 (helper l)))))
     (define rember1*
       (lambda (a l)
         (letrec ((helper
