@@ -11,7 +11,8 @@
         (test-lr-intersect)
         (test-lr-intersectall)
         (test-lr-rember)
-        (test-rember-beyond-first)))
+        (test-rember-beyond-first)
+        (test-rember-upto-last)))
     (define test-lr-intersect
       (lambda ()
         (check (lr-intersect '() '())
@@ -99,4 +100,39 @@
                       potatoes
                       yam))
           (check (rember-beyond-first 'sweetthing input1)
-                 => input1))))))
+                 => input1))))
+    (define test-rember-upto-last
+      (lambda ()
+        (let ((input '(noodles
+                       spaghetti
+                       spatzle
+                       bean-thread
+                       roots
+                       potatoes
+                       yam
+                       others
+                       rice)))
+          (check (rember-upto-last 'roots '())
+                 => '())
+          (check (rember-upto-last 'rice input)
+                 => '())
+          (check (rember-upto-last 'roots input)
+                 => '(potatoes yam others rice))
+          (check (rember-upto-last 'sweetthing input)
+                 => input)
+          (let ((desert-input '(cookies
+                                chocolate mints
+                                caramel delight ginger snaps
+                                desserts
+                                chocolate mousse
+                                vanilla ice cream
+                                German chocolate cake
+                                more cookies
+                                gingerbreadman chocolate
+                                chip brownies)))
+          (check (rember-upto-last 'cookies
+                                    desert-input)
+                 => '(gingerbreadman
+                      chocolate
+                      chip
+                      brownies))))))))

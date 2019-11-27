@@ -3,7 +3,8 @@
   (export lr-intersect
           lr-intersectall
           lr-rember
-          rember-beyond-first)
+          rember-beyond-first
+          rember-upto-last)
   (import (scheme base)
           (scheme write)
           (seasoned-schemer ch11))
@@ -75,4 +76,15 @@
                                (eq? a (car lat))) '())
                           (else (cons (car lat)
                                       (helper (cdr lat))))))))
-          (helper lat))))))
+          (helper lat))))
+    (define rember-upto-last
+      (lambda (a lat)
+        (letcc hop
+               (letrec
+                   ((helper
+                     (lambda (helper-lat)
+                       (cond ((null? helper-lat) (hop lat))
+                             ((eq? (car helper-lat) a)
+                              (rember-upto-last a (cdr lat))) 
+                             (else (helper (cdr helper-lat)))))))
+                 (helper lat)))))))
