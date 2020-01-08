@@ -4,7 +4,9 @@
 (include "seasonedSchemerCh11.sld")
 (define-library (seasoned-schemer ch14)
   (export leftmost
+          letcc-leftmost
           rember1*
+          letcc-rember1*
           depth*)
   (import (scheme base)
           (scheme write)
@@ -24,6 +26,20 @@
                                          (helper (car l))
                                          (helper (cdr l))))))))
                  (helper l)))))
+    (define letcc-leftmost
+      (lambda (l)
+        (letcc skip
+               (letrec
+                   ((lm
+                     (lambda (l)
+                       (cond ((null? l) '())
+                             (else (let ((c-l (car l)))
+                                     (cond ((atom? c-l)
+                                            (skip c-l))
+                                           (else (begin
+                                                   (lm c-l)
+                                                   (lm (cdr l)))))))))))
+                 (lm l)))))
     (define rember1*
       (lambda (a l)
         (letrec ((helper
@@ -40,9 +56,31 @@
                                         (else (cons result
                                                     (cdr l))))))))))
           (helper l))))
+    (define letcc-rember1*
+      (lambda (a l)
+        (letrec ((helper
+                  (lambda (a l out)
+                    (cond ((null? l) (out 'no))
+                          ((atom? (car l))
+                           (cond ((eq? (car l) a) (cdr l))
+                                 (else (cons (car l)
+                                             (helper a (cdr l) out)))))
+                          (else (let ((result
+                                       (letcc out
+                                              (helper a (car l) out))))
+                                  (cond ((atom? result)
+                                         (cons (car l)
+                                               (helper a (cdr l) out)))
+                                        (else (cons result
+                                                    (cdr l))))))))))
+          (let ((result (letcc out
+                               (helper a l out))))
+            (cond ((atom? result) l)
+                  (else result))))))
+    
     (define depth*
       (lambda (l)
         (cond ((null? l) 1)
               ((atom? (car l)) (depth* (cdr l)))
               (else (max (depth* (cdr l))
-                         (add1 (depth* (car l))))))))))
+                         (add1 (depth* (car l)))))))))) 

@@ -17,7 +17,7 @@
       (syntax-rules () 
         ((letcc var body ...) 
          (call-with-current-continuation 
-          (lambda (var)  body ... ))))) 
+          (lambda (var) body ... ))))) 
     (define-syntax try 
       (syntax-rules () 
         ((try var a . b) 
