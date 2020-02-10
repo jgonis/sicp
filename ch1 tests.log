@@ -1,0 +1,7 @@
+%%%% Starting test ch1 tests
+Group begin: ch1 tests
+Test begin:
+  source-file: "/home/jeff.gonis/Code/sicp/sicp/tests/ch1/ch1Tests.scm"
+  source-line: 11
+  source-form: (test-eqv
+326 (test-func 5))
