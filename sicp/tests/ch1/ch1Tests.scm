@@ -8,5 +8,12 @@
     (define ch1-tests
       (lambda ()
         (test-begin "ch1 tests")
-        (test-eqv 326 (test-func 5))
+        (test-eqv 13 (ex-1-3 1 2 3))
+        (test-eqv 13 (ex-1-3 1 3 2))
+        (test-eqv 13 (ex-1-3 3 2 1))
+        (test-eqv 13 (ex-1-3 3 1 2))
+        (test-eqv 13 (ex-1-3 3 2 2))
+        (test-eqv 13 (ex-1-3 2 3 2))
+        (test-eqv 13 (ex-1-3 2 2 3))
+        (test-eqv 18 (ex-1-3 3 3 3))
         (test-end "ch1 tests")))))
