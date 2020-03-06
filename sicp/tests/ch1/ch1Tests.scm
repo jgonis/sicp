@@ -1,4 +1,4 @@
-(define-library (sicp tests ch1 ch1Tests)
+(define-library (tests ch1 ch1Tests)
   (export ch1-tests)
   (import (scheme base)
           (scheme write)
