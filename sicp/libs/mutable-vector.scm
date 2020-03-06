@@ -1,4 +1,4 @@
-(define-library (sicp mutable-vector)
+(define-library (libs mutable-vector)
   (export make-mutable-vector
           mutable-vector?
           add-element

@@ -1,4 +1,4 @@
-(define-library (srfi 27)
+(define-library (libs srfi-27)
   (export random-integer
           random-real
           default-random-source

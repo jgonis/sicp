@@ -1,5 +1,5 @@
 ;;java -jar kawa.jar -s -r7rs
-(define-library (sicp ch1 ch1)
+(define-library (ch1 ch1)
   (export ex-1-3)
   (import (scheme base))
   (begin
