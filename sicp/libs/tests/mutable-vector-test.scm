@@ -12,5 +12,14 @@
         (test-assert (mutable-vector? mv))
         (test-assert (mutable-vector? mv-preallocated))
         (test-equal 0 (mutable-vector-length mv))
-        (test-equal 0 (mutable-vector-length mv-preallocated)))
+        (test-equal 0 (mutable-vector-length mv-preallocated))
+        
+        (test-assert (guard (condition
+                             (else (and (error-object? condition)
+                                        (string=? (error-object-message condition)
+                                                  "invalid argument for initial vector capacity"))))
+                            (make-mutable-vector -1)))
+        
+        (test-error #t (make-mutable-vector -1))
+        (test-error #t (make-mutable-vector 1/2)))
       (test-end "make-mutable-vector-tests"))))
