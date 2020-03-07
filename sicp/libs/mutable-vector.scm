@@ -1,7 +1,9 @@
 (define-library (libs mutable-vector)
   (export make-mutable-vector
           mutable-vector?
+          mutable-vector-length
           add-element
+          vector-ref
           push-to-front
           remove-first)
   (import (scheme base))
@@ -16,14 +18,18 @@
     (define (make-mutable-vector . initial-capacity)      
       (cond ((null? initial-capacity)
              (make-mutable-vec 0 (make-vector 1) 1))
-            (else (let (initial-capacity (car initial-capacity))
-                    (if (argument-is-positive-integer initial-capacity)
+            (else (let ((initial-capacity (car initial-capacity)))
+                    (if (argument-is-positive-integer? initial-capacity)
                         (make-mutable-vec 0 (make-vector initial-capacity) initial-capacity)
                         (error "invalid argument for initial vector capacity" initial-capacity))))))
+    
+    (define (mutable-vector-length mutable-vec)
+      (get-used mutable-vec))
 
     (define (add-element mutable-vec element)
       (let ((used (get-used mutable-vec))
-            (capacity (get-capacity mutable-vec)))))
+            (capacity (get-capacity mutable-vec)))
+        mutable-vec))
 
     (define (push-to-front mutable-vec element)
       mutable-vec)
@@ -38,5 +44,5 @@
       mutable-vec)
 
     (define (argument-is-positive-integer? arg)
-      (and (integer? initial-size)
-           (> initial-size 0)))))
+      (and (integer? arg)
+           (> arg 0)))))
