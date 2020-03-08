@@ -3,45 +3,34 @@
           mutable-vector?
           mutable-vector-length
           add-element
-          vector-ref
-          push-to-front
-          remove-first)
+          mutable-vector-ref
+          get-buff)
   (import (scheme base))
   (begin
     (define-record-type mutable-vector
       (make-mutable-vec used buff capacity)
       mutable-vector?
       (used get-used set-used!)
-      (buff get-buff set-buff!)
-      (capacity get-capacity set-capacity!))
+      (buff get-buff))
     
     (define (make-mutable-vector . initial-capacity)      
       (cond ((null? initial-capacity)
-             (make-mutable-vec 0 (make-vector 1) 1))
+             (make-mutable-vec 0 (make-vector 1)))
             (else (let ((initial-capacity (car initial-capacity)))
                     (if (argument-is-positive-integer? initial-capacity)
-                        (make-mutable-vec 0 (make-vector initial-capacity) initial-capacity)
+                        (make-mutable-vec 0 (make-vector initial-capacity))
                         (error "invalid argument for initial vector capacity" initial-capacity))))))
     
     (define (mutable-vector-length mutable-vec)
       (get-used mutable-vec))
 
     (define (add-element mutable-vec element)
-      (let ((used (get-used mutable-vec))
-            (capacity (get-capacity mutable-vec)))
-        mutable-vec))
+      (let ((used (get-used mutable-vec)))
+        (set-used! mutable-vec (+ used 1))
+        (vector-set! (get-buff mutable-vec) used element)))
 
-    (define (push-to-front mutable-vec element)
-      mutable-vec)
-    
-    (define (remove-first mutable-vec)
-      mutable-vec)
-
-    (define (remove-at mutable-vec index)
-      mutable-vec)
-
-    (define (insert-at mutable-vec index element)
-      mutable-vec)
+    (define (mutable-vector-ref mutable-vec idx)
+      (vector-ref (get-buff mutable-vec) idx))
 
     (define (argument-is-positive-integer? arg)
       (and (integer? arg)

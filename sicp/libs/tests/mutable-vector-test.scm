@@ -6,6 +6,10 @@
           (libs mutable-vector))
   (begin
     (define (run-tests)
+      (make-mutable-vec-test)
+      (add-element-test))
+    
+    (define (make-mutable-vec-test)
       (test-begin "make-mutable-vector-tests")
       (let ((mv (make-mutable-vector))
             (mv-preallocated (make-mutable-vector 10)))
@@ -22,4 +26,11 @@
         
         (test-error #t (make-mutable-vector -1))
         (test-error #t (make-mutable-vector 1/2)))
-      (test-end "make-mutable-vector-tests"))))
+      (test-end "make-mutable-vector-tests"))
+
+    (define (add-element-test)
+      (test-begin "add-element-tests")
+      (let ((mv (make-mutable-vector)))
+        (add-element mv "a")
+        (test-assert (string=? "a" (mutable-vector-ref mv 0))))
+      (test-end "add-element-tests"))))
