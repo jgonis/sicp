@@ -3,7 +3,8 @@
   (import (scheme base)
           (scheme write)
           (srfi 64)
-          (libs mutable-vector))
+          (libs mutable-vector)
+          (libs mutable-vector-messages))
   (begin
     (define (run-tests)
       (make-mutable-vec-test)
@@ -17,13 +18,7 @@
         (test-assert (mutable-vector? mv-preallocated))
         (test-equal 0 (mutable-vector-length mv))
         (test-equal 0 (mutable-vector-length mv-preallocated))
-        
-        (test-assert (guard (condition
-                             (else (and (error-object? condition)
-                                        (string=? (error-object-message condition)
-                                                  "invalid argument for initial vector capacity"))))
-                            (make-mutable-vector -1)))
-        
+        (test-for-error (lambda () (make-mutable-vector -1)) INVALID_CAPACITY_ERROR)        
         (test-error #t (make-mutable-vector -1))
         (test-error #t (make-mutable-vector 1/2)))
       (test-end "make-mutable-vector-tests"))
@@ -32,5 +27,29 @@
       (test-begin "add-element-tests")
       (let ((mv (make-mutable-vector)))
         (add-element mv "a")
-        (test-assert (string=? "a" (mutable-vector-ref mv 0))))
-      (test-end "add-element-tests"))))
+        (test-assert "add element to empty vector puts it at index 0"
+                     (string=? "a" (mutable-vector-ref mv 0)))
+        (add-element mv "b")
+        (test-assert "add element to vector with 1 element puts it at index 1" (string=? "b" (mutable-vector-ref mv 1)))
+                (add-element mv "c")
+        (test-assert "add element to vector with 1 element puts it at index 1" (string=? "c" (mutable-vector-ref mv 2)))
+                (add-element mv "d")
+        (test-assert "add element to vector with 1 element puts it at index 1" (string=? "d" (mutable-vector-ref mv 3)))
+                (add-element mv "e")
+        (test-assert "add element to vector with 1 element puts it at index 1" (string=? "e" (mutable-vector-ref mv 4))))
+      (test-end "add-element-tests"))
+    
+    (define (mutable-vector-ref-test)
+      (test-begin "mutable-vector-ref-tests")
+      (let ((mv (make-mutable-vector)))
+        ()))
+
+    (define (test-for-error thunk error-string)
+      (test-assert (guard (condition
+                           (else (and (error-object? condition)
+                                      (string=? (error-object-message condition)
+                                                error-string))))
+                          (thunk))))))
+
+(import (libs tests mutable-vector-test))
+(run-tests)
