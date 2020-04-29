@@ -8,7 +8,9 @@
   (begin
     (define (run-tests)
       (make-mutable-vec-test)
-      (add-element-test))
+      (add-element-test)
+      (mutable-vector-ref-test)
+      (remove-element-test))
     
     (define (make-mutable-vec-test)
       (test-begin "make-mutable-vector-tests")
@@ -18,9 +20,12 @@
         (test-assert (mutable-vector? mv-preallocated))
         (test-equal 0 (mutable-vector-length mv))
         (test-equal 0 (mutable-vector-length mv-preallocated))
-        (test-for-error (lambda () (make-mutable-vector -1)) INVALID_CAPACITY_ERROR)        
-        (test-error #t (make-mutable-vector -1))
-        (test-error #t (make-mutable-vector 1/2)))
+        (test-for-error "make vector with negative capacity"
+                        (lambda () (make-mutable-vector -1))
+                        INVALID_CAPACITY_ERROR)        
+        (test-for-error "make vector with non-integer capacity"
+                        (lambda () (make-mutable-vector -1))
+                        INVALID_CAPACITY_ERROR))
       (test-end "make-mutable-vector-tests"))
 
     (define (add-element-test)
@@ -42,10 +47,31 @@
     (define (mutable-vector-ref-test)
       (test-begin "mutable-vector-ref-tests")
       (let ((mv (make-mutable-vector)))
-        ()))
+        (add-element mv "a")
+        (test-for-error "-1 index is out of bounds"
+                        (lambda () (mutable-vector-ref mv -1))
+                        INVALID_INDEX_ERROR)
+        (test-for-error "index greater than number of items contained is out of bounds"
+                        (lambda () (mutable-vector-ref mv (+ 1 (mutable-vector-length mv))))
+                        INVALID_INDEX_ERROR)
+        (test-assert "can access data correctly" (string=? "a" (mutable-vector-ref mv 0))))
+      (test-end "mutable-vector-ref-tests"))
 
-    (define (test-for-error thunk error-string)
-      (test-assert (guard (condition
+    (define (remove-element-test)
+      (test-begin "remove-element-tests")
+      (let ((mv (make-mutable-vector)))
+        (add-element mv "a")
+        (add-element mv "b")
+        (test-equal (mutable-vector-length mv) 2)
+        (remove-element mv 1)
+        (test-equal (mutable-vector-length mv) 1)
+        (test-assert (string=? "a" (mutable-vector-ref 0)))
+        (add-element mv "b")
+        (test-end "remove-element-tests")))
+    
+    (define (test-for-error description thunk error-string)
+      (test-assert description
+                   (guard (condition
                            (else (and (error-object? condition)
                                       (string=? (error-object-message condition)
                                                 error-string))))

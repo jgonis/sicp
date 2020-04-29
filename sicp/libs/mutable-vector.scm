@@ -36,7 +36,13 @@
         mutable-vec))
     
     (define (mutable-vector-ref mutable-vec idx)
-      (vector-ref (get-buff mutable-vec) idx))
+      (if (or (< idx 0) (>= idx (get-used mutable-vec)))
+          (error INVALID_INDEX_ERROR idx)
+          (vector-ref (get-buff mutable-vec) idx)))
+
+    (define (remove-element mutable-vec idx))
+
+ ;;;;;;;;;;;;;;;;;;;;;;;;;;Non-Exported Methods ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 
     (define (get-capacity mutable-vec)
       (vector-length (get-buff mutable-vec)))
