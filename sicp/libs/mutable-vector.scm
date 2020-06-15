@@ -40,7 +40,10 @@
           (error INVALID_INDEX_ERROR idx)
           (vector-ref (get-buff mutable-vec) idx)))
 
-    (define (remove-element mutable-vec idx))
+    (define (remove-element mutable-vec idx)
+      (if (or (not (argument-is-positive-integer idx)) (>= idx (get-used mutable-vec)))
+          (error INVALID_INDEX_ERROR idx)
+          ()))
 
  ;;;;;;;;;;;;;;;;;;;;;;;;;;Non-Exported Methods ;;;;;;;;;;;;;;;;;;;;;;;;;;;
 

@@ -77,5 +77,6 @@
                                                 error-string))))
                           (thunk))))))
 
-(import (libs tests mutable-vector-test))
-(run-tests)
+;;(import (libs tests mutable-vector-test))
+;;(run-tests)
+
