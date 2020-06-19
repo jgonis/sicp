@@ -6,22 +6,24 @@
           mutable-vector-ref
           get-buff)
   (import (scheme base)
+          (scheme case-lambda)
           (libs mutable-vector-messages))
   (begin
     (define GROWTH_FACTOR 1.5)
+    
     (define-record-type mutable-vector
       (make-mutable-vec used buff)
       mutable-vector?
       (used get-used set-used!)
       (buff get-buff set-buff!))
     
-    (define (make-mutable-vector . initial-capacity)      
-      (cond ((null? initial-capacity)
-             (make-mutable-vec 0 (make-vector 1)))
-            (else (let ((initial-capacity (car initial-capacity)))
-                    (if (argument-is-positive-integer? initial-capacity)
-                        (make-mutable-vec 0 (make-vector initial-capacity))
-                        (error INVALID_CAPACITY_ERROR initial-capacity))))))
+    (define make-mutable-vector
+      (case-lambda
+        (() (make-mutable-vector 1))
+        ((initial-capacity)
+         (if (argument-is-positive-integer? initial-capacity)
+             (make-mutable-vec 0 (make-vector initial-capacity))
+             (error INVALID_CAPACITY_ERROR initial-capacity)))))
     
     (define (mutable-vector-length mutable-vec)
       (get-used mutable-vec))
