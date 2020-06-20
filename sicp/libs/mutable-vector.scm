@@ -3,8 +3,10 @@
           mutable-vector?
           mutable-vector-length
           add-element
+          remove-element
           mutable-vector-ref
-          get-buff)
+          get-buff
+          get-capacity)
   (import (scheme base)
           (scheme case-lambda)
           (libs mutable-vector-messages))
@@ -43,14 +45,20 @@
           (vector-ref (get-buff mutable-vec) idx)))
 
     (define (remove-element mutable-vec idx)
-      (if (or (not (argument-is-positive-integer idx)) (>= idx (get-used mutable-vec)))
+      (if (or (not (argument-is-positive-integer? idx)) (>= idx (get-used mutable-vec)))
           (error INVALID_INDEX_ERROR idx)
-          ()))
-
- ;;;;;;;;;;;;;;;;;;;;;;;;;;Non-Exported Methods ;;;;;;;;;;;;;;;;;;;;;;;;;;;
-
+          (let* ((vec (get-buff mutable-vec))
+                 (element (vector-ref vec idx))
+                 (last-idx (get-used mutable-vec)))
+            (vector-copy! vec idx vec (+ idx 1) last-idx)
+            (vector-set! vec (- last-idx 1) '())
+            (set-used! mutable-vec (- (get-used mutable-vec) 1))
+            element)))
+    
     (define (get-capacity mutable-vec)
       (vector-length (get-buff mutable-vec)))
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;Non-Exported Methods ;;;;;;;;;;;;;;;;;;;;;;;;;;;
           
     (define (copy-old-buff-to-new-buff mutable-vec)
       (let* ((new-capacity (exact (ceiling (* (get-capacity mutable-vec) GROWTH_FACTOR))))
