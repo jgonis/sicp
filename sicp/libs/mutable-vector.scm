@@ -69,4 +69,4 @@
     
     (define (argument-is-positive-integer? arg)
       (and (integer? arg)
-           (> arg 0)))))
+           (>= arg 0)))))

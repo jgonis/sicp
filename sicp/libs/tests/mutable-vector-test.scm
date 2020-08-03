@@ -26,9 +26,9 @@
         (test-equal capacity (get-capacity mv-preallocated))
         (test-for-error "make vector with negative capacity"
                         (lambda () (make-mutable-vector -1))
-                        INVALID_CAPACITY_ERROR)        
+                        INVALID_CAPACITY_ERROR)
         (test-for-error "make vector with non-integer capacity"
-                        (lambda () (make-mutable-vector -1))
+                        (lambda () (make-mutable-vector 2))
                         INVALID_CAPACITY_ERROR))
       (test-end "make-mutable-vector-tests"))
 
@@ -79,7 +79,9 @@
         ;(test-assert (string=? "a" (mutable-vector-ref 0)))
         ;(add-element mv "b")
         (test-end "remove-element-tests")))
-    
+
+
+    ;;Todo: make this fail if no error occurs when calling thunk
     (define (test-for-error description thunk error-string)
       (test-assert description
                    (guard (condition
