@@ -1,7 +1,9 @@
 (define-library (tests ch1 ch1Tests)
-  (export ch1-tests)
+  (export ch1-tests
+          check-exception)
   (import (scheme base)
           (scheme write)
+          (scheme case-lambda)
           (ch1 ch1)
           (srfi 64))
   (begin    
@@ -16,6 +18,7 @@
         ;;If using Gauche scheme, uncomment this line to avoid the
         ;;test count continuing to increase
         (test-runner-reset (test-runner-current))))
+        (check-exception-tests)
 
     (define (ex1-2-tests)
       (test-begin "ex1-2")
@@ -65,3 +68,18 @@
              (test-result (ex1-8 test-val)))
         (test-assert (fp-equal? 0.1 test-result)))
       (Test-end "ex1-8 tests"))))
+
+    (define (check-exception-tests)
+      (check-exception (lambda () (raise "jeff-exception")))
+      (check-exception (lambda () (error "jeff error" 1))))
+    (define check-exception
+      (case-lambda
+        ;;Merely test for the presence of an exception being thrown
+        ((body) (check (let ((ex-thrown #f))
+                         (guard (ex
+                                 (else (set! ex-thrown #t)))
+                                (body))
+                         ex-thrown)
+                       => #t))
+        ;;Test for a specific type of exception being thrown
+        ((body exception-test) (check (#t) => #t))))))
