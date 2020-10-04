@@ -14,6 +14,12 @@
   (begin
     (define SQRT_TOLERANCE 0.001)
     (define FP_EQUAL_TOLERANCE 0.0000001)
+    (define (fp-equal? x y)
+      (let ((diff (abs (- x y))))
+        (cond ((< diff FP_EQUAL_TOLERANCE) #t)
+              (else #f))))
+
+    
     (define (sum-of-squares x y)
       (+ (square x) (square y)))
 
@@ -35,11 +41,6 @@
     (define (j-abs x)
       (cond ((< x 0) (- x))
             (else x)))
-
-    (define (fp-equal? x y)
-      (let ((diff (abs (- x y))))
-        (cond ((< diff FP_EQUAL_TOLERANCE) #t)
-              (else #f))))
 
     (define (j-sqrt x)
       (define (good-enough-direct-compare? guess x)
@@ -81,10 +82,3 @@
               (* 2 guess))
            3))
       (cube-root-iter 1.0))))
-
-
-
-
-(define (load-func)
-  (load "ch1/ch1.scm")
-  (load "tests/ch1/ch1Tests.scm"))
