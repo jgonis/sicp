@@ -6,20 +6,11 @@
           j-abs
           j-sqrt
           alt-j-sqrt
-          SQRT_TOLERANCE
-          ex1-8
-          fp-equal?)
+          ex1-8)
   (import (scheme base)
-          (scheme write))
-  (begin
-    (define SQRT_TOLERANCE 0.001)
-    (define FP_EQUAL_TOLERANCE 0.0000001)
-    (define (fp-equal? x y)
-      (let ((diff (abs (- x y))))
-        (cond ((< diff FP_EQUAL_TOLERANCE) #t)
-              (else #f))))
-
-    
+          (scheme write)
+          (libs fp-compare))
+  (begin    
     (define (sum-of-squares x y)
       (+ (square x) (square y)))
 
@@ -44,7 +35,7 @@
 
     (define (j-sqrt x)
       (define (good-enough-direct-compare? guess x)
-        (fp-equal? (square guess) x))
+        (fp-eq? (square guess) x))
       (j-square-root x good-enough-direct-compare?))
     
     (define (alt-j-sqrt x)
