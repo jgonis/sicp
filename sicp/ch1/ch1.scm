@@ -1,5 +1,11 @@
 ;;java -jar kawa.jar -s -r7rs
 ;;"/home/jeff.gonis/Code/gauche/bin/gosh -i -r7 -I /home/jeff.gonis/Code/sicp/sicp"
+;;
+;; (define (load-func)
+;;   (load "/home/jgonis/code/sicp/sicp/ch1/ch1.scm")
+;;   (load "/home/jgonis/code/sicp/sicp/libs/fp-compare.scm")
+;;   (load "/home/jgonis/code/sicp/sicp/tests/ch1/ch1Tests.scm"))
+
 (define-library (ch1 ch1)
   (export ex1-2
           ex1-3
