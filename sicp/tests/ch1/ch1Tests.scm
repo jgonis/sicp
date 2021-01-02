@@ -15,7 +15,7 @@
         (j-abs-tests)
         (sqrt-tests j-sqrt "sqrt tests")
         (sqrt-tests alt-j-sqrt "alt-sqrt tests")
-        ;;(ex1-8-tests)
+        (ex1-8-tests)
         ;;If using Gauche scheme, uncomment this line to avoid the
         ;;test count continuing to increase
         (test-runner-reset (test-runner-current))))
@@ -46,22 +46,23 @@
 
     (define (sqrt-tests sqrt-func test-name)
       (test-begin test-name)
-      (test-assert (fp-eq? 2
+      (test-assert "sqrt 2 test"
+		   (fp-eq? 2
 			   (sqrt-func 4)))
-      (test-assert (fp-eq? 0.0000009
+      (test-assert "small sqrt test"
+		   (fp-eq? 0.0000009
                            (sqrt-func 0.00000000000081)
                            0.001))
-      (test-assert (fp-eq? 985881
+      (test-assert "large sqrt test"
+		   (fp-eq? 985881
 			   (sqrt-func 971961346161)
 			   0.001))
       (test-end test-name))
 
     (define (ex1-8-tests)
       (test-begin "ex1-8 tests")
-      ;; (let* ((test-val 8)
-      ;;        (test-result (ex1-8 test-val)))
-      ;;   (test-assert (fp-equal? 2.0 test-result)))
-      ;; (let* ((test-val 0.001)
-      ;;        (test-result (ex1-8 test-val)))
-      ;;   (test-assert (fp-equal? 0.1 test-result)))
+      (test-assert "small cube root test"
+		   (fp-eq? 3 (ex1-8 27)))
+      (test-assert "decimal cube root test"
+		   (fp-eq? 0.1 (ex1-8 0.001)))
       (test-end "ex1-8 tests"))))
