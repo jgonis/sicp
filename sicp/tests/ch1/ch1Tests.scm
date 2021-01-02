@@ -5,6 +5,7 @@
           (scheme write)
           (scheme case-lambda)
           (ch1 ch1)
+	  (libs fp-compare)
           (srfi 64))
   (begin    
     (define ch1-tests
@@ -45,16 +46,16 @@
 
     (define (sqrt-tests sqrt-func test-name)
       (test-begin test-name)
-      (test-equal-tolerance 2
-                            (lambda () (sqrt-func 4))
-                            0.001)
-      (test-equal-tolerance 0.0000009
-                            (lambda () (sqrt-func 0.00000000000081))
-                            0.001)
-      (test-equal-tolerance 985881
-                            (lambda () (sqrt-func 971961346161))
-                            0.001)
+      (test-assert (fp-eq? 2
+			   (sqrt-func 4)))
+      (test-assert (fp-eq? 0.0000009
+                           (sqrt-func 0.00000000000081)
+                           0.001))
+      (test-assert (fp-eq? 985881
+			   (sqrt-func 971961346161)
+			   0.001))
       (test-end test-name))
+
     (define (ex1-8-tests)
       (test-begin "ex1-8 tests")
       ;; (let* ((test-val 8)
@@ -63,9 +64,4 @@
       ;; (let* ((test-val 0.001)
       ;;        (test-result (ex1-8 test-val)))
       ;;   (test-assert (fp-equal? 0.1 test-result)))
-      (test-end "ex1-8 tests"))
-
-    (define (test-equal-tolerance expected func tolerance)
-      (let* ((test-result (func))
-             (result-diff (abs (- test-result expected))))
-        (test-assert (< result-diff tolerance))))))
+      (test-end "ex1-8 tests"))))
