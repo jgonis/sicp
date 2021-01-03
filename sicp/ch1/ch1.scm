@@ -13,7 +13,10 @@
           j-abs
           j-sqrt
           alt-j-sqrt
-          ex1-8)
+          ex1-8
+	  Ackermann
+	  jfib
+	  jfib-iter)
   (import (scheme base)
           (scheme write)
 	  (scheme case-lambda)
@@ -92,4 +95,54 @@
         (/ (+ (/ x (square guess))
 	      (* 2 guess))
            3))
-      (cube-root-iter x 1.0))))
+      (cube-root-iter x 1.0))
+    
+    (define (jfactorial n)
+      (cond ((= n 1) 1)
+	    (else (* n (jfactorial (- n 1))))))
+    
+    (define (jfactorial-iterative n)
+      (define (jfactorial-helper count product)
+	(cond ((> count n) product)
+	      (else (jfactorial-helper (+ count 1) (* product count)))))
+      (jfactorial-helper 1 1))
+
+    (define (ex1-9)
+      ;; The first method define a recursive process as its deferred
+      ;; inc operations will grow with each step of the procedure.
+      ;; 
+      ;; The second method is iterative as it does not require any
+      ;; deferred operations and its state is captured in the a and b
+      ;; variables.
+      )
+    
+    (define (Ackermann x y)
+      (cond ((= y 0) 0)
+	    ((= x 0) (* 2 y))
+	    ((= y 1) 2)
+	    (else (Ackermann (- x 1)
+			     (Ackermann x (- y 1))))))
+    ;; (Ackermann 1 10) -> 1024
+    ;; (Ackermann 2 4) -> 65536
+    ;; (Ackermann 3 3) -> 65536
+    (define (f n) (Ackermann 0 n)) ;; Multiplies 2 by n
+    (define (g n) (Ackermann 1 n)) ;; Raises 2 to n.
+    (define (h n) (Ackermann 2 n)) ;; Raises 2 to (h (- n 1))
+    (define (k n) (* 5 n n))	   ;; Multiplies square of n by 5.
+
+    (define (jfib n)
+      (cond ((= n 0) 0)
+	    ((= n 1) 1)
+	    (else (+ (jfib (- n 1))
+		     (jfib (- n 2))))))
+    (define (jfib-iter n)
+      (define (helper fib-prev fib-current count)
+	(cond ((= count n) fib-current)
+	      (else (helper fib-current
+			    (+ fib-current fib-prev)
+			    (+ count 1)))))
+      (cond ((= n 0) 0)
+	    ((= n 1) 1)
+	    (else (helper 0 1 1))))))		
+
+

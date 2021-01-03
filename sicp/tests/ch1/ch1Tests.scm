@@ -6,7 +6,8 @@
           (scheme case-lambda)
           (ch1 ch1)
 	  (libs fp-compare)
-          (srfi 64))
+          (srfi 64)
+	  (srfi 1))
   (begin    
     (define ch1-tests
       (lambda ()
@@ -16,6 +17,7 @@
         (sqrt-tests j-sqrt "sqrt tests")
         (sqrt-tests alt-j-sqrt "alt-sqrt tests")
         (ex1-8-tests)
+	(fib-tests)
         ;;If using Gauche scheme, uncomment this line to avoid the
         ;;test count continuing to increase
         (test-runner-reset (test-runner-current))))
@@ -65,4 +67,12 @@
 		   (fp-eq? 3 (ex1-8 27)))
       (test-assert "decimal cube root test"
 		   (fp-eq? 0.1 (ex1-8 0.001)))
-      (test-end "ex1-8 tests"))))
+      (test-end "ex1-8 tests"))
+
+    (define (fib-tests)
+      (test-begin "fib-tests")
+      (let ((num-list (iota 10)))
+	(map (lambda (n)
+	       (test-equal (jfib n)
+			   (jfib-iter n))) num-list))
+      (test-end "fib-tests"))))
