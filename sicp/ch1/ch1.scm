@@ -16,7 +16,10 @@
           ex1-8
 	  Ackermann
 	  jfib
-	  jfib-iter)
+	  jfib-iter
+	  count-change-combinations
+	  ex1-11
+	  ex1-11-iter)
   (import (scheme base)
           (scheme write)
 	  (scheme case-lambda)
@@ -143,6 +146,44 @@
 			    (+ count 1)))))
       (cond ((= n 0) 0)
 	    ((= n 1) 1)
-	    (else (helper 0 1 1))))))		
+	    (else (helper 0 1 1))))
 
+    (define (count-change-combinations amount)
+      (define (cc amount number-of-different-coins)
+	(cond ((= amount 0) 1)
+	      ((or (< amount 0)
+		   (= 0 number-of-different-coins)) 0)
+	      (else (+ (cc amount
+			   (- number-of-different-coins 1))
+		       (cc (- amount
+			      (coin-value number-of-different-coins))
+			   number-of-different-coins)))))
+      (define (coin-value number-of-coin-denominations)
+	(cond ((= number-of-coin-denominations 1) 1)
+	      ((= number-of-coin-denominations 2) 5)
+	      ((= number-of-coin-denominations 3) 10)
+	      ((= number-of-coin-denominations 4) 25)
+	      ((= number-of-coin-denominations 5) 100)
+	      ((= number-of-coin-denominations 6) 200)
+	      (else (error "unknown coin denomination"
+			   number-of-coin-denominations))))
+      (cc amount 6))
 
+    (define (ex1-11 n)
+      (cond ((< n 3) n)
+	    (else (+ (ex1-11 (- n 1))
+		     (* 2 (ex1-11 (- n 2)))
+		     (* 3 (ex1-11 (- n 3)))))))
+    
+    (define (ex1-11-iter n)
+      (define (helper n-3 n-2 n-1 count)
+	(cond ((= count n) n-1)
+	      (else (helper n-2
+			    n-1
+			    (+ n-1 (* 2 n-2) (* 3 n-3))
+			    (+ count 1)))))
+      (cond ((< n 3) n)
+	    (else (helper 0 1 2 2))))
+
+    (define (pascals-triangle row column)
+      1))) 

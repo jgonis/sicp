@@ -18,6 +18,7 @@
         (sqrt-tests alt-j-sqrt "alt-sqrt tests")
         (ex1-8-tests)
 	(fib-tests)
+	(ex1-11-tests)
         ;;If using Gauche scheme, uncomment this line to avoid the
         ;;test count continuing to increase
         (test-runner-reset (test-runner-current))))
@@ -74,5 +75,15 @@
       (let ((num-list (iota 10)))
 	(map (lambda (n)
 	       (test-equal (jfib n)
-			   (jfib-iter n))) num-list))
-      (test-end "fib-tests"))))
+			   (jfib-iter n)))
+	     num-list))
+      (test-end "fib-tests"))
+
+    (define (ex1-11-tests)
+      (test-begin "ex1-11-tests")
+      (let ((num-list (iota 10)))
+	(map (lambda (n)
+	       (test-equal (ex1-11 n)
+			   (ex1-11-iter n)))
+	     num-list))
+      (test-end "ex1-11-tests"))))
