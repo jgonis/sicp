@@ -26,7 +26,8 @@
 	  fast-expt
 	  ex1-16
 	  ex1-17
-	  ex1-18)
+	  ex1-18
+	  jfib-log-steps)
   (import (scheme base)
           (scheme write)
 	  (scheme case-lambda)
@@ -240,4 +241,9 @@
 	(cond ((= counter 0) product)
 	      ((odd? counter) (helper-iter a (- counter 1) (+ product a)))
 	      (else (helper-iter (double a) (halve counter) product))))
-      (helper-iter a b 0))))
+      (helper-iter a b 0))
+
+    (define (jfib-log-steps n)
+      (define (helper-iter a b p q count)
+	1)
+      (helper-iter 1 0 0 1 n))))

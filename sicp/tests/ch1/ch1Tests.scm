@@ -21,6 +21,7 @@
 	(ex1-11-tests)
 	(j-expt-tests)
 	(ex1-17-and-ex1-18-tests)
+	(jfib-log-steps-tests)
         ;;If using Gauche scheme, uncomment this line to avoid the
         ;;test count continuing to increase
         (test-runner-reset (test-runner-current))))
@@ -114,4 +115,13 @@
 	       (test-equal (ex1-17 2 n)
 			   (ex1-18 2 n)))
 	     num-list))
-      (test-end "ex1-17-and-ex1-18-tests"))))
+      (test-end "ex1-17-and-ex1-18-tests"))
+
+    (define (jfib-log-steps-tests)
+      (test-begin "jfib-log-steps-tests")
+      (let ((num-list (iota 10)))
+	(map (lambda (n)
+	       (test-equal (jfib n)
+			   (jfib-log-steps n)))
+	     num-list))
+      (test-end "jfib-log-steps-tests"))))
