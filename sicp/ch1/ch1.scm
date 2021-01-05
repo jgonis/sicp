@@ -19,10 +19,18 @@
 	  jfib-iter
 	  count-change-combinations
 	  ex1-11
-	  ex1-11-iter)
+	  ex1-11-iter
+	  pascals-triangle
+	  j-expt
+	  j-expt-iter
+	  fast-expt
+	  ex1-16
+	  ex1-17
+	  ex1-18)
   (import (scheme base)
           (scheme write)
 	  (scheme case-lambda)
+	  (srfi 1)
           (libs fp-compare))
   (begin    
     (define (sum-of-squares x y)
@@ -81,9 +89,9 @@
       (sqrt-iter x 1.0 1))
     
     (define (ex1-6)
-      (let ((a "the new-if fails if passed functions as then or else-clauses because it tries")
-            (b "to evaluate them as part of applicative-order evaluations. So the function")
-            (c "goes into an infinite loop of calling itself"))))
+      (let ((a "the new-if fails if passed functions as then or else-clauses because it")
+            (b "tries to evaluate them as part of applicative-order evaluations. So the")
+            (c "function goes into an infinite loop of calling itself"))))
 
     (define (ex1-8 x)
       (define (cube-root-iter x guess)
@@ -186,4 +194,50 @@
 	    (else (helper 0 1 2 2))))
 
     (define (pascals-triangle row column)
-      1))) 
+      (cond ((and (= row 1) (= column 1)) 1)
+	    ((= 0 column) 0)
+	    ((> column row) 0)
+	    (else (+ (pascals-triangle (- row 1) (- column 1))
+		     (pascals-triangle (- row 1) column)))))
+
+    (define (j-expt b n)
+      (cond ((= n 0) 1)
+	    (else (* b (j-expt b (- n 1))))))
+
+    (define (j-expt-iter b n)
+      (define (helper-iter b counter product)
+	(cond ((= counter n) product)
+	      (else (helper-iter b (+ counter 1) (* b product)))))
+      (helper-iter b 0 1))
+
+    (define (fast-expt b n)
+      (cond ((= n 0) 1)
+	    ((odd? n) (* b (fast-expt b (- n 1))))
+	    (else (square (fast-expt b (/ n 2))))))
+
+    (define (ex1-16 b n)
+      (define (helper-iter b counter product)
+	(cond ((= counter 0) product)
+	      ((odd? counter) (helper-iter b (- counter 1) (* product b)))
+	      (else (helper-iter (square b) (/ counter 2) product))))
+      (helper-iter b n 1))
+
+    (define (ex1-17 a b)
+      (define (double x)
+	(* x 2))
+      (define (halve x)
+	(/ x 2))
+      (cond ((= b 0) 0)
+	    ((odd? b) (+ a (ex1-17 a (- b 1))))
+	    (else (double (ex1-17 a (halve b))))))
+
+    (define (ex1-18 a b)
+      (define (double x)
+	(* x 2))
+      (define (halve x)
+	(/ x 2))
+      (define (helper-iter a counter product)
+	(cond ((= counter 0) product)
+	      ((odd? counter) (helper-iter a (- counter 1) (+ product a)))
+	      (else (helper-iter (double a) (halve counter) product))))
+      (helper-iter a b 0))))
