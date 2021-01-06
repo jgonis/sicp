@@ -27,7 +27,8 @@
 	  ex1-16
 	  ex1-17
 	  ex1-18
-	  jfib-log-steps)
+	  prime?
+	  fast-prime?)
   (import (scheme base)
           (scheme write)
 	  (scheme case-lambda)
@@ -243,7 +244,14 @@
 	      (else (helper-iter (double a) (halve counter) product))))
       (helper-iter a b 0))
 
-    (define (jfib-log-steps n)
-      (define (helper-iter a b p q count)
-	1)
-      (helper-iter 1 0 0 1 n))))
+    (define (prime? n)
+      (define (smallest-divisor n)
+	(find-divisor n 2))
+      (define (find-divisor n test-divisor)
+	(cond ((> (square test-divisor) n) n)
+	      ((= (remainder n test-divisor) 0) test-divisor)
+	      (else (find-divisor n (+ test-divisor 1))))) 
+      (= n (smallest-divisor n)))
+
+    (define (fast-prime? n)
+      #t)))
