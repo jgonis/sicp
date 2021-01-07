@@ -21,7 +21,7 @@
 	(ex1-11-tests)
 	(j-expt-tests)
 	(ex1-17-and-ex1-18-tests)
-	(prime?-tests)
+	(prime-tests)
         ;;If using Gauche scheme, uncomment this line to avoid the
         ;;test count continuing to increase
         (test-runner-reset (test-runner-current))))
@@ -117,9 +117,9 @@
 	     num-list))
       (test-end "ex1-17-and-ex1-18-tests"))
 
-    (define (prime?-tests)
-      (test-begin "prime?-tests")
-      (let ((num-list (iota 10)))
+    (define (prime-tests)
+      (test-begin "prime-tests")
+      (let ((num-list (iota 10 2 1)))
 	(map (lambda (n)
 	       (test-equal (prime? n)
 			   (fast-prime? n)))
@@ -129,4 +129,4 @@
 	       (test-assert (and (prime? n)
 				 (fast-prime? n))))
 	     prime-list))
-      (test-end "prime?-tests"))))
+      (test-end "prime-tests"))))
