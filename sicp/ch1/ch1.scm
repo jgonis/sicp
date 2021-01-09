@@ -253,27 +253,18 @@
 	      ((odd? counter) (helper-iter a (- counter 1) (+ product a)))
 	      (else (helper-iter (double a) (halve counter) product))))
       (helper-iter a b 0))
-
-    (define (smallest-divisor n)
-      (define (next n)
-	(cond ((= n 2) 3)
-	      (else (+ n 2))))
-      (define (find-divisor n test-divisor)
-	(cond ((> (square test-divisor) n) n)
-	      ((= (remainder n test-divisor) 0) test-divisor)
-	      (else (find-divisor n (next test-divisor))))) 
-      (find-divisor n 3))
     
     (define (smallest-divisor n)
       (define (next n)
+	;; (+ n 1)
 	(cond ((= n 2) 3)
-	      (else (+ n 2))))
+	      (else (+ n 2)))
+	)
       (define (find-divisor n test-divisor)
 	(cond ((> (square test-divisor) n) n)
 	      ((= (remainder n test-divisor) 0) test-divisor)
 	      (else (find-divisor n (next test-divisor)))))
-      
-      (find-divisor n 3))
+      (find-divisor n 2))
     
     (define (prime? n)
       (= n (smallest-divisor n)))
@@ -341,24 +332,48 @@
       (iter-helper start (list)))
 
     (define (ex1-22)
-      ;; 3 smallest primes larger than 1000
-      ;; prime: 1009 time: 4.843e-5
-      ;; prime: 1013 time: 4.8062e-5
-      ;; prime: 1019 time: 5.4288e-5
-      ;; 3 smallest primes larger than 10,000
-      ;; prime: 10007 time: 6.3668e-5
-      ;; prime: 10009 time: 6.6488e-5
-      ;; prime: 10037 time: 1.04282e-4
-      ;; 3 smallest primes larger than 100,000
-      ;; prime: 100003 time: 7.3302e-5
-      ;; prime: 100019 time: 7.3089e-5
-      ;; prime: 100043 time: 7.3004e-5
-      ;; 3 smallest primes larger than 1,000,000
-      ;; prime: 1000003 time: 7.7814e-5
-      ;; prime: 1000033 time: 7.5177e-5
-      ;; prime: 1000037 time: 7.694e-5
+      ;; 3 smallest primes larger than 1,000,000,000
+      ;; prime: 1000000007 time: 0.0069
+      ;; prime: 1000000009 time: 0.0088
+      ;; prime: 1000000021 time: 0.0051
+      ;; 3 smallest primes larger than 10,000,000,000
+      ;; prime: 10000000019 time: 0.0211
+      ;; prime: 10000000033 time: 0.0264
+      ;; prime: 10000000061 time: 0.0176
+      ;; 3 smallest primes larger than 100,000,000,000
+      ;; prime: 100000000003 time: 0.0693
+      ;; prime: 100000000019 time: 0.0678
+      ;; prime: 100000000057 time: 0.0679
+      ;; 3 smallest primes larger than 1,000,000,000,000
+      ;; prime: 1000000000039 time: 0.2157
+      ;; prime: 1000000000061 time: 0.2079
+      ;; prime: 1000000000063 time: 0.2
       #t)
-    (define (ex1-23) 1)))
+    
+    (define (ex1-23)
+      ;; 3 smallest primes larger than 1,000,000,000
+      ;; prime: 1000000007 time: 0.0024
+      ;; prime: 1000000009 time: 0.0032
+      ;; prime: 1000000021 time: 0.0041
+      ;; 3 smallest primes larger than 10,000,000,000
+      ;; prime: 10000000019 time: 0.0131
+      ;; prime: 10000000033 time: 0.0104
+      ;; prime: 10000000061 time: 0.0179
+      ;; 3 smallest primes larger than 100,000,000,000
+      ;; prime: 100000000003 time: 0.0413
+      ;; prime: 100000000019 time: 0.0293
+      ;; prime: 100000000057 time: 0.0385
+      ;; 3 smallest primes larger than 1,000,000,000,000
+      ;; prime: 1000000000039 time: 0.1185
+      ;; prime: 1000000000061 time: 0.108
+      ;; prime: 1000000000063 time: 0.1024
+      ;; The updated prime? procedure that doesn't check even divisors
+      ;; is roughly twice as fast as the one that does, which is what we
+      ;; would expact as it is doing 1/2 as much work.
+      #t)
+
+    (define (ex1-24)
+      #t)))
 
 ;; (time-taken (lambda ()
 ;; 	      (let ((nums (iota 1000000 2 1)))
