@@ -31,10 +31,12 @@
 	  smallest-divisor
 	  prime?
 	  fast-prime?
-	  search-for-primes)
+	  search-for-primes
+	  n-primes-larger-than)
   (import (scheme base)
           (scheme write)
 	  (scheme case-lambda)
+	  (scheme time)
 	  (srfi 1)
 	  (srfi 27)
           (libs fp-compare)
@@ -253,11 +255,25 @@
       (helper-iter a b 0))
 
     (define (smallest-divisor n)
+      (define (next n)
+	(cond ((= n 2) 3)
+	      (else (+ n 2))))
       (define (find-divisor n test-divisor)
 	(cond ((> (square test-divisor) n) n)
 	      ((= (remainder n test-divisor) 0) test-divisor)
-	      (else (find-divisor n (+ test-divisor 1))))) 
-      (find-divisor n 2))
+	      (else (find-divisor n (next test-divisor))))) 
+      (find-divisor n 3))
+    
+    (define (smallest-divisor n)
+      (define (next n)
+	(cond ((= n 2) 3)
+	      (else (+ n 2))))
+      (define (find-divisor n test-divisor)
+	(cond ((> (square test-divisor) n) n)
+	      ((= (remainder n test-divisor) 0) test-divisor)
+	      (else (find-divisor n (next test-divisor)))))
+      
+      (find-divisor n 3))
     
     (define (prime? n)
       (= n (smallest-divisor n)))
@@ -291,16 +307,58 @@
       (newline)
       (display (smallest-divisor 19999)) ;7, not prime!
       (newline))
-
+    
     (define search-for-primes
       (case-lambda
-       ((range) (search-for-primes 2 (+ 2 range)))
-       ((start end) (let ((num-list (iota (- end start) start 2)))
-		      (for-each (lambda (n) 
-				  (display (time-taken (lambda () (fast-prime? n))))
-				  (newline))
-				num-list)))))))
+       ((range-size) (search-for-primes 2 (+ 2 range-size)))
+       ((start end)
+	(let ((num-list (iota (- end start) start 2)))
+	  (for-each (lambda (n) 
+		      (display (time-taken (lambda () (fast-prime? n))))
+		      (newline))
+		    num-list)))))
 
+    (define (n-primes-larger-than n start prime-test-method)
+      (define (report-prime prime duration)
+	(display "prime: ")
+	(display prime)
+	(display " time: ")
+	(display (* 1.0 (/ duration (jiffies-per-second))))
+	(newline))
+      (define (iter-helper current primes-found)
+	(cond ((= (length primes-found) n) primes-found)
+	      (else
+	       (let* ((start-time (current-jiffy))
+		      (is-prime? (prime-test-method current))
+		      (duration (- (current-jiffy) start-time)))
+		 (cond (is-prime? (report-prime current
+						duration)
+				  (iter-helper (+ current 1)
+					       (cons current
+						     primes-found))) 
+		       (else (iter-helper (+ current 1)
+					  primes-found)))))))
+      (iter-helper start (list)))
+
+    (define (ex1-22)
+      ;; 3 smallest primes larger than 1000
+      ;; prime: 1009 time: 4.843e-5
+      ;; prime: 1013 time: 4.8062e-5
+      ;; prime: 1019 time: 5.4288e-5
+      ;; 3 smallest primes larger than 10,000
+      ;; prime: 10007 time: 6.3668e-5
+      ;; prime: 10009 time: 6.6488e-5
+      ;; prime: 10037 time: 1.04282e-4
+      ;; 3 smallest primes larger than 100,000
+      ;; prime: 100003 time: 7.3302e-5
+      ;; prime: 100019 time: 7.3089e-5
+      ;; prime: 100043 time: 7.3004e-5
+      ;; 3 smallest primes larger than 1,000,000
+      ;; prime: 1000003 time: 7.7814e-5
+      ;; prime: 1000033 time: 7.5177e-5
+      ;; prime: 1000037 time: 7.694e-5
+      #t)
+    (define (ex1-23) 1)))
 
 ;; (time-taken (lambda ()
 ;; 	      (let ((nums (iota 1000000 2 1)))
