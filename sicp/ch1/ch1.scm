@@ -5,6 +5,7 @@
 ;; (define (load-func)
 ;;   (load "/home/jgonis/code/sicp/sicp/ch1/ch1.scm")
 ;;   (load "/home/jgonis/code/sicp/sicp/libs/fp-compare.scm")
+;;   (load "/home/jgonis/code/sicp/sicp/libs/timing.scm")
 ;;   (load "/home/jgonis/code/sicp/sicp/tests/ch1/ch1Tests.scm"))
 
 (define-library (ch1 ch1)
@@ -27,15 +28,17 @@
 	  ex1-16
 	  ex1-17
 	  ex1-18
+	  smallest-divisor
 	  prime?
-	  fast-prime?)
+	  fast-prime?
+	  search-for-primes)
   (import (scheme base)
           (scheme write)
 	  (scheme case-lambda)
-	  (scheme time)
 	  (srfi 1)
 	  (srfi 27)
-          (libs fp-compare))
+          (libs fp-compare)
+	  (libs timing))
   (begin    
     (define (sum-of-squares x y)
       (+ (square x) (square y)))
@@ -249,13 +252,14 @@
 	      (else (helper-iter (double a) (halve counter) product))))
       (helper-iter a b 0))
 
-    (define (prime? n)
-      (define (smallest-divisor n)
-	(find-divisor n 2))
+    (define (smallest-divisor n)
       (define (find-divisor n test-divisor)
 	(cond ((> (square test-divisor) n) n)
 	      ((= (remainder n test-divisor) 0) test-divisor)
 	      (else (find-divisor n (+ test-divisor 1))))) 
+      (find-divisor n 2))
+    
+    (define (prime? n)
       (= n (smallest-divisor n)))
 
     (define (fast-prime? n)
@@ -265,9 +269,12 @@
 	      (else #f)))
       (define (fermat-test n)
 	(let ((a (+ 1 (random-integer (- n 1)))))
-	  ;; (= (expmod a n n) a)
-	  (= (modulo (fast-expt-iter a n) n) (modulo a n))
-	  ))
+	  (= (expmod a n n) a)))
+      ;; By taking the remainder at each recursive step we make sure
+      ;; we are not dealing with huge exponents which would greatly
+      ;; slow things down. Just using the regular old fast-expt
+      ;; procedure would allow for the exponents to grow and the
+      ;; procedure would grind to a halt.
       (define (expmod base exp m)
 	(cond ((= exp 0) 1)
 	      ((even? exp) (remainder (square (expmod base (/ exp 2) m))
@@ -275,4 +282,27 @@
 	      (else (remainder (* base (expmod base (- exp 1) m))
 			       m))))
       (cond ((= n 2) #t)
-	    (else (prime-test n 5))))))
+	    (else (prime-test n 5))))
+
+    (define (ex1-21)
+      (display (smallest-divisor 199)) ;Prime so smallest divisor is itself
+      (newline)
+      (display (smallest-divisor 1999)) ;Prime so smallest divisor is itself
+      (newline)
+      (display (smallest-divisor 19999)) ;7, not prime!
+      (newline))
+
+    (define search-for-primes
+      (case-lambda
+       ((range) (search-for-primes 2 (+ 2 range)))
+       ((start end) (let ((num-list (iota (- end start) start 2)))
+		      (for-each (lambda (n) 
+				  (display (time-taken (lambda () (fast-prime? n))))
+				  (newline))
+				num-list)))))))
+
+
+;; (time-taken (lambda ()
+;; 	      (let ((nums (iota 1000000 2 1)))
+;; 		(for-each (lambda (n)
+;; 			    (fast-prime? n)) nums))))

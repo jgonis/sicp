@@ -1,0 +1,10 @@
+(define-library (libs timing)
+  (export time-taken)
+  (import (scheme base)
+	  (scheme time))
+  (begin
+    (define (time-taken thunk)
+      (let ((start (current-jiffy)))
+	(thunk)
+	(* 1.0 (/ (- (current-jiffy) start)
+		  (jiffies-per-second)))))))
