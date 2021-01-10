@@ -22,6 +22,7 @@
 	(j-expt-tests)
 	(ex1-17-and-ex1-18-tests)
 	(prime-tests)
+	(carmichael-number-tests)
         ;;If using Gauche scheme, uncomment this line to avoid the
         ;;test count continuing to increase
         (test-runner-reset (test-runner-current))))
@@ -129,4 +130,12 @@
 	       (test-assert (and (prime? n)
 				 (fast-prime? n))))
 	     prime-list))
-      (test-end "prime-tests"))))
+      (test-end "prime-tests"))
+
+    (define (carmichael-number-tests)
+      (test-begin "carmichael-number-tests")
+      (let ((num-list (list 561 1105 1729)))
+	(map (lambda (n)
+	       (test-assert (carmichael-number-tester n)))
+	     num-list))
+      (test-end "carmichael-number-tests"))))

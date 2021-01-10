@@ -32,7 +32,8 @@
 	  prime?
 	  fast-prime?
 	  search-for-primes
-	  n-primes-larger-than)
+	  n-primes-larger-than
+	  carmichael-number-tester)
   (import (scheme base)
           (scheme write)
 	  (scheme case-lambda)
@@ -373,9 +374,44 @@
       #t)
 
     (define (ex1-24)
-      #t)))
+      ;; 3 smallest primes larger than 1,000,000,000
+      ;; prime: 1000000007 time: 6.8341e-5
+      ;; prime: 1000000009 time: 6.4775e-5
+      ;; prime: 1000000021 time: 6.5272e-5
+      ;; 3 smallest primes larger than 10,000,000,000
+      ;; prime: 10000000019 time: 2.23804e-4
+      ;; prime: 10000000033 time: 2.24777e-4
+      ;; prime: 10000000061 time: 2.28425e-4
+      ;; 3 smallest primes larger than 100,000,000,000
+      ;; prime: 100000000003 time: 2.63017e-4
+      ;; prime: 100000000019 time: 2.63702e-4
+      ;; prime: 100000000057 time: 2.66588e-4
+      ;; 3 smallest primes larger than 1,000,000,000,000
+      ;; prime: 1000000000039 time: 3.23397e-4
+      ;; prime: 1000000000061 time: 3.22042e-4
+      ;; prime: 1000000000063 time: 3.39159e-4
+      #t)
 
-;; (time-taken (lambda ()
-;; 	      (let ((nums (iota 1000000 2 1)))
-;; 		(for-each (lambda (n)
-;; 			    (fast-prime? n)) nums))))
+    (define (ex1-25)
+      ;; Our previously written exponential procedure would not work
+      ;; as well as it would not reduce the numbers before hand so as
+      ;; we tested every larger primes, we would be doing computations
+      ;; on huge numbers which would be much slower than doing
+      ;; equivalent computations on small numbers.
+      #t)
+
+    (define (ex1-26)
+      
+      #t)
+
+    (define (carmichael-number-tester n)
+      ;; (map (lambda (n)
+      ;; (carmichael-number-tester n))
+      ;; (list 561 1105 1729 2465 2821 6601))
+      (define (iter-helper current)
+	(cond ((= current n) #t)
+	      ((= (modulo (fast-expt current n) n)
+		  (modulo current n))
+	       (iter-helper (+ current 1)))
+	      (else #f)))
+      (iter-helper 1)))) 
