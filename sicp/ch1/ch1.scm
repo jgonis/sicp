@@ -33,7 +33,13 @@
 	  fast-prime?
 	  search-for-primes
 	  n-primes-larger-than
-	  carmichael-number-tester)
+	  carmichael-number-tester
+	  sum-integers
+	  sum-cubes
+	  pi-sum
+	  pi-sum-iter
+	  general-sum
+	  sum-cubes-general)
   (import (scheme base)
           (scheme write)
 	  (scheme case-lambda)
@@ -48,22 +54,22 @@
 
     (define (ex1-2)
       (/ (+ 5
-            4
-            (- 2
-               (- 3
-                  (+ 6 4/5))))
+	    4
+	    (- 2
+	       (- 3
+		  (+ 6 4/5))))
          (* 3
-            (- 6 2)
-            (- 2 7))))
+	    (- 6 2)
+	    (- 2 7))))
     
     (define (ex1-3 x y z)
       (cond ((and (<= x y) (< x z)) (sum-of-squares y z))
-            ((and (< y z) (<= y x)) (sum-of-squares x z))
-            (else (sum-of-squares x y))))
+	    ((and (< y z) (<= y x)) (sum-of-squares x z))
+	    (else (sum-of-squares x y))))
     
     (define (j-abs x)
       (cond ((< x 0) (- x))
-            (else x)))
+	    (else x)))
 
     (define (j-sqrt x)
       (define (good-enough-direct-compare? guess x)
@@ -76,7 +82,7 @@
     (define (improve-guess guess x)
       (define (j-average x y)
         (/ (+ x y)
-           2))
+	   2))
       (j-average guess (/ x guess)))
     
     ;;Exercise 1.7
@@ -100,8 +106,8 @@
     
     (define (ex1-6)
       (let ((a "the new-if fails if passed functions as then or else-clauses because it")
-            (b "tries to evaluate them as part of applicative-order evaluations. So the")
-            (c "function goes into an infinite loop of calling itself"))))
+	    (b "tries to evaluate them as part of applicative-order evaluations. So the")
+	    (c "function goes into an infinite loop of calling itself"))))
 
     (define (ex1-8 x)
       (define (cube-root-iter x guess)
@@ -156,6 +162,7 @@
 	    ((= n 1) 1)
 	    (else (+ (jfib (- n 1))
 		     (jfib (- n 2))))))
+    
     (define (jfib-iter n)
       (define (helper fib-prev fib-current count)
 	(cond ((= count n) fib-current)
@@ -399,11 +406,7 @@
       ;; on huge numbers which would be much slower than doing
       ;; equivalent computations on small numbers.
       #t)
-
-    (define (ex1-26)
-      
-      #t)
-
+    
     (define (carmichael-number-tester n)
       ;; (map (lambda (n)
       ;; (carmichael-number-tester n))
@@ -414,4 +417,44 @@
 		  (modulo current n))
 	       (iter-helper (+ current 1)))
 	      (else #f)))
-      (iter-helper 1)))) 
+      (iter-helper 1))
+
+    (define (cube x)
+      (* x x x))
+    
+    (define (sum-integers a b)
+      (cond ((> a b) 0)
+	    (else (+ a (sum-integers (+ a 1) b)))))
+
+    (define (sum-cubes a b)
+      (cond ((> a b) 0)
+	    (else (+ (cube a) (sum-cubes (+ a 1) b)))))
+
+    (define (pi-sum a b)
+      (cond ((> a b) 0)
+	    (else (+ (/ 1.0 (* a (+ a 2)))
+		     (pi-sum (+ a 4) b)))))
+
+    (define (pi-sum-iter a b)
+      (define (iter-helper a b current)
+	(cond ((> a b) current)
+	      (else (iter-helper (+ a 4)
+				 b
+				 (+ current
+				    (/ 1.0 (* a (+ a 2))))))))
+      (iter-helper a b 0))
+
+    (define (general-sum term a next b)
+      (cond ((> a b) 0)
+	    (else (+ (term a)
+		     (general-sum term (next a) next b)))))
+
+    (define (sum-cubes-general a b)
+      (define (cube x) (* x x x))
+      (define (inc x) (+ x 1))
+      (general-sum cube a inc b))
+
+    (define (sum-integers-general a b)
+      (define (identity x) x)
+      ()
+      (sum-general identity a )))) 

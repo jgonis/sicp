@@ -23,6 +23,7 @@
 	(ex1-17-and-ex1-18-tests)
 	(prime-tests)
 	(carmichael-number-tests)
+	(sum-cubes-tests)
         ;;If using Gauche scheme, uncomment this line to avoid the
         ;;test count continuing to increase
         (test-runner-reset (test-runner-current))))
@@ -138,4 +139,13 @@
 	(map (lambda (n)
 	       (test-assert (carmichael-number-tester n)))
 	     num-list))
-      (test-end "carmichael-number-tests"))))
+      (test-end "carmichael-number-tests"))
+
+    (define (sum-cubes-tests)
+      (test-begin "sum-cubes-tests")
+      (let ((num-list (iota 10)))
+	(map (lambda (n)
+	       (test-equal (sum-cubes 1 n)
+			   (sum-cubes-general 1 n)))
+	     num-list))
+      (test-end "sum-cubes-tests"))))
