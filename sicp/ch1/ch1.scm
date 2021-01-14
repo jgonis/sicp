@@ -35,12 +35,15 @@
 	  n-primes-larger-than
 	  carmichael-number-tester
 	  sum-integers
+	  cube
 	  sum-cubes
 	  pi-sum
 	  pi-sum-iter
 	  general-sum
 	  sum-cubes-general
-	  pi-sum-general)
+	  pi-sum-general
+	  integral
+	  simpsons-integral)
   (import (scheme base)
           (scheme write)
 	  (scheme case-lambda)
@@ -463,4 +466,24 @@
 	(/ 1.0 (* x (+ x 2))))
       (define (pi-next x)
 	(+ x 4))
-      (general-sum pi-term a pi-next b)))) 
+      (general-sum pi-term a pi-next b))
+
+    (define (integral f a b dx)
+      (define (add-dx x) (+ x dx))
+      (* (general-sum f (+ a (/ dx 2.0)) add-dx b)
+	 dx))
+    
+    (define (simpsons-integral f a b n)
+      (let ((h (* 1.0 (/ (- b a) n))))
+	(define (calc-input a x)
+	  (+ a (* x h)))
+	(define (calc-term x)
+	  (let ((output (f (calc-input a x))))
+	    (cond ((or (= x 0) (= x n)) output)
+		  ((even? x) (* 4.0 output))
+		  (else (* 2.0 output)))))
+	(* (/ h 3.0)
+	   (general-sum calc-term 0 increment n))))
+
+    (define (general-sum-iter a next b)
+      (define (iter a result))))) 
