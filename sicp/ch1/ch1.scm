@@ -5,7 +5,7 @@
 ;; (define (load-func)
 ;;   (load "/home/jgonis/code/sicp/sicp/ch1/ch1.scm")
 ;;   (load "/home/jgonis/code/sicp/sicp/libs/fp-compare.scm")
-;;   (load "/home/jgonis/code/sicp/sicp/libs/timing.scm")
+;;   (load "/home/jgonis/code/sicp/sicp/libs/helpers.scm")
 ;;   (load "/home/jgonis/code/sicp/sicp/tests/ch1/ch1Tests.scm"))
 
 (define-library (ch1 ch1)
@@ -39,7 +39,8 @@
 	  pi-sum
 	  pi-sum-iter
 	  general-sum
-	  sum-cubes-general)
+	  sum-cubes-general
+	  pi-sum-general)
   (import (scheme base)
           (scheme write)
 	  (scheme case-lambda)
@@ -47,7 +48,7 @@
 	  (srfi 1)
 	  (srfi 27)
           (libs fp-compare)
-	  (libs timing))
+	  (libs helpers))
   (begin    
     (define (sum-of-squares x y)
       (+ (square x) (square y)))
@@ -436,12 +437,13 @@
 		     (pi-sum (+ a 4) b)))))
 
     (define (pi-sum-iter a b)
+      (define (pi-term x)
+	(/ 1.0 (* x (+ x 2))))
       (define (iter-helper a b current)
 	(cond ((> a b) current)
 	      (else (iter-helper (+ a 4)
 				 b
-				 (+ current
-				    (/ 1.0 (* a (+ a 2))))))))
+				 (+ current (pi-term a))))))
       (iter-helper a b 0))
 
     (define (general-sum term a next b)
@@ -451,10 +453,14 @@
 
     (define (sum-cubes-general a b)
       (define (cube x) (* x x x))
-      (define (inc x) (+ x 1))
-      (general-sum cube a inc b))
+      (general-sum cube a increment b))
 
-    (define (sum-integers-general a b)
-      (define (identity x) x)
-      ()
-      (sum-general identity a )))) 
+    (define (sum-integers-general a b)      
+      (sum-general identity a ))
+
+    (define (pi-sum-general a b)
+      (define (pi-term x)
+	(/ 1.0 (* x (+ x 2))))
+      (define (pi-next x)
+	(+ x 4))
+      (general-sum pi-term a pi-next b)))) 
