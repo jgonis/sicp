@@ -27,6 +27,7 @@
 	(sum-cubes-tests)
 	(pi-sum-general-tests)
 	(pi-sum-iter-tests)
+	(general-sum-tests)
         ;;If using Gauche scheme, uncomment this line to avoid the
         ;;test count continuing to increase
         (test-runner-reset (test-runner-current))))
@@ -173,4 +174,26 @@
 	       (test-assert (fp-eq? (pi-sum-iter 1 n)
 				    (pi-sum 1 n))))
 	     num-list))
-      (test-end "pi-sum-iter-tests"))))
+      (test-end "pi-sum-iter-tests"))
+
+    (define (general-sum-tests)
+      (test-begin "general-sum-tests")
+      (let ((num-list (iota 10)))
+	(map (lambda (n)
+	       (test-assert
+		(fp-eq? (pi-sum-general 1 n)
+			(pi-sum-general 1 n general-sum-iter))))
+	     num-list)
+	(map (lambda (n)
+	       (test-assert
+		(fp-eq? (integral cube
+				  0
+				  1
+				  0.001)
+			(integral cube
+				  0
+				  1
+				  0.001
+				  general-sum-iter))))
+	     num-list))
+      (test-end "general-sum-tests"))))

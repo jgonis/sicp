@@ -43,7 +43,8 @@
 	  sum-cubes-general
 	  pi-sum-general
 	  integral
-	  simpsons-integral)
+	  simpsons-integral
+	  general-sum-iter)
   (import (scheme base)
           (scheme write)
 	  (scheme case-lambda)
@@ -454,25 +455,30 @@
 	    (else (+ (term a)
 		     (general-sum term (next a) next b)))))
 
-    (define (sum-cubes-general a b)
-      (define (cube x) (* x x x))
-      (general-sum cube a increment b))
+    (define sum-cubes-general
+      (case-lambda ((a b) (sum-cubes-general a b general-sum))
+		   ((a b sum-func)
+		    (letrec ((cube (lambda (x) (* x x x))))
+		      (sum-func cube a increment b)))))
 
-    (define (sum-integers-general a b)      
-      (sum-general identity a ))
+    (define sum-integers-general
+      (case-lambda ((a b) (sum-integers-general a b general-sum))
+		   ((a b sum-func) (sum-func identity a increment b))))
 
-    (define (pi-sum-general a b)
-      (define (pi-term x)
-	(/ 1.0 (* x (+ x 2))))
-      (define (pi-next x)
-	(+ x 4))
-      (general-sum pi-term a pi-next b))
+    (define pi-sum-general
+      (case-lambda ((a b) (pi-sum-general a b general-sum))
+		   ((a b sum-func)
+		    (letrec ((pi-term (lambda (x) (/ 1.0 (* x (+ x 2)))))
+			     (pi-next (lambda (x) (+ x 4))))
+		      (sum-func pi-term a pi-next b)))))
 
-    (define (integral f a b dx)
-      (define (add-dx x) (+ x dx))
-      (* (general-sum f (+ a (/ dx 2.0)) add-dx b)
-	 dx))
-    
+    (define integral
+      (case-lambda ((f a b dx) (integral f a b dx general-sum))
+		   ((f a b dx sum-func)
+		    (letrec ((add-dx (lambda (x) (+ x dx))))
+		      (* (sum-func f (+ a (/ dx 2.0)) add-dx b)
+			 dx)))))
+		    
     (define (simpsons-integral f a b n)
       (let ((h (* 1.0 (/ (- b a) n))))
 	(define (calc-input a x)
@@ -484,6 +490,10 @@
 		  (else (* 2.0 output)))))
 	(* (/ h 3.0)
 	   (general-sum calc-term 0 increment n))))
-
-    (define (general-sum-iter a next b)
-      (define (iter a result))))) 
+    
+    ;; Ex 1.30
+    (define (general-sum-iter term a next b)
+      (define (iter a result)
+	(cond ((> a b) result)
+	      (else (iter (next a) (+ result (term a))))))
+      (iter a 0)))) 
