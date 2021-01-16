@@ -28,6 +28,8 @@
 	(pi-sum-general-tests)
 	(pi-sum-iter-tests)
 	(general-sum-tests)
+	(accumulate-tests)
+	(accumulate-rec-tests)
         ;;If using Gauche scheme, uncomment this line to avoid the
         ;;test count continuing to increase
         (test-runner-reset (test-runner-current))))
@@ -196,4 +198,12 @@
 				  0.001
 				  general-sum-iter))))
 	     num-list))
-      (test-end "general-sum-tests"))))
+      (test-end "general-sum-tests"))
+    
+    (define (accumulate-tests)
+      (test-begin "accumulate-tests")
+      (test-end "accumulate-tests"))
+    
+    (define (accumulate-rec-tests)
+      (test-begin "accumulate-tests")
+      (test-end "accumulate-tests"))))

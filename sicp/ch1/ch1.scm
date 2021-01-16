@@ -44,7 +44,12 @@
 	  pi-sum-general
 	  integral
 	  simpsons-integral
-	  general-sum-iter)
+	  general-sum-iter
+	  general-product
+	  general-product-iter
+	  pi-approximation
+	  accumulate-rec
+	  accumulate)
   (import (scheme base)
           (scheme write)
 	  (scheme case-lambda)
@@ -496,4 +501,42 @@
       (define (iter a result)
 	(cond ((> a b) result)
 	      (else (iter (next a) (+ result (term a))))))
-      (iter a 0)))) 
+      (iter a 0))
+
+    ;; Ex 1.31
+    (define (general-product term a next b)
+      (cond ((> a b) 1)
+	    (else (* (term a)
+		     (general-product term (next a) next b)))))
+
+    (define (general-product-iter term a next b)
+      (define (iter a result)
+	(cond ((> a b) result)
+	      (else (iter (next a) (* result (term a))))))
+      (iter a 1))
+
+    (define pi-approximation
+      (case-lambda ((a b) (pi-approximation a b general-product))
+		   ((a b product-func)
+		    (letrec
+			((term (lambda (n)
+				 (cond ((even? n) (* 1.0 (/ (+ n 2) (+ n 1))))
+				       (else (* 1.0 (/ (+ n 1) (+ n 2))))))))
+		      (product-func term a increment b)))))
+    
+    ;; Ex 1.32
+    (define (accumulate-rec combiner null-value term a next b)
+      (cond ((> a b) null-value)
+	    (else (combiner (term a)
+			    (accumulate-rec combiner
+					    null-value
+					    term
+					    (next a)
+					    next
+					    b)))))
+    
+    (define (accumulate combiner null-value term a next b)
+      (define (iter a result)
+	(cond ((> a b) result)
+	      (else (iter (next a) (combiner result (term a))))))
+      (iter a null-value)))) 
