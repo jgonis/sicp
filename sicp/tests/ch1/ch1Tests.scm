@@ -6,6 +6,7 @@
           (scheme case-lambda)
           (ch1 ch1)
 	  (libs fp-compare)
+	  (libs helpers)
           (srfi 64)
 	  (srfi 1))
   (begin    
@@ -202,8 +203,48 @@
     
     (define (accumulate-tests)
       (test-begin "accumulate-tests")
+      (let ((num-list (iota 10)))
+	(map (lambda (n)
+	       (test-equal (general-sum identity
+					0
+					increment
+					n)
+			   (accumulate +
+				       0
+				       identity
+				       0
+				       increment
+				       n)))
+	     num-list)
+	(map (lambda (n)
+	       (test-equal (general-product identity
+					    1
+					    increment
+					    n)
+			   (accumulate *
+				       1
+				       identity
+				       1
+				       increment
+				       n)))
+	     num-list))
       (test-end "accumulate-tests"))
     
     (define (accumulate-rec-tests)
       (test-begin "accumulate-tests")
+      (let ((num-list (iota 10)))
+	(map (lambda (n)
+	       (test-equal (accumulate-rec +
+					   0
+					   identity
+					   0
+					   increment
+					   n)
+			   (accumulate +
+				       0
+				       identity
+				       0
+				       increment
+				       n)))
+	     num-list))
       (test-end "accumulate-tests"))))

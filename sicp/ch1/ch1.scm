@@ -49,7 +49,10 @@
 	  general-product-iter
 	  pi-approximation
 	  accumulate-rec
-	  accumulate)
+	  accumulate
+	  filtered-accumulate
+	  product-of-relatively-prime-integers
+	  sum-of-prime-squares)
   (import (scheme base)
           (scheme write)
 	  (scheme case-lambda)
@@ -285,7 +288,8 @@
       (find-divisor n 2))
     
     (define (prime? n)
-      (= n (smallest-divisor n)))
+      (cond ((= n 1) #f)
+	    (else (= n (smallest-divisor n)))))
 
     (define (fast-prime? n)
       (define (prime-test n times)
@@ -539,4 +543,25 @@
       (define (iter a result)
 	(cond ((> a b) result)
 	      (else (iter (next a) (combiner result (term a))))))
-      (iter a null-value)))) 
+      (iter a null-value))
+
+    ;; Ex1.33
+    (define (filtered-accumulate combiner null-value term a next b filter)
+      (define (iter a result)
+	(cond ((> a b) result)
+	      ((filter a) (iter (next a) (combiner result (term a))))
+	      (else (iter (next a) result))))
+      (iter a null-value))
+
+    (define (sum-of-prime-squares a b)
+      (filtered-accumulate + 0 square a increment b prime?))
+
+    (define (product-of-relatively-prime-integers n)
+      (filtered-accumulate *
+			   1
+			   identity
+			   1
+			   increment
+			   (- n 1)
+			   (lambda (x)
+			     (= 1 (gcd x n)))))))  
