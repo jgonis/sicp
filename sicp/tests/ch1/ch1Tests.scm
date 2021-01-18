@@ -31,6 +31,7 @@
 	(general-sum-tests)
 	(accumulate-tests)
 	(accumulate-rec-tests)
+	(sqrt-tests j-new-sqrt "j-new-sqrt tests")
         ;;If using Gauche scheme, uncomment this line to avoid the
         ;;test count continuing to increase
         (test-runner-reset (test-runner-current))))

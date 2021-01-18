@@ -52,11 +52,17 @@
 	  accumulate
 	  filtered-accumulate
 	  product-of-relatively-prime-integers
-	  sum-of-prime-squares)
+	  sum-of-prime-squares
+	  half-interval-method
+	  fixed-point
+	  j-new-sqrt
+	  golden-ratio
+	  ex1-36)
   (import (scheme base)
           (scheme write)
 	  (scheme case-lambda)
 	  (scheme time)
+	  (scheme inexact)
 	  (srfi 1)
 	  (srfi 27)
           (libs fp-compare)
@@ -564,4 +570,52 @@
 			   increment
 			   (- n 1)
 			   (lambda (x)
-			     (= 1 (gcd x n)))))))  
+			     (= 1 (gcd x n)))))
+    
+    (define (search f neg-point pos-point)
+      (define (average x y)
+	(/ (+ x y) 2))
+      (define (close-enough? x y)
+	(< (abs (- x y)) 0.0000001))
+      (let ((midpoint (average neg-point pos-point)))
+	(cond ((close-enough? neg-point pos-point) midpoint)
+	      (else
+	       (let ((test-value (f midpoint)))
+		 (cond ((positive? test-value) (search f neg-point midpoint))
+		       ((negative? test-value) (search f midpoint pos-point))
+		       (else midpoint)))))))
+
+    (define (half-interval-method f a b)
+      (let ((a-value (f a))
+	    (b-value (f b)))
+	(cond ((and (negative? a-value)
+		    (positive? b-value)) (search f a b))
+	      ((and (positive? a-value)
+		    (negative? b-value) (search f b a)))
+	      (else (error "arguments do not give positive and negative values" a b)))))
+
+    (define (fixed-point f first-guess)
+      (define tolerance 0.0000001)
+      (define (close-enough? x y)
+	(< (abs (- x y)) tolerance))
+      (define (try guess)
+	(let ((next (f guess)))
+	  (display "guess: ")
+	  (display next)
+	  (newline)
+	  (cond ((close-enough? guess next) next)
+		(else (try next)))))
+      (try first-guess))
+
+    (define (j-new-sqrt x)
+      (define (average x y)
+	(/ (+ x y) 2))
+      (fixed-point (lambda (n) (average n (/ x n))) 1.0))
+
+    ;; Ex 1.35
+    (define (golden-ratio)
+      (fixed-point (lambda (x) (+ 1 (/ 1 x))) 1.0))
+
+    ;; Ex1.36
+    (define (ex1-36)
+      (fixed-point (lambda (x) (/ (log 1000) (log x))) 1.5))))  
