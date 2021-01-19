@@ -2,7 +2,8 @@
   (export time-taken
 	  identity
 	  increment
-	  decrement)
+	  decrement
+	  average)
   (import (scheme base)
 	  (scheme time))
   (begin
@@ -13,4 +14,5 @@
 		  (jiffies-per-second)))))
     (define (identity x) x)
     (define (increment x) (+ x 1))
-    (define (decrement x) (- x 1))))
+    (define (decrement x) (- x 1))
+    (define (average x y) (/ (+ x y) 2))))
