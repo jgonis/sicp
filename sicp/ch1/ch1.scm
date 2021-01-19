@@ -57,7 +57,8 @@
 	  fixed-point
 	  j-new-sqrt
 	  golden-ratio
-	  ex1-36)
+	  ex1-36
+	  cube-root)
   (import (scheme base)
           (scheme write)
 	  (scheme case-lambda)
@@ -597,23 +598,31 @@
 	(let ((next (f guess)))
 	  (if debug-output
 	      (begin
-	      (display "guess: ")
-	      (display next)
-	      (newline)))
+		(display "guess: ")
+		(display next)
+		(newline)))
 	  (cond ((close-enough? guess next) next)
 		(else (try next debug-output)))))
       (cond ((and (= 1 (length debug-output))
 		  (car debug-output)) (try first-guess #t))
 	    (else (try first-guess #f))))
+
+    (define (average-damp f)
+      (lambda (x)
+	(average x (f x))))
     
     (define (j-new-sqrt x)
-      (fixed-point (lambda (n) (average n (/ x n))) 1.0))
+      (fixed-point (average-damp (lambda (y) (/ x y))) 1.0))
+
+    (define (cube-root x)
+      (fixed-point (average-damp (lambda (y) (/ x (square y)))) 1.0))
     
     ;; Ex 1.35
     (define (golden-ratio)
-	      (fixed-point (lambda (x) (+ 1 (/ 1 x))) 1.0))
+      (fixed-point (lambda (x) (+ 1 (/ 1 x))) 1.0))
 
     ;; Ex1.36
     ;; answer is: 4.555535667772162
+    ;; adding average to our convergence function cuts convergence time in half or less
     (define (ex1-36)
-      (fixed-point (lambda (x) (/ (log 1000) (log x))) 1.5 #f))))
+      (fixed-point (lambda (x) (average x (/ (log 1000) (log x)))) 1.5 #t))))
