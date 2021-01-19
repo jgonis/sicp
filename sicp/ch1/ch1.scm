@@ -99,10 +99,7 @@
       (j-square-root x good-enough-guess-difference?))
 
     (define (improve-guess guess x)
-      (define (j-average x y)
-        (/ (+ x y)
-	   2))
-      (j-average guess (/ x guess)))
+      (average guess (/ x guess)))
     
     ;;Exercise 1.7
     (define good-enough-guess-difference?
@@ -573,8 +570,6 @@
 			     (= 1 (gcd x n)))))
     
     (define (search f neg-point pos-point)
-      (define (average x y)
-	(/ (+ x y) 2))
       (define (close-enough? x y)
 	(< (abs (- x y)) 0.0000001))
       (let ((midpoint (average neg-point pos-point)))
@@ -594,28 +589,31 @@
 		    (negative? b-value) (search f b a)))
 	      (else (error "arguments do not give positive and negative values" a b)))))
 
-    (define (fixed-point f first-guess)
+    (define (fixed-point f first-guess . debug-output)
       (define tolerance 0.0000001)
       (define (close-enough? x y)
 	(< (abs (- x y)) tolerance))
-      (define (try guess)
+      (define (try guess debug-output)
 	(let ((next (f guess)))
-	  (display "guess: ")
-	  (display next)
-	  (newline)
+	  (if debug-output
+	      (begin
+	      (display "guess: ")
+	      (display next)
+	      (newline)))
 	  (cond ((close-enough? guess next) next)
-		(else (try next)))))
-      (try first-guess))
-
+		(else (try next debug-output)))))
+      (cond ((and (= 1 (length debug-output))
+		  (car debug-output)) (try first-guess #t))
+	    (else (try first-guess #f))))
+    
     (define (j-new-sqrt x)
-      (define (average x y)
-	(/ (+ x y) 2))
       (fixed-point (lambda (n) (average n (/ x n))) 1.0))
-
+    
     ;; Ex 1.35
     (define (golden-ratio)
-      (fixed-point (lambda (x) (+ 1 (/ 1 x))) 1.0))
+	      (fixed-point (lambda (x) (+ 1 (/ 1 x))) 1.0))
 
     ;; Ex1.36
+    ;; answer is: 4.555535667772162
     (define (ex1-36)
-      (fixed-point (lambda (x) (/ (log 1000) (log x))) 1.5))))  
+      (fixed-point (lambda (x) (/ (log 1000) (log x))) 1.5 #f))))
