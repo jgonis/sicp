@@ -10,7 +10,12 @@
 ;;   (load "/home/jgonis/code/sicp/sicp/tests/ch2/ch2Tests.scm"))
 
 (define-library (ch2 ch2)
-  (export test-func)
+  (export make-rational
+	  add-rational
+	  sub-rational
+	  mult-rational
+	  div-rational
+	  equal-rational)
   (import (scheme base)
           (scheme write)
 	  (scheme case-lambda)
@@ -21,4 +26,24 @@
           (libs fp-compare)
 	  (libs helpers))
   (begin
-    (define (test-func) 1)))
+    (define (test-func) 1)
+    (define (make-rational numerator denominator) 1)
+    (define (j-numerator rational) 1)
+    (define (j-denominator rational) 1)
+    (define (add-rational x y)
+      (make-rational (+ (* (j-numerator x) (j-denominator y))
+			(* (j-numerator y) (j-denominator x)))
+		     (* (j-denominator x) (j-denominator y))))
+    (define (sub-rational x y)
+      (make-rational (- (* (j-numerator x) (j-denominator y))
+			(* (j-numerator y) (j-denominator x)))
+		     (* (j-denominator x) (j-denominator y))))
+    (define (mult-rational x y)
+      (make-rational (* (j-numerator x) (j-numerator y))
+		     (* (j-denominator x) (j-denominator y))))
+    (define (div-rational x y)
+      (make-rational (* (j-numerator x) (j-denominator y))
+		     (* (j-denominator x) (j-numerator y))))
+    (define (equal-rational x y)
+      (and (eqv? (j-numerator x) (j-numerator y))
+	   (eqv? (j-denominator x) (j-denominator y))))))
