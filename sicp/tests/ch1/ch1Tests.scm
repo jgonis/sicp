@@ -1,6 +1,5 @@
 (define-library (tests ch1 ch1Tests)
-  (export ch1-tests
-          check-exception)
+  (export ch1-tests)
   (import (scheme base)
           (scheme write)
           (scheme case-lambda)
