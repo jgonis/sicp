@@ -4,6 +4,7 @@
           (scheme write)
           (scheme case-lambda)
           (ch2 ch2)
+	  (tests ch2 rationalNumberTests)
 	  (libs fp-compare)
 	  (libs helpers)
           (srfi 64)
@@ -12,6 +13,7 @@
     (define ch2-tests
       (lambda ()
         (test-func-tests)
+	(rational-number-tests)
         ;;If using Gauche scheme, uncomment this line to avoid the
         ;;test count continuing to increase
         (test-runner-reset (test-runner-current))))
