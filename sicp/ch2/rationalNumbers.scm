@@ -10,7 +10,13 @@
           (scheme write))
   (begin
     (define (make-rational numerator denominator)
-      (cons numerator denominator))
+      (let* ((g (gcd numerator denominator))
+	     (new-num (/ numerator g))
+	     (new-denom (/ denominator g)))
+	(cond ((and (< new-num 0) (< new-denom 0))
+	       (cons (abs new-num) (abs new-denom)))
+	      ((< new-denom 0) (cons (* -1 new-num) (abs new-denom)))
+	      (else (cons new-num new-denom)))))
     
     (define (j-numerator rational)
       (car rational))
@@ -44,4 +50,5 @@
       (newline)
       (display (j-numerator rational))
       (display "/")
-      (display (j-denominator rational)))))
+      (display (j-denominator rational))
+      (newline))))
