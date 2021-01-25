@@ -2,6 +2,7 @@
   (export point-tests)
   (import (scheme base)
           (scheme write)
+	  (ch2 rationalNumbers)
 	  (ch2 point)
 	  (srfi 64))
   (begin    
