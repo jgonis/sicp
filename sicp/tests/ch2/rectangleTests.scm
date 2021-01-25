@@ -4,6 +4,7 @@
           (scheme write)
 	  (ch2 point)
 	  (ch2 rectangle)
+	  (ch2 rectangleFunctions)
 	  (srfi 64))
   (begin    
     (define rectangle-tests
