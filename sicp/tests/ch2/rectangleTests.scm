@@ -3,6 +3,7 @@
   (import (scheme base)
           (scheme write)
 	  (ch2 point)
+	  (ch2 rectangle)
 	  (srfi 64))
   (begin    
     (define rectangle-tests

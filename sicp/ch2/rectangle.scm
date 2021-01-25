@@ -15,8 +15,8 @@
 	    (else
 	     (let* ((left-x (pt-x top-left-pt))
 		    (top-y (pt-y top-left-pt))
-		    (right-x (+ top-x width))
-		    (bottom-y (+ top-x height))
+		    (right-x (+ left-x width))
+		    (bottom-y (+ left-x height))
 		    (bottom-right-pt (make-point right-x bottom-y)))
 	       (cons top-left-pt bottom-right-pt)))))
 	    
