@@ -3,6 +3,7 @@
   (import (scheme base)
           (scheme write)
 	  (ch2 intervals)
+	  (ch2 intervalFunctions)
 	  (srfi 64))
   (begin    
     (define interval-tests

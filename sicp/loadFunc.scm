@@ -10,6 +10,7 @@
 ;;   (load "/home/jgonis/Code/sicp/sicp/ch2/rectangleFunctions.scm")
 ;;   (load "/home/jgonis/Code/sicp/sicp/ch2/altRectangle.scm")
 ;;   (load "/home/jgonis/Code/sicp/sicp/ch2/intervals.scm")
+;;   (load "/home/jgonis/Code/sicp/sicp/ch2/intervalFunctions.scm")
 ;;   (load "/home/jgonis/Code/sicp/sicp/libs/fp-compare.scm")
 ;;   (load "/home/jgonis/Code/sicp/sicp/libs/helpers.scm")
 ;;   (load "/home/jgonis/Code/sicp/sicp/tests/ch1/ch1Tests.scm")
