@@ -9,6 +9,7 @@
 ;;   (load "/home/jgonis/Code/sicp/sicp/ch2/rectangle.scm")
 ;;   (load "/home/jgonis/Code/sicp/sicp/ch2/rectangleFunctions.scm")
 ;;   (load "/home/jgonis/Code/sicp/sicp/ch2/altRectangle.scm")
+;;   (load "/home/jgonis/Code/sicp/sicp/ch2/intervals.scm")
 ;;   (load "/home/jgonis/Code/sicp/sicp/libs/fp-compare.scm")
 ;;   (load "/home/jgonis/Code/sicp/sicp/libs/helpers.scm")
 ;;   (load "/home/jgonis/Code/sicp/sicp/tests/ch1/ch1Tests.scm")
@@ -16,4 +17,5 @@
 ;;   (load "/home/jgonis/Code/sicp/sicp/tests/ch2/pointTests.scm")
 ;;   (load "/home/jgonis/Code/sicp/sicp/tests/ch2/segmentTests.scm")
 ;;   (load "/home/jgonis/Code/sicp/sicp/tests/ch2/rectangleTests.scm")
+;;   (load "/home/jgonis/Code/sicp/sicp/tests/ch2/intervalTests.scm")
 ;;   (load "/home/jgonis/Code/sicp/sicp/tests/ch2/rationalNumberTests.scm"))
