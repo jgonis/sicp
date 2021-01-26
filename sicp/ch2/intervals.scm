@@ -2,8 +2,9 @@
   (export make-interval
 	  lower-bound
 	  upper-bound
-	  equal-segment
-	  print-segment)
+	  interval-width
+	  equal-interval
+	  print-interval)
   (import (scheme base)
           (scheme write)
 	  (scheme case-lambda))
@@ -14,10 +15,15 @@
 		    lower
 		    upper))
 	    (else (cons lower upper))))
+    
     (define (lower-bound interval)
       (car interval))
+    
     (define (upper-bound interval)
       (cdr interval))
+
+    (define (interval-width interval)
+      (- (upper-bound interval) (lower-bound interval)))
     
     (define (equal-interval x y)
       (and (= (lower-bound x)
@@ -25,7 +31,7 @@
 	   (= (upper-bound x)
 	      (upper-bound y))))
     
-    (define (print-interval interval)
+    (define print-interval
       (case-lambda ((interval) (print-interval #f))
 		   ((interval print-newline)
 		    (display "lower: ")

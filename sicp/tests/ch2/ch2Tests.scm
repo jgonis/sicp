@@ -8,6 +8,7 @@
 	  (tests ch2 pointTests)
 	  (tests ch2 segmentTests)
 	  (tests ch2 rectangleTests)
+	  (tests ch2 intervalTests)
 	  (libs fp-compare)
 	  (libs helpers)
           (srfi 64)
@@ -20,6 +21,7 @@
 	(segment-tests)
 	(rectangle-tests)
 	(alt-car-cdr-tests)
+	(interval-tests)
         ;;If using Gauche scheme, uncomment this line to avoid the
         ;;test count continuing to increase
         (test-runner-reset (test-runner-current))))
