@@ -13,6 +13,7 @@
 	  Ackermann
 	  jfib
 	  jfib-iter
+	  jfactorial
 	  count-change-combinations
 	  ex1-11
 	  ex1-11-iter
