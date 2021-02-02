@@ -11,9 +11,11 @@
   (begin
     (define (make-interval lower upper)
       (cond ((> lower upper)
-	     (error "interval can't be constructed with lower bound > upper bound"
-		    lower
-		    upper))
+	     ;; (error "interval can't be constructed with lower bound > upper bound"
+	     ;; 	    lower
+	     ;; 	    upper)
+	     (cons upper lower)
+	     )
 	    (else (cons lower upper))))
     
     (define (lower-bound interval)
@@ -32,7 +34,7 @@
 	      (upper-bound y))))
     
     (define print-interval
-      (case-lambda ((interval) (print-interval #f))
+      (case-lambda ((interval) (print-interval interval #t))
 		   ((interval print-newline)
 		    (display "lower: ")
 		    (display (lower-bound interval))
