@@ -1,4 +1,4 @@
-(define-library (ch2 intervals)
+(define-library (ch2 alt-intervals)
   (export make-interval
 	  center
 	  width
@@ -11,7 +11,7 @@
 	  (scheme write)
 	  (scheme case-lambda))
   (begin
-    (define (make-interval lower upper)
+    (define (make-interval center width)
       (cond ((> lower upper)
 	     (error "interval can't be constructed with lower bound > upper bound"
 		    lower
@@ -45,4 +45,4 @@
 		    (display " upper: ")
 		    (display (upper-bound interval))
 		    (if print-newline
-			(newline))))))) 
+			(newline)))))))
