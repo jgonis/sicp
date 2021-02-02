@@ -11,11 +11,9 @@
   (begin
     (define (make-interval lower upper)
       (cond ((> lower upper)
-	     ;; (error "interval can't be constructed with lower bound > upper bound"
-	     ;; 	    lower
-	     ;; 	    upper)
-	     (cons upper lower)
-	     )
+	     (error "interval can't be constructed with lower bound > upper bound"
+		    lower
+		    upper))
 	    (else (cons lower upper))))
     
     (define (lower-bound interval)
