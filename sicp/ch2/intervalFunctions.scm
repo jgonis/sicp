@@ -2,8 +2,7 @@
   (export add-interval
 	  sub-interval
 	  mul-interval
-	  div-interval
-	  mul-interval-alt)
+	  div-interval)
   (import (scheme base)
           (scheme write)
 	  (ch2 intervals))
@@ -20,7 +19,7 @@
 		     (- (upper-bound x)
 			(lower-bound y))))
     
-    (define (mul-interval x y)
+    (define (mul-interval-old x y)
       (let ((p1 (* (lower-bound x)
 		   (lower-bound y)))
 	    (p2 (* (lower-bound x)
@@ -32,7 +31,7 @@
 	(make-interval (min p1 p2 p3 p4)
 		       (max p1 p2 p3 p4))))
 
-    (define (mul-interval-alt x y)
+    (define (mul-interval x y)
       (let ((lower-x (lower-bound x))
 	    (upper-x (upper-bound x))
 	    (lower-y (lower-bound y))
