@@ -10,7 +10,6 @@
   (begin    
     (define interval-tests
       (lambda ()
-	(make-interval-error-test)
 	(interval-equal-test)
 	(interval-width-test)
 	(interval-div-test)
@@ -18,11 +17,6 @@
         ;;If using Gauche scheme, uncomment this line to avoid the
         ;;test count continuing to increase
         (test-runner-reset (test-runner-current))))
-    
-    (define (make-interval-error-test)
-      (test-begin "make-interval-error-test")
-      ;; (test-error #t (make-interval 5 4))
-      (test-end "make-interval-error-test"))
 
     (define (interval-equal-test)
       (test-begin "interval-equal-test")
