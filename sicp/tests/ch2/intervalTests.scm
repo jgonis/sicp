@@ -7,7 +7,20 @@
 	  (ch2 intervals)
 	  (ch2 intervalFunctions)
 	  (srfi 64))
-  (begin    
+  (begin
+
+    ;; This is a function for fuzz testing by repeatedly performing an op
+    ;; (define (mult-test count)
+    ;;   (define (iter current)
+    ;; 	(let* ((interval-1 (make-interval (- (random-integer 21) 10)
+    ;; 					  (- (random-integer 21) 10)))
+    ;; 	       (interval-2 (make-interval (- (random-integer 21) 10)
+    ;; 				      (- (random-integer 21) 10)))
+    ;; 	       (result (mul-interval interval-1 interval-2)))
+    ;; 	  (cond ((= current count) (displayln interval-1))
+    ;; 		(else (iter (+ current 1))))))
+    ;;   (iter 0))
+    
     (define interval-tests
       (lambda ()
 	(interval-equal-test)
@@ -67,9 +80,9 @@
 	(cond ((= subject-index (length test-intervals)) () (display "done"))
 	      ((= current-index
 		  (length test-intervals)) (begin (display "increment subject")
-						  (newline)
-						  (helper (+ subject-index 1)
-							  0)))
+		  (newline)
+		  (helper (+ subject-index 1)
+			  0)))
 	      (else (begin
 		      (let ((subject (list-ref test-intervals subject-index))
 			    (current (list-ref test-intervals current-index)))

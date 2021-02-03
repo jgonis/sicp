@@ -134,14 +134,3 @@
 		    (if print-newline
 			(newline)))))))
 
-
-(define (mult-test count)
-  (define (iter current)
-    (let* ((interval-1 (make-interval (- (random-integer 21) 10)
-				      (- (random-integer 21) 10)))
-	   (interval-2 (make-interval (- (random-integer 21) 10)
-				      (- (random-integer 21) 10)))
-	   (result (mul-interval interval-1 interval-2)))
-      (cond ((= current count) (displayln interval-1))
-	    (else (iter (+ current 1))))))
-  (iter 0))
