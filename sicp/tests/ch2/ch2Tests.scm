@@ -16,12 +16,7 @@
   (begin    
     (define ch2-tests
       (lambda ()
-	(rational-number-tests)
-	(point-tests)
-	(segment-tests)
-	(rectangle-tests)
 	(alt-car-cdr-tests)
-	(interval-tests)
         ;;If using Gauche scheme, uncomment this line to avoid the
         ;;test count continuing to increase
         (test-runner-reset (test-runner-current))))
