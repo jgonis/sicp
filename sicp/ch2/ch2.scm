@@ -8,12 +8,15 @@
 	  alt-cdr
 	  numeric-cons
 	  numeric-car
-	  numeric-cdr)
+	  numeric-cdr
+	  last-pair
+	  j-reverse
+	  count-change
+	  same-parity)
   (import (scheme base)
           (scheme write)
 	  (libs fp-compare)
-	  (libs helpers)
-	  (ch2 rationalNumbers))
+	  (libs helpers))
   (begin    
     (define (alt-cons x y)
       (lambda (m) (m x y)))
@@ -37,4 +40,48 @@
       (define (iter num counter)
 	(cond ((not (= 0 (remainder num 3))) counter)
 	      (else (iter (/ num 3) (+ counter 1)))))
-      (iter pair 0))))
+      (iter pair 0))
+
+    (define (last-pair items)
+      (cond ((null? (cdr items)) items)
+	    (else (last-pair (cdr items)))))
+    
+    (define (j-reverse items)
+      (define (helper lst work-lst)
+	(cond ((null? lst) work-lst)
+	      (else (helper (cdr lst) (cons (car lst) work-lst)))))
+      (helper items '()))
+
+    (define (count-change amount coin-values)
+      (define (cc amount coins)
+	(cond ((= amount 0) 1)
+	      ((or (< amount 0)
+		   (no-more? coins)) 0)
+	      (else (+ (cc amount
+			   (except-first-denomination coins))
+		       (cc (- amount
+			      (first-denomination coins))
+			   coins)))))
+      (define (except-first-denomination coins)
+	(cdr coins))
+      (define (first-denomination coins)
+	(car coins))
+      (define (no-more? coins)
+	(null? coins))
+      (cc amount coin-values))
+
+    (define (same-parity x . rest)
+      (define (helper lst test-func result)
+	(cond ((null? lst) (j-reverse result))
+	      ((test-func (car lst)) (helper (cdr lst)
+					     test-func
+					     (cons (car lst) result)))
+	      (else (helper (cdr lst)
+			    test-func
+			    result))))
+      (cond ((even? x) (helper rest
+			       even?
+			       (list x)))
+	    (else (helper rest
+			  odd?
+			  (list x)))))))
