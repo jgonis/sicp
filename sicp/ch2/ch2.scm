@@ -12,7 +12,10 @@
 	  last-pair
 	  j-reverse
 	  count-change
-	  same-parity)
+	  same-parity
+	  square-list
+	  alt-square-list
+	  j-for-each)
   (import (scheme base)
           (scheme write)
 	  (libs fp-compare)
@@ -84,4 +87,17 @@
 			       (list x)))
 	    (else (helper rest
 			  odd?
-			  (list x)))))))
+			  (list x)))))
+
+    (define (square-list items)
+      (if (null? items)
+	  nil
+	  (cons (square (car items))
+		(square-list (cdr items)))))
+
+    (define (alt-square-list items)
+      (map (lambda (n) (* n n)) items))
+
+    (define (j-for-each func lst)
+      (cond ((not (null? lst)) (func (car lst))
+	     (j-for-each func (cdr lst)))))))
