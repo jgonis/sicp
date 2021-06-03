@@ -1,0 +1,20 @@
+(define-library (tests ch2 treeTests)
+  (export tree-tests)
+  (import (scheme base)
+	  (ch2 tree-library)
+	  (srfi 64))
+  (begin
+    (define (tree-tests)
+      (count-leaves-tests)
+      (deep-reverse-tests)
+      (test-runner-reset (test-runner-current)))
+
+    (define (count-leaves-tests)
+      (test-begin "count-leaves")
+      (test-equal 1 1)
+      (test-end "count-leaves"))
+
+    (define (deep-reverse-tests)
+      (test-begin "deep-reverse")
+      (test-equal 1 1)
+      (test-end "deep-reverse"))))

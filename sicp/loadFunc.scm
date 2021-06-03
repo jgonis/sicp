@@ -22,4 +22,5 @@
   (load "/home/jgonis/Code/sicp/sicp/tests/ch2/segmentTests.scm")
   (load "/home/jgonis/Code/sicp/sicp/tests/ch2/rectangleTests.scm")
   (load "/home/jgonis/Code/sicp/sicp/tests/ch2/intervalTests.scm")
-  (load "/home/jgonis/Code/sicp/sicp/tests/ch2/rationalNumberTests.scm"))
+  (load "/home/jgonis/Code/sicp/sicp/tests/ch2/rationalNumberTests.scm")
+  (load "/home/jgonis/Code/sicp/sicp/tests/ch2/treeTests.scm"))
