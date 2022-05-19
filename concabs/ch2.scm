@@ -1,0 +1,15 @@
+;;test comment
+(define-library (concabs-ch2)
+  (export ex2-1)
+  (import (scheme base)
+          (scheme write)
+	  (scheme case-lambda)
+	  (scheme time)
+	  (scheme inexact)
+	  (srfi 1)
+	  (srfi 27)
+	  (concabs-helpers))
+  (begin    
+    (define (ex2-1 x y)
+      (cond ((= y 0) 1)
+	    (else (* x (ex2-1 x (- y 1))))))))
