@@ -1,4 +1,3 @@
-(include "seasonedSchemerCh14.sld")
 (define-library (seasoned-schemer tests ch14)
   (export run-tests-ch14)
   (import (scheme base)
@@ -11,7 +10,7 @@
         (test-leftmost leftmost)
         (test-leftmost letcc-leftmost)
         (test-rember1* rember1*)
-        (test-rember1* letcc-rember1*)
+        ;; (test-rember1* letcc-rember1*)
         (test-depth*)))
     (define test-leftmost
       (lambda (lm-func)
@@ -27,44 +26,35 @@
                => 'c)
         (check (lm-func '(((() (() b)) () e)))
                => 'b)))
+    
     (define test-rember1*
-      (lambda (rem-f)
-        (check (rem-f 'salad '((Swedish rye)
-                               (French (mustard
-                                        salad
-                                        turkey))
-                               salad))
+      (lambda (rm-func)
+        (check (rm-func 'salad '((Swedish rye)
+                                 (French (mustard salad turkey))
+                                 salad))
                => '((Swedish rye)
-                    (French (mustard
-                             turkey))
+                    (French (mustard turkey))
                     salad))
-        (check (rem-f 'meat '((pasta meat)
-                              pasta
-                              (noodles meat sauce)
-                              meat tomatoes))
+        (check (rm-func 'meat '((pasta meat)
+                                pasta
+                                (noodles meat sauce)
+                                meat tomatoes))
                => '((pasta)
                     pasta
                     (noodles meat sauce)
                     meat tomatoes))
-        (check (rem-f 'salad '())
-               => '())
-        (check (rem-f 'b '(((() (() b)) () e b)))
-               => '(((() (())) () e b)))))
+        (check (rm-func 'noodle '((food) more (food)))
+               => '((food) more (food)))))
+    
     (define test-depth*
       (lambda ()
-        (check (depth* '()) => 1)
         (check (depth* '((pickled) peppers (peppers pickled)))
                => 2)
         (check (depth* '(margarine
                          ((bitter butter)
-                          (makes) (batter (bitter)))
-                         butter))
-               => 4)
-        (check (depth* '(c (b (a b) a) a))
-               => 3)
-        (check (depth* '(()
-                         ((bitter butter)
                           (makes)
                           (batter (bitter)))
                          butter))
-               => 4)))))
+               => 4)
+        (check (depth* '(c (b (a b) a) a))
+               => 3)))))
