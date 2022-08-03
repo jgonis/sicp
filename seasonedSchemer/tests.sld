@@ -11,7 +11,7 @@
           (seasoned-schemer tests ch12)
           (seasoned-schemer tests ch13)
           (seasoned-schemer tests ch14)
-          (seasoned-schemer tests ch15))
+          (seasoned-schemer tests ch16))
   (begin
     (define run-tests
       (lambda ()
@@ -21,6 +21,6 @@
         (run-tests-ch12)
         (run-tests-ch13)
         (run-tests-ch14)
-        (run-tests-ch15)
+        (run-tests-ch16)
         (check-report)
         (check-reset!)))))

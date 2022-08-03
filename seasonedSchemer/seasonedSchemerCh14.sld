@@ -48,7 +48,6 @@
                                                       (cdr l))))))))))
           (r l))))
 
-    ;;Todo - come back to this when my head isn't spinning as much
     (define letcc-rember1*
       (lambda (a l)
         (letrec ((rm (lambda (a l oh)
@@ -58,10 +57,13 @@
                                                   (cons (car l)
                                                         (rm a (cdr l) oh))))
                              (else (let ((ret-val (letcc oh (rm a (car l) oh))))
-                                     (cond ((atom? ret-val) l)
-                                           (else ))))))))
-          (rm a l 0))))
-
+                                     (cond ((atom? ret-val) (cons (car l)
+                                                                  (rm a (cdr l) oh)))
+                                           (else (cons ret-val (cdr l))))))))))
+          (let ((new-l (letcc oh (rm a l oh))))
+            (cond ((atom? new-l) l)
+                  (else new-l))))))
+    
     (define depth*
       (lambda (l)
         (cond ((null? l) 1)

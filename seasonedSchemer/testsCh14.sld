@@ -7,11 +7,15 @@
   (begin
     (define run-tests-ch14
       (lambda ()
+        (check-reset!)
+        (check-set-mode! 'report-failed)
         (test-leftmost leftmost)
         (test-leftmost letcc-leftmost)
         (test-rember1* rember1*)
-        ;; (test-rember1* letcc-rember1*)
-        (test-depth*)))
+        (test-rember1* letcc-rember1*)
+        (test-depth*)
+        (check-report)
+        (check-reset!)))
     (define test-leftmost
       (lambda (lm-func)
         (check (lm-func '(((a) b) (c d)))
@@ -43,8 +47,8 @@
                     pasta
                     (noodles meat sauce)
                     meat tomatoes))
-        (check (rm-func 'noodle '((food) more (food)))
-               => '((food) more (food)))))
+         (check (rm-func 'noodle '((food) more (food)))
+                => '((food) more (food)))))
     
     (define test-depth*
       (lambda ()

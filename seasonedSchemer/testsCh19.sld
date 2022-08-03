@@ -1,0 +1,22 @@
+(define-library (seasoned-schemer tests ch19)
+  (export run-tests-ch19)
+  (import (scheme base)
+          (scheme write)
+          (srfi 78)
+          (seasoned-schemer ch19))
+  (begin
+    (define run-tests-ch19
+      (lambda ()
+        (check-reset!)
+        (check-set-mode! 'report-failed)
+        (test-two-in-a-row*)
+        (check-report)
+        (check-reset!)))
+    (define test-two-in-a-row*
+      (lambda ()
+        (check (two-in-a-row* '((mozzarella) (cake) mozzarella))
+               => #f)
+        (check (two-in-a-row* '((potato) (chips ((with) fish) (fish))))
+               => #t)
+        (check (two-in-a-row* '((potato) (chips (chips (with) fish))))
+               => #t)))))
