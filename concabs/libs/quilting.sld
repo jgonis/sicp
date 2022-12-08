@@ -8,6 +8,22 @@
 	  (scheme cxr)
 	  (concabs fungraph))
   (begin
+    
+    (define omb
+      (lambda x
+	(let l
+	    ((x (cdr x))
+	     (y (list-tail (cdr x) (quotient (length x) 2)))
+	     (z #f)
+	     (w (car x)))
+	  (if (null? y)
+	      z
+	      (l (cddddr x) (cddddr y)
+		 (let* ((v (lambda (v) (/ v w)))
+			(v (filled-triangle (v (car y)) (v (car x))
+					    (v (cadr y)) (v (cadr x))
+					    (v (caddr y)) (v (caddr x)))))
+		   (if z (overlay z v) v)) w)))))
     ;; A simple test image, to illustrate transformations.
     (define test-bb
       (filled-triangle 0 1 0 -1 1 -1))
@@ -45,21 +61,5 @@
     ;; A much simpler basic block, with one corner black.
     (define corner-bb
       (omb -1 -1 -1 0 0 0 -1 -1 -1))
-    
-    (define omb
-      (lambda x
-	(let l
-	    ((x (cdr x))
-	     (y (list-tail (cdr x) (quotient (length x) 2)))
-	     (z #f)
-	     (w (car x)))
-	  (if (null? y)
-	      z
-	      (l (cddddr x) (cddddr y)
-		 (let* ((v (lambda (v) (/ v w)))
-			(v (filled-triangle (v (car y)) (v (car x))
-					    (v (cadr y)) (v (cadr x))
-					    (v (caddr y)) (v (caddr x)))))
-		   (if z (overlay z v) v)) w)))))
     )
   )
