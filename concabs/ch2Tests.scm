@@ -1,10 +1,10 @@
-(define-library (concabs-ch2Tests)
+(define-library (concabs ch2Tests)
   (export ch2-tests)
   (import (scheme base)
 	  (scheme write)
 	  (scheme case-lambda)
-	  (concabs-ch2)
-	  (concabs-helpers)
+	  (concabs ch2)
+	  (concabs helpers)
 	  (srfi 64)
 	  (srfi 1))
   (begin    

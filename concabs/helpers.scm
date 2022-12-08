@@ -1,4 +1,4 @@
-(define-library (concabs-helpers)
+(define-library (concabs helpers)
   (export time-taken
 	  identity
 	  increment

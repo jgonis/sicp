@@ -1,5 +1,5 @@
 ;;test comment
-(define-library (concabs-ch2)
+(define-library (concabs ch2)
   (export ex2-1)
   (import (scheme base)
           (scheme write)
@@ -8,7 +8,7 @@
 	  (scheme inexact)
 	  (srfi 1)
 	  (srfi 27)
-	  (concabs-helpers)
+	  (concabs helpers)
 	  (concabs fungraph)
 	  (concabs quilting))
   (begin    

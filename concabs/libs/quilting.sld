@@ -3,12 +3,12 @@
 	  nova-bb
 	  bitw-bb
 	  rcross-bb
-	  corner-bb)
+	  corner-bb
+          corner-bb-new)
   (import (scheme base)
 	  (scheme cxr)
 	  (concabs fungraph))
   (begin
-    
     (define omb
       (lambda x
 	(let l
@@ -24,6 +24,7 @@
 					    (v (cadr y)) (v (cadr x))
 					    (v (caddr y)) (v (caddr x)))))
 		   (if z (overlay z v) v)) w)))))
+    
     ;; A simple test image, to illustrate transformations.
     (define test-bb
       (filled-triangle 0 1 0 -1 1 -1))
@@ -61,5 +62,8 @@
     ;; A much simpler basic block, with one corner black.
     (define corner-bb
       (omb -1 -1 -1 0 0 0 -1 -1 -1))
+    
+    (define corner-bb-new
+      (filled-triangle -1 1 0 1 -1/2 1/2))
     )
   )
