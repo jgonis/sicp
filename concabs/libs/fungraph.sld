@@ -29,8 +29,9 @@
       (height image-height)
       (image-proc image-proc))
 
+    ;;(save-image-as-epsf (line -1 -1 1 1) "line.eps")
     (define save-image-as-epsf
-      (let ((left-margin 50) ; margins make printing work better
+      (let ((left-margin 50)       ; margins make printing work better
             (bottom-margin 50))
 	(lambda (image filename)
 	  (if (not (image? image))
@@ -112,22 +113,22 @@
 		  (image-height image)
 		  (image-width image)))
 
-        (define (half-turn image)
-	  (if (not (image? image))
-	      (error "argument to half-turn not an image" image))
-	  (quarter-turn-right (quarter-turn-right image)))
+    (define (half-turn image)
+      (if (not (image? image))
+	  (error "argument to half-turn not an image" image))
+      (quarter-turn-right (quarter-turn-right image)))
 
-	(define (quarter-turn-left image)
-	  (if (not (image? image))
-	      (error "argument to quarter-turn-left not an image" image))
-	  (quarter-turn-right (quarter-turn-right (quarter-turn-right image))))
+    (define (quarter-turn-left image)
+      (if (not (image? image))
+	  (error "argument to quarter-turn-left not an image" image))
+      (quarter-turn-right (quarter-turn-right (quarter-turn-right image))))
 
-	(define (side-by-side left-image right-image)
-	  (if (not (image? left-image))
-	      (error "left-image argument to side-by-side not an image" left-image))
-	  (if (not (image? right-image))
-	      (error "right-image argument to side-by-side not an image" right-image))
-	  (quarter-turn-right (stack (quarter-turn-left right-image) (quarter-turn-left left-image))))
+    (define (side-by-side left-image right-image)
+      (if (not (image? left-image))
+	  (error "left-image argument to side-by-side not an image" left-image))
+      (if (not (image? right-image))
+	  (error "right-image argument to side-by-side not an image" right-image))
+      (quarter-turn-right (stack (quarter-turn-left right-image) (quarter-turn-left left-image))))
 	
     (define (mirror-image image)
       (if (not (image? image))

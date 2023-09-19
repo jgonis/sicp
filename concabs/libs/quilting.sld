@@ -7,7 +7,7 @@
           corner-bb-new)
   (import (scheme base)
 	  (scheme cxr)
-	  (concabs fungraph)))
+	  (concabs fungraph))
 (begin
   (define omb
     (lambda x
@@ -64,5 +64,4 @@
     (omb -1 -1 -1 0 0 0 -1 -1 -1))
   
   (define corner-bb-new
-    (filled-triangle -1 1 0 1 -1/2 1/2))
-  )
+    (filled-triangle -1 1 0 1 -1/2 1/2))))

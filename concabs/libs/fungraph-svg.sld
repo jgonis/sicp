@@ -36,6 +36,15 @@
 				    "width=\"" (number->string (image-width image)) "\"\n"
 				    "height=\"" (number->string (image-height image)) "\"\n"
 				    "xmlns=\"http://www.w3.org/2000/svg\">\n"
+                                    "<defs>\n"
+                                    "<filter id=\"MyInvert\">\n"
+                                    "<feComponentTransfer>\n"
+                                    "<feFuncR type=\"table\" tableValues=\"1 0\" />\n"
+                                    "<feFuncG type=\"table\" tableValues=\"1 0\" />\n"
+                                    "<feFuncB type=\"table\" tableValues=\"1 0\" />\n"
+                                    "</feComponentTransfer>\n"
+                                    "</filter>\n"
+                                    "</defs>\n"
 				    "<rect width=\"100%\" height=\"100%\" fill=\"white\"/>\n"))
 	    ((image-proc image)
 	     (lambda (x y) (* (+ x 1) (/ (image-width image) 2.0)))
