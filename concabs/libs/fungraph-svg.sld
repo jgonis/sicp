@@ -12,7 +12,9 @@
 	  side-by-side
 	  stack
 	  overlay
-	  resize-image)
+	  resize-image
+          mirror-image
+          invert)
   (import (scheme base)
 	  (scheme write)
 	  (scheme file))
@@ -154,6 +156,34 @@
 		  (image-width image)
 		  (image-height image)))
 
+    (define (invert image)
+      (if (not (image? image))
+	  (error "argument to invert not an image" image))
+      (make-image (lambda (xt yt)
+                    (let* ((left (inexact (xt -1 -1)))
+			   (bottom  (inexact (yt -1 -1)))
+			   (right (inexact (xt 1 1)))
+			   (top (inexact (yt 1 1)))
+                           (width (- right left))
+                           (height (- bottom top)))
+                      (display "<g filter=\"url(#MyInvert)\">")
+                      (newline)
+                      (display (string-append "<rect x=\""
+                                              (number->string left)
+                                              "\" y=\""
+                                              (number->string top)
+                                              "\" width=\""
+                                              (number->string width)
+                                              "\" height=\""
+                                              (number->string height)
+                                              "\" fill=\"white\"/>"))
+                      (newline)
+                      ((image-proc image) xt yt)
+                      (display "</g>")
+                      (newline)))
+		  (image-width image)
+		  (image-height image)))
+
     (define (overlay image . images)
       (if (not (image? image))
 	  (error "argument to overlay not an image" image))
@@ -217,9 +247,9 @@
 		  (image-width image)))
     
     (define (half-turn image)
-	  (if (not (image? image))
-	      (error "argument to half-turn not an image" image))
-	  (quarter-turn-right (quarter-turn-right image)))
+      (if (not (image? image))
+	  (error "argument to half-turn not an image" image))
+      (quarter-turn-right (quarter-turn-right image)))
 
     (define (quarter-turn-left image)
       (if (not (image? image))

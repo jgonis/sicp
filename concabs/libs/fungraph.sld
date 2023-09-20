@@ -6,15 +6,15 @@
 	  save-image-as-epsf
 	  line
 	  filled-triangle
+          quarter-turn-right
+          half-turn
+          quarter-turn-left
+          side-by-side
 	  stack
+          overlay
 	  resize-image
-	  overlay
 	  invert
 	  mirror-image
-	  quarter-turn-right
-	  quarter-turn-left
-	  half-turn
-	  side-by-side
 	  ps-image)
   (import (scheme base)
 	  (scheme write)
