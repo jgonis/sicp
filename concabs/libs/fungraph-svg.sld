@@ -6,6 +6,7 @@
 	  save-image-as-svg
 	  line
 	  filled-triangle
+          filled-rectangle
 	  quarter-turn-right
 	  half-turn
 	  quarter-turn-left
@@ -146,6 +147,11 @@
                       (newline))
                     width
 		    height)))
+
+    (define filled-rectangle
+      (lambda (x0 y0 x1 y1)
+        (overlay (filled-triangle x0 y0 x0 y1 x1 y1)
+                 (filled-triangle x0 y0 x1 y0 x1 y1))))
 
     (define (mirror-image image)
       (if (not (image? image))

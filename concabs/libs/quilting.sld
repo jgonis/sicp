@@ -7,7 +7,7 @@
           corner-bb-new)
   (import (scheme base)
 	  (scheme cxr)
-	  (concabs fungraph))
+	  (concabs fungraph-svg))
 (begin
   (define omb
     (lambda x
