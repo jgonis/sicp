@@ -15,7 +15,8 @@
 	  overlay
 	  resize-image
           mirror-image
-          invert)
+          invert
+          pinwheel)
   (import (scheme base)
 	  (scheme write)
 	  (scheme file))
@@ -298,7 +299,9 @@
                       (> width 0)))
             (error "illegal size specification in resize-image" wh))
 	(make-image (image-proc image) width height)))
-    
-    )
-  )
+
+    (define pinwheel
+      (lambda (image)
+        (side-by-side (stack (quarter-turn-right image) image)
+                      (stack (half-turn image) (quarter-turn-left image)))))))
 
