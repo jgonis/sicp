@@ -1,0 +1,55 @@
+(define-library (concabs helpers)
+  (export time-taken
+	  identity
+	  increment
+	  decrement
+	  average
+	  displayln
+          binary-form
+          byte-binary-form)
+  (import (scheme base)
+	  (scheme time)
+	  (scheme write))
+  (begin
+    (define (time-taken thunk)
+      (let ((start (current-jiffy)))
+	(thunk)
+	(* 1.0 (/ (- (current-jiffy) start)
+		  (jiffies-per-second)))))
+    (define (identity x) x)
+    (define (increment x) (+ x 1))
+    (define (decrement x) (- x 1))
+    (define (average x y) (/ (+ x y) 2))
+    (define (displayln str)
+      (display str)
+      (newline))
+    (define binary-form
+      (lambda (num)
+        (cond ((= num 0) '(0))
+              ((= num 1) '(1))
+              (else (let loop ((num num)
+                               (lst (list)))
+                      (let-values (((quotient remainder) (floor/ num 2)))
+                        (cond ((and (= quotient 0) (= remainder 1)) (cons 1 lst))
+                              ((and (= quotient 0) lst))
+                              ((= remainder 1) (loop quotient (cons 1 lst)))
+                              (else (loop quotient (cons 0 lst))))))))))
+    (define byte-binary-form
+      (lambda (num)
+        (if (> num 255)
+            (error "number greater than can be held in a byte" num)
+            (let* ((result (make-vector 8 0))
+                   (vec-length (vector-length result)))
+              (cond ((= num 0) result)
+                    ((= num 1) (begin (vector-set! result 7 1)
+                                      result))
+                    (else (let loop ((num num)
+                                     (idx 1))
+                            (let-values (((quotient remainder) (floor/ num 2)))
+                              (cond ((and (= quotient 0) (= remainder 1))
+                                     (begin (vector-set! result (- vec-length idx) 1)
+                                            result))
+                                    ((= quotient 0) result)
+                                    ((= remainder 1) (begin (vector-set! result (- vec-length idx) 1)
+                                                            (loop quotient (+ idx 1))))
+                                    (else (loop quotient (+ idx 1))))))))))))))

@@ -9,7 +9,7 @@
 	  (srfi 1)
 	  (srfi 27)
 	  (concabs helpers)
-	  (concabs fungraph)
+	  (concabs fungraph-svg)
 	  (concabs quilting))
   (begin    
     (define (ex2-1 x y)
