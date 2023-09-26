@@ -1,6 +1,7 @@
 ;;test comment
 (define-library (concabs ch2)
-  (export ex2-1)
+  (export ex2-1
+          ex2-4)
   (import (scheme base)
           (scheme write)
 	  (scheme case-lambda)
@@ -32,7 +33,6 @@
 	(+ a (if (> b c)
 		 b
 		 c))))
-    
     ;; If an argument passed in is negative turn it positive
     ;; basically an absolute value function
     (define puzzle2
@@ -40,7 +40,14 @@
 	((if (< x 0)
 	     -
 	     +)
-	 0 x)))))
+	 0 x)))
+    
+    (define ex2-4
+      (lambda (n)
+        (cond ((= n 0) 0)
+              ((even? n) (* (ex24 (/ n 2)) 4))
+              (else (+ (ex24 (- n 1)) (- (+ n n) 1))))))
+    ))
 
 
 
