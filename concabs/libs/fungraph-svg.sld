@@ -16,7 +16,8 @@
 	  resize-image
           mirror-image
           invert
-          pinwheel)
+          pinwheel
+          stack-of-copies)
   (import (scheme base)
 	  (scheme write)
 	  (scheme file))
@@ -303,5 +304,12 @@
     (define pinwheel
       (lambda (image)
         (side-by-side (stack (quarter-turn-right image) image)
-                      (stack (half-turn image) (quarter-turn-left image)))))))
+                      (stack (half-turn image) (quarter-turn-left image)))))
+
+    (define stack-of-copies
+      (lambda (n image)
+        (let loop ((i 1)
+                   (stacked-image image))
+          (cond ((< i n) (loop (+ i 1) (stack image stacked-image)))
+                (else stacked-image)))))))
 

@@ -3,7 +3,8 @@
 	  nova-bb
 	  bitw-bb
 	  rcross-bb
-	  corner-bb)
+	  corner-bb
+          quilt)
   (import (scheme base)
 	  (scheme cxr)
 	  (concabs fungraph-svg))
@@ -31,10 +32,18 @@
   ;; Publications, New York, 1989, p. 60.
   (define corner-bb
     (filled-triangle 0 1 1 1 1 0))
-
+  
   (define rcross-bb
-    (overlay (overlay (filled-triangle -1/2 -1/2 1/2 -1/2 -1/2 1/2) corner-bb)
-             (overlay (overlay (filled-triangle 1 -1 1/2 -1/2 1 0)
-                               (filled-triangle 1/2 -1/2 1/2 1/2 1 0))
-                      (overlay (filled-triangle -1 1 -1/2 1/2 0 1)
-                               (filled-triangle -1/2 1/2 0 1 1/2 1/2)))))))
+    (overlay (filled-triangle -1/2 1/2 -1/2 -1/2 1/2 -1/2)
+             (overlay (overlay (filled-triangle 1/2 -1/2 1 1/2 1/2 1/2)
+                               (filled-triangle 1 -1 1/2 -1/2 1 1/2))
+                      (overlay (filled-triangle -1/2 1/2 1 1 1 1/2)
+                               (filled-triangle -1 1 -1/2 1/2 1 1)))))
+
+  (define quilt
+    (lambda (image width height)
+      (let ((stacked-image (stack-of-copies height image)))
+        (let loop ((n 1)
+                   (quilt stacked-image))
+          (cond ((< n width) (loop (+ n 1) (side-by-side quilt stacked-image)))
+                (else quilt))))))))

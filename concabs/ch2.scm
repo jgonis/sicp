@@ -5,13 +5,16 @@
           fast-ex2-1
           fast-iter-ex2-1
           quot
+	  remaind
 	  subtract-the-first
 	  sum-of-squares
 	  sum-of-cubes
 	  sum-of-powers
 	  num-digits
 	  number-of-sixes
-	  number-of-digit)
+	  number-of-digit
+	  number-of-odd-digits
+	  sum-of-digits)
   (import (scheme base)
           (scheme write)
 	  (scheme case-lambda)
@@ -81,8 +84,12 @@
 
     (define remaind
       (lambda (n d)
-	(cond ((< n 0) (- (remaind (- n) d)))
-	      ())))
+	(let ((result (let loop ((a (abs n))
+				 (b (abs d)))
+			(cond ((< a b) a)
+			      (else (loop (- a b) b))))))
+	  (cond ((< n 0) (- result))
+		(else result)))))
 
     (define subtract-the-first
       (lambda (n)
@@ -110,10 +117,32 @@
 	(cond ((< n 0) (num-digits (- n)))
 	      ((< n 10) 1)
 	      (else (+ 1 (num-digits (quot n 10)))))))
+    
     (define number-of-sixes
       (lambda (n)
-	(cond ((< n 0) (number-of-sixes (- n)))
-	      ((= (remainder n 10) 6) (+ 1 (number-of-sixes (quot n 10)))))))
+	(number-of-digit n 6)))
+
+    (define number-of-digit
+      (lambda (n digit)
+	(cond ((< n 0) (number-of-digit (- n) digit))
+	      ((< n 10) (if (= n digit) 1 0))
+	      ((= (remaind n 10) digit) (+ 1 (number-of-digit (quot n 10) digit)))
+	      (else (number-of-digit (quot n 10) digit)))))
+
+    (define number-of-odd-digits
+      (lambda (n)
+	(cond ((< n 0) (number-odd-digits (- n)))
+	      ((< n 10) (if (odd? n) 1 0))
+	      ((odd? (remaind n 10)) (+ 1 (number-of-odd-digits (quot n 10))))
+	      (else (number-of-odd-digits (quot n 10))))))
+
+    (define sum-of-digits
+      (lambda (n)
+	(cond ((< n 10) n)
+	      (else (+ (remaind n 10) (sum-of-digits (quot n 10)))))))
+
+    (define stack-of-copies)
+    
     ))
 
 
