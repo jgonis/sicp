@@ -17,7 +17,8 @@
           mirror-image
           invert
           pinwheel
-          stack-of-copies)
+          stack-of-copies
+          stack-of-alternating-copies)
   (import (scheme base)
 	  (scheme write)
 	  (scheme file))
@@ -311,5 +312,16 @@
         (let loop ((i 1)
                    (stacked-image image))
           (cond ((< i n) (loop (+ i 1) (stack image stacked-image)))
+                (else stacked-image)))))
+    (define stack-of-alternating-copies
+      (lambda (n image)
+        (let loop ((i 1)
+                   (stacked-image image))
+          (cond ((and (< i n) (even? i))
+                 (loop (+ i 1)
+                       (stack image stacked-image)))
+                ((and (< i n) (odd? i))
+                 (loop (+ i 1)
+                       (stack (invert image) stacked-image)))
                 (else stacked-image)))))))
 

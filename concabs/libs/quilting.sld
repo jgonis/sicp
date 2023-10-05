@@ -4,7 +4,8 @@
 	  bitw-bb
 	  rcross-bb
 	  corner-bb
-          quilt)
+          quilt
+          checkerboard)
   (import (scheme base)
 	  (scheme cxr)
 	  (concabs fungraph-svg))
@@ -46,4 +47,12 @@
         (let loop ((n 1)
                    (quilt stacked-image))
           (cond ((< n width) (loop (+ n 1) (side-by-side quilt stacked-image)))
+                (else quilt))))))
+  (define checkerboard
+    (lambda (image width height)
+      (let ((stacked-image (stack-of-alternating-copies height image)))
+        (let loop ((n 1)
+                   (quilt stacked-image))
+          (cond ((and (< n width) (even? n)) (loop (+ n 1) (side-by-side quilt stacked-image)))
+                ((and (< n width) (odd? n)) (loop (+ n 1) (side-by-side quilt (invert stacked-image))))
                 (else quilt))))))))

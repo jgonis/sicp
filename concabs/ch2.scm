@@ -14,7 +14,7 @@
 	  number-of-sixes
 	  number-of-digit
 	  number-of-odd-digits
-	  sum-of-digits)
+	  image-of-number)
   (import (scheme base)
           (scheme write)
 	  (scheme case-lambda)
@@ -24,7 +24,8 @@
 	  (srfi 27)
 	  (concabs helpers)
 	  (concabs fungraph-svg)
-	  (concabs quilting))
+	  (concabs quilting)
+	  (concabs digits))
   (begin    
     (define (ex2-1 x y)
       (cond ((= y 0) 1)
@@ -141,7 +142,23 @@
 	(cond ((< n 10) n)
 	      (else (+ (remaind n 10) (sum-of-digits (quot n 10)))))))
 
-    (define stack-of-copies)
+    (define image-of-digit
+      (lambda (n)
+	(cond ((or (< n 0) (> n 9)) (error "expected input to be between 0 and 9" n))
+	      ((= n 0) zero-bb)
+	      ((= n 1) one-bb)
+	      ((= n 2) two-bb)
+	      ((= n 3) three-bb)
+	      ((= n 4) four-bb)
+	      ((= n 5) five-bb)
+	      ((= n 6) six-bb)
+	      ((= n 7) seven-bb)
+	      ((= n 8) eight-bb)
+	      ((= n 9) nine-bb))))
+
+    (define image-of-number
+      (lambda (n)
+	1))
     
     ))
 
