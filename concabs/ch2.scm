@@ -158,10 +158,11 @@
 
     (define image-of-number
       (lambda (n)
-	1))
-    
+	(let loop ((current n)
+		   (image '()))
+	  (let* ((r (remaind current 10))
+		 (digit-image (image-of-digit r))
+		 (new-image (if (null? image) digit-image (side-by-side digit-image image))))
+	    (cond ((< current 10) new-image)
+		  (else (loop (quot current 10) new-image)))))))
     ))
-
-
-
-
