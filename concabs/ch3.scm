@@ -2,7 +2,8 @@
   (export fib
 	  iter-fib
 	  fermat-number
-	  is-prime?)
+	  is-prime?
+	  perfect-number?)
   (import (scheme base)
           (scheme write)
 	  (scheme case-lambda)
@@ -37,4 +38,20 @@
 		      (else (loop (* a a) (- b 1))))))))
     (define is-prime?
       (lambda (n)
-	#t))))
+	(if (= 0 (remainder n 2))
+	    #f
+	    (let loop ((i 3))
+	      (cond ((> (* i i) n) #t)
+		    ((= 0 (remainder n i)) #f)
+		    (else (loop (+ i 2))))))))
+    (define sum-of-divisors
+      (lambda (n)
+	(define sum-from-plus
+	  (lambda (current addend)
+	    (cond ((> current n) addend)
+		  ((= 0 (remainder n current)) (sum-of-divisors (+ current 1) (+ addend current)))
+		  (else (sum-of-divisors (+ current 1) addend)))))
+	(sum-from-plus 1 0)))
+    (define perfect-number?
+      (lambda (n) 
+	(= (* 2 n) (sum-of-divisors 1 0))))))
