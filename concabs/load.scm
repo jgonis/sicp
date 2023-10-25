@@ -5,6 +5,7 @@
   (load "/home/jgonis/Code/sicp/concabs/libs/helpers.sld")
   (load "/home/jgonis/Code/sicp/concabs/ch2.scm")
   (load "/home/jgonis/Code/sicp/concabs/ch3.scm")
+  (load "/home/jgonis/Code/sicp/concabs/ch4.scm")
   (load "/home/jgonis/Code/sicp/concabs/ch2Tests.scm"))
 
 
