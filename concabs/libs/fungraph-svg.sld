@@ -7,6 +7,7 @@
 	  line
 	  filled-triangle
           filled-rectangle
+          triangle
 	  quarter-turn-right
 	  half-turn
 	  quarter-turn-left
@@ -90,11 +91,58 @@
 					      "L "
 					      (number->string (inexact (x-transformer x1 y1))) " "
 					      (number->string (inexact (y-transformer x1 y1))) "\""
+                                              " stroke=\"black\""
 					      "/>"))
                       (newline))
                     width height)))
 
-    (define (filled-triangle x0 y0 x1 y1 x2 y2 . wh)
+    (define triangle
+      (lambda (x0 y0 x1 y1 x2 y2 . wh)
+        (cond ((not (real? x0))   (error "x0 argument to triangle not a real" x0))
+              ((not (<= -1 x0 1)) (error "x0 argument to triangle not in -1 to 1 range" x0))
+              ((not (real? x1))   (error "x1 argument to triangle not a real" x1))
+              ((not (<= -1 x1 1)) (error "x1 argument to triangle not in -1 to 1 range" x1))
+              ((not (real? x2))   (error "x2 argument to triangle not a real" x2))
+              ((not (<= -1 x2 1)) (error "x2 argument to triangle not in -1 to 1 range" x2))
+              ((not (real? y0))   (error "y0 argument to triangle not a real" y0))
+              ((not (<= -1 y0 1)) (error "y0 argument to triangle not in -1 to 1 range" y0))
+              ((not (real? y1))   (error "y1 argument to triangle not a real" y1))
+              ((not (<= -1 y1 1)) (error "y1 argument to triangle not in -1 to 1 range" y1))
+              ((not (real? y2))   (error "y2 argument to triangle not a real" y2))
+              ((not (<= -1 y2 1)) (error "y2 argument to triangle not in -1 to 1 range" y2))
+              (else (let ((width default-image-size)
+                          (height default-image-size))
+	              (if (not (null? wh))
+                          (begin (set! width (car wh))
+		                 (if (not (null? (cdr wh)))
+                                     (begin (set! height (cadr wh))
+                                            (if (not (null? (cddr wh)))
+				                (error "too many argument to triangle")))
+                                     (set! height width))))
+	              (if (not (and (integer? height)
+                                    (integer? width)
+                                    (exact? height)
+                                    (exact? width)
+                                    (> height 0)
+                                    (> width 0)))
+                          (error "illegal size specification in triangle" wh))
+                      (make-image (lambda (x-transformer y-transformer)
+		                    (display (string-append "<path d=\"M "
+					                    (number->string (inexact (x-transformer x0 y0))) " "
+					                    (number->string (inexact (y-transformer x0 y0))) " "
+					                    "L "
+					                    (number->string (inexact (x-transformer x1 y1))) " "
+					                    (number->string (inexact (y-transformer x1 y1))) " "
+					                    "L "
+					                    (number->string (inexact (x-transformer x2 y2))) " "
+					                    (number->string (inexact (y-transformer x2 y2))) " "
+					                    "Z\" stroke=\"black\" fill=\"white\" stroke-linejoin=\"miter\""
+					                    "/>"))
+                                    (newline))
+                                  width
+		                  height))))))
+
+              (define (filled-triangle x0 y0 x1 y1 x2 y2 . wh)
       (if (not (real? x0))
 	  (error "x0 argument to filled-triangle not a real" x0))
       (if (not (<= -1 x0 1))
