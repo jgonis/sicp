@@ -8,8 +8,10 @@
                                       "seasonedSchemer/seasonedSchemerCh16.sld"
                                       "seasonedSchemer/seasonedSchemerCh18.sld"
                                       "seasonedSchemer/seasonedSchemerCh19.sld"
-                                      "seasonedSchemer/seasonedSchemerCh20.sld"))
-         (test-file-strings (list "seasonedSchemer/testsCh11.sld"
+                                      "seasonedSchemer/seasonedSchemerCh20.sld"
+                                      "seasonedSchemer/oldCh10.sld"))
+         (test-file-strings (list "seasonedSchemer/testsOldCh10.sld"
+                                  "seasonedSchemer/testsCh11.sld"
                                   "seasonedSchemer/testsCh12.sld"
                                   "seasonedSchemer/testsCh13.sld"
                                   "seasonedSchemer/testsCh14.sld"
